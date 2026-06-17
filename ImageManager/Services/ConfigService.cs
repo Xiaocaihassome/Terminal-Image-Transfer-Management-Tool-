@@ -16,6 +16,8 @@ public class ConfigService : IConfigService
     public string Theme { get; set; } = "System";
     public string? CustomTempPath { get; set; }
     public double Transparency { get; set; } = 0.75;
+    public string Language { get; set; } = "zh-CN";
+    public bool DisableBlur { get; set; }
 
     public void Load()
     {
@@ -34,6 +36,8 @@ public class ConfigService : IConfigService
                 Theme = string.IsNullOrEmpty(data.Theme) ? "System" : data.Theme;
                 CustomTempPath = string.IsNullOrEmpty(data.CustomTempPath) ? null : data.CustomTempPath;
                 Transparency = data.Transparency > 0 && data.Transparency <= 1 ? data.Transparency : 0.75;
+                Language = string.IsNullOrEmpty(data.Language) ? "zh-CN" : data.Language;
+                DisableBlur = data.DisableBlur;
             }
         }
         catch { }
@@ -49,7 +53,9 @@ public class ConfigService : IConfigService
             ShowInTaskbar = ShowInTaskbar,
             Theme = Theme,
             CustomTempPath = CustomTempPath,
-            Transparency = Transparency
+            Transparency = Transparency,
+            Language = Language,
+            DisableBlur = DisableBlur
         };
         var json = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });
         File.WriteAllText(ConfigPath, json);
@@ -68,5 +74,7 @@ public class ConfigService : IConfigService
         public string? Theme { get; set; }
         public string? CustomTempPath { get; set; }
         public double Transparency { get; set; } = 0.75;
+        public string? Language { get; set; }
+        public bool DisableBlur { get; set; }
     }
 }

@@ -42,6 +42,8 @@ public interface IConfigService
     string Theme { get; set; }
     string? CustomTempPath { get; set; }
     double Transparency { get; set; } // 0=全透明, 1=不透明
+    string Language { get; set; }
+    bool DisableBlur { get; set; }
     string GetTempRoot();
     void Load();
     void Save();

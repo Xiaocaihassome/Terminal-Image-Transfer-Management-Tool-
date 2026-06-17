@@ -14,6 +14,9 @@ public partial class SettingsViewModel : ObservableObject
     private readonly IConfigService _configService;
     private readonly IToastService _toastService;
 
+    // 由 SettingsWindow 设置，用于切换设置后刷新毛玻璃效果
+    public Action? RefreshBackdrop { get; set; }
+
     [ObservableProperty]
     private string _currentTheme = "System";
 
@@ -23,6 +26,12 @@ public partial class SettingsViewModel : ObservableObject
 
     [ObservableProperty]
     private double _transparency = 0.75;
+
+    [ObservableProperty]
+    private string _currentLanguage = "zh-CN";
+
+    [ObservableProperty]
+    private bool _disableBlur;
 
     [ObservableProperty]
     private bool _deleteWithoutConfirm;
@@ -50,6 +59,8 @@ public partial class SettingsViewModel : ObservableObject
         DeleteWithoutConfirm = _configService.DeleteWithoutConfirm;
         AutoCleanOnExit = _configService.AutoCleanOnExit;
         Transparency = _configService.Transparency;
+        CurrentLanguage = _configService.Language;
+        DisableBlur = _configService.DisableBlur;
     }
 
     partial void OnTransparencyChanged(double value)
@@ -57,6 +68,21 @@ public partial class SettingsViewModel : ObservableObject
         _configService.Transparency = value;
         _configService.Save();
         ApplyTheme(CurrentTheme, value);
+        RefreshBackdrop?.Invoke();
+    }
+
+    partial void OnCurrentLanguageChanged(string value)
+    {
+        _configService.Language = value;
+        _configService.Save();
+        LanguageManager.ApplyLanguage(value);
+    }
+
+    partial void OnDisableBlurChanged(bool value)
+    {
+        _configService.DisableBlur = value;
+        _configService.Save();
+        RefreshBackdrop?.Invoke();
     }
 
     [RelayCommand]
@@ -66,6 +92,13 @@ public partial class SettingsViewModel : ObservableObject
         _configService.Theme = theme;
         _configService.Save();
         ApplyTheme(theme);
+        RefreshBackdrop?.Invoke();
+    }
+
+    [RelayCommand]
+    private void SetLanguage(string lang)
+    {
+        CurrentLanguage = lang;
     }
 
     [RelayCommand]

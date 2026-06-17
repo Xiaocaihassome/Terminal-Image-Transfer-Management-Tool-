@@ -59,12 +59,20 @@ public partial class SettingsWindow : Window
     {
         DataContext = viewModel;
         ConfigService = configService;
+        viewModel.RefreshBackdrop = () =>
+        {
+            if (configService.DisableBlur)
+                Background = new SolidColorBrush(Color.FromArgb(240, 240, 240, 240));
+            else
+                ApplyFrostedGlass();
+        };
     }
 
     private async void SettingsWindow_Loaded(object sender, RoutedEventArgs e)
     {
         await Task.Delay(50);
-        ApplyFrostedGlass();
+        if (ConfigService?.DisableBlur != true)
+            ApplyFrostedGlass();
     }
 
     private void ApplyFrostedGlass()
@@ -108,6 +116,63 @@ public partial class SettingsWindow : Window
             Background = new SolidColorBrush(Color.FromArgb(200, 240, 240, 240));
         }
     }
+
+    #region 窗口缩放
+
+    private void Resize_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        if (sender is not FrameworkElement el) return;
+        var direction = el.Name.Replace("Resize", "");
+
+        double minWidth = 350, minHeight = 400;
+        double maxWidth = SystemParameters.PrimaryScreenWidth;
+        double maxHeight = SystemParameters.PrimaryScreenHeight;
+
+        el.CaptureMouse();
+        var anchor = PointToScreen(e.GetPosition(this));
+        double origLeft = Left, origTop = Top, origW = Width, origH = Height;
+
+        void OnMove(object s, MouseEventArgs ev)
+        {
+            var cur = PointToScreenMouse();
+            double dx = cur.X - anchor.X, dy = cur.Y - anchor.Y;
+
+            if (direction.Contains("W"))
+            {
+                double w = Math.Clamp(origW - dx, minWidth, maxWidth);
+                Left = origLeft + origW - w;
+                Width = w;
+            }
+            if (direction.Contains("E"))
+                Width = Math.Clamp(origW + dx, minWidth, maxWidth);
+            if (direction.Contains("N"))
+            {
+                double h = Math.Clamp(origH - dy, minHeight, maxHeight);
+                Top = origTop + origH - h;
+                Height = h;
+            }
+            if (direction.Contains("S"))
+                Height = Math.Clamp(origH + dy, minHeight, maxHeight);
+        }
+
+        void OnUp(object s, MouseButtonEventArgs ev)
+        {
+            el.ReleaseMouseCapture();
+            el.MouseMove -= OnMove;
+            el.MouseLeftButtonUp -= OnUp;
+        }
+
+        el.MouseMove += OnMove;
+        el.MouseLeftButtonUp += OnUp;
+    }
+
+    private Point PointToScreenMouse()
+    {
+        var p = Mouse.GetPosition(this);
+        return new Point(p.X + Left, p.Y + Top);
+    }
+
+    #endregion
 
     private void TitleBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {

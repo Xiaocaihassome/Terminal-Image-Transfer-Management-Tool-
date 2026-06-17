@@ -32,7 +32,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ApplicationIcon Include="Resources\app.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\app.png" />
     <Resource Include="Resources\avatar.png" />
+    <Resource Include="Resources\Lang\zh-CN.xaml" />
+    <Resource Include="Resources\Lang\zh-TW.xaml" />
+    <Resource Include="Resources\Lang\en-US.xaml" />
+    <Resource Include="Resources\Lang\ko-KR.xaml" />
+    <Resource Include="Resources\Lang\ja-JP.xaml" />
   </ItemGroup>
 
 </Project>

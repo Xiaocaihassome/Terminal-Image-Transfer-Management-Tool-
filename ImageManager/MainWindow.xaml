@@ -3,11 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:conv="clr-namespace:ImageManager.Converters"
         xmlns:svc="clr-namespace:ImageManager.Services"
-        Title="图片管理助手"
-        Width="580" Height="680"
-        MinWidth="460" MinHeight="500"
+        Title="{DynamicResource AppTitle}"
+        Icon="pack://application:,,,/Resources/app.png"
+        Width="480" Height="600"
+        MinWidth="380" MinHeight="420"
         WindowStartupLocation="CenterScreen"
-        FontFamily="Microsoft YaHei, Segoe UI"
         WindowStyle="None"
         AllowsTransparency="True">
 
@@ -15,7 +15,8 @@
         <conv:BoolToVisibilityConverter x:Key="BoolToVis"/>
     </Window.Resources>
 
-    <Border CornerRadius="12" Background="{Binding CardBackground, Source={x:Static svc:ThemeManager.Instance}}"
+    <Grid>
+    <Border x:Name="RootBorder" CornerRadius="12" Background="{Binding CardBackground, Source={x:Static svc:ThemeManager.Instance}}"
             BorderThickness="0">
         <Grid>
             <Grid.RowDefinitions>
@@ -27,7 +28,7 @@
             <!-- 标题栏 -->
             <Grid Grid.Row="0" MouseLeftButtonDown="TitleBar_MouseLeftButtonDown"
                   Background="Transparent">
-                <TextBlock Text="图片管理助手" FontSize="13" FontWeight="Medium"
+                <TextBlock Text="{DynamicResource AppTitle}" FontSize="13" FontWeight="Medium"
                            Foreground="{Binding TextPrimary, Source={x:Static svc:ThemeManager.Instance}}"
                            VerticalAlignment="Center" Margin="14,0,0,0"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
@@ -73,7 +74,7 @@
                     <StackPanel HorizontalAlignment="Center">
                         <TextBlock Text="+" FontSize="20" FontWeight="Light"
                                    Foreground="{Binding Accent, Source={x:Static svc:ThemeManager.Instance}}" HorizontalAlignment="Center"/>
-                        <TextBlock Text="拖入图片或 Ctrl+V 粘贴截图"
+                        <TextBlock Text="{DynamicResource DropHint}"
                                    FontSize="12" Foreground="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}"
                                    HorizontalAlignment="Center" Margin="0,4,0,0"/>
                     </StackPanel>
@@ -82,19 +83,19 @@
                 <!-- 工具栏 -->
                 <Grid Grid.Row="1" Margin="0,0,0,8">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                        <CheckBox Content="全选"
+                        <CheckBox Content="{DynamicResource SelectAll}"
                                   IsChecked="{Binding IsAllSelected}"
                                   FontSize="12" Foreground="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}"/>
                         <TextBlock FontSize="11" Foreground="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}"
                                    VerticalAlignment="Center" Margin="10,0,0,0">
-                            <Run Text="{Binding TotalCount, Mode=OneWay}"/><Run Text=" 项"/>
+                            <Run Text="{Binding TotalCount, Mode=OneWay}"/><Run Text=" "/><Run Text="{DynamicResource Items}"/>
                         </TextBlock>
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
                                 VerticalAlignment="Center">
                         <TextBlock FontSize="11" Foreground="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}">
-                            已选 <Run Text="{Binding SelectedCount, Mode=OneWay}"/>
+                            <Run Text="{DynamicResource Selected}"/> <Run Text="{Binding SelectedCount, Mode=OneWay}"/>
                         </TextBlock>
                         <Button Click="Settings_Click" Padding="4,2" Margin="8,0,0,0"
                                 Background="Transparent" BorderThickness="0" Cursor="Hand"
@@ -114,10 +115,10 @@
                                     Visibility="{Binding IsAny, Converter={StaticResource BoolToVis}, ConverterParameter=Invert}">
                             <TextBlock Text="&#x25A1;" FontSize="36" HorizontalAlignment="Center"
                                        Foreground="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}"/>
-                            <TextBlock Text="暂无图片" FontSize="14" FontWeight="SemiBold"
+                            <TextBlock Text="{DynamicResource EmptyState}" FontSize="14" FontWeight="SemiBold"
                                        Foreground="{Binding TextPrimary, Source={x:Static svc:ThemeManager.Instance}}" HorizontalAlignment="Center"
                                        Margin="0,6,0,0"/>
-                            <TextBlock Text="拖入图片或 Ctrl+V 粘贴截图" FontSize="11"
+                            <TextBlock Text="{DynamicResource DropHint}" FontSize="11"
                                        Foreground="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}" HorizontalAlignment="Center"
                                        Margin="0,4,0,0"/>
                         </StackPanel>
@@ -235,7 +236,7 @@
                             </Button.Template>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="&#x2191;" FontSize="12" Margin="0,0,4,0"/>
-                                <TextBlock Text="粘贴到窗口"/>
+                                <TextBlock Text="{DynamicResource PasteToWindow}"/>
                             </StackPanel>
                         </Button>
 
@@ -261,7 +262,7 @@
                             </Button.Template>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="&#x2398;" FontSize="12" Margin="0,0,4,0"/>
-                                <TextBlock Text="复制路径"/>
+                                <TextBlock Text="{DynamicResource CopyPath}"/>
                             </StackPanel>
                         </Button>
                     </StackPanel>
@@ -292,7 +293,7 @@
                             </Button.Template>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="&#x2715;" FontSize="12" Margin="0,0,4,0"/>
-                                <TextBlock Text="删除"/>
+                                <TextBlock Text="{DynamicResource Delete}"/>
                             </StackPanel>
                         </Button>
 
@@ -321,7 +322,7 @@
                             </Button.Template>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="&#x21BA;" FontSize="12" Margin="0,0,4,0"/>
-                                <TextBlock Text="清空"/>
+                                <TextBlock Text="{DynamicResource ClearAll}"/>
                             </StackPanel>
                         </Button>
                     </StackPanel>
@@ -335,10 +336,10 @@
                            Text="{Binding SelectedFilePath, Mode=OneWay}"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
                             VerticalAlignment="Center">
-                    <CheckBox Content="删除时不询问"
+                    <CheckBox Content="{DynamicResource DeleteNoAsk}"
                               IsChecked="{Binding DeleteWithoutConfirm}"
                               FontSize="10" Foreground="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}"/>
-                    <CheckBox Content="退出清空"
+                    <CheckBox Content="{DynamicResource CleanOnExit}"
                               IsChecked="{Binding AutoCleanOnExit}"
                               FontSize="10" Foreground="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}"
                               Margin="10,0,0,0"/>
@@ -357,4 +358,15 @@
                     Margin="0,0,0,50"/>
         </Grid>
     </Border>
+
+    <!-- 缩放拖拽手柄 -->
+    <Border x:Name="ResizeN"  Height="5" VerticalAlignment="Top"    HorizontalAlignment="Stretch" Cursor="SizeNS" Background="Transparent" MouseLeftButtonDown="Resize_MouseLeftButtonDown"/>
+    <Border x:Name="ResizeS"  Height="5" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Cursor="SizeNS" Background="Transparent" MouseLeftButtonDown="Resize_MouseLeftButtonDown"/>
+    <Border x:Name="ResizeW"  Width="5"  VerticalAlignment="Stretch" HorizontalAlignment="Left"   Cursor="SizeWE" Background="Transparent" MouseLeftButtonDown="Resize_MouseLeftButtonDown"/>
+    <Border x:Name="ResizeE"  Width="5"  VerticalAlignment="Stretch" HorizontalAlignment="Right"  Cursor="SizeWE" Background="Transparent" MouseLeftButtonDown="Resize_MouseLeftButtonDown"/>
+    <Border x:Name="ResizeNW" Width="10" Height="10" VerticalAlignment="Top"    HorizontalAlignment="Left"   Cursor="SizeNWSE" Background="Transparent" MouseLeftButtonDown="Resize_MouseLeftButtonDown"/>
+    <Border x:Name="ResizeNE" Width="10" Height="10" VerticalAlignment="Top"    HorizontalAlignment="Right"  Cursor="SizeNESW" Background="Transparent" MouseLeftButtonDown="Resize_MouseLeftButtonDown"/>
+    <Border x:Name="ResizeSW" Width="10" Height="10" VerticalAlignment="Bottom" HorizontalAlignment="Left"   Cursor="SizeNESW" Background="Transparent" MouseLeftButtonDown="Resize_MouseLeftButtonDown"/>
+    <Border x:Name="ResizeSE" Width="10" Height="10" VerticalAlignment="Bottom" HorizontalAlignment="Right"  Cursor="SizeNWSE" Background="Transparent" MouseLeftButtonDown="Resize_MouseLeftButtonDown"/>
+    </Grid>
 </Window>

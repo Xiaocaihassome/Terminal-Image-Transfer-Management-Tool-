@@ -1,0 +1,57 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <!-- 主窗口 -->
+    <sys:String x:Key="AppTitle">图片管理助手</sys:String>
+    <sys:String x:Key="DropHint">拖入图片或 Ctrl+V 粘贴截图</sys:String>
+    <sys:String x:Key="SelectAll">全选</sys:String>
+    <sys:String x:Key="Items">项</sys:String>
+    <sys:String x:Key="Selected">已选</sys:String>
+    <sys:String x:Key="EmptyState">暂无图片</sys:String>
+    <sys:String x:Key="PasteToWindow">粘贴到窗口</sys:String>
+    <sys:String x:Key="CopyPath">复制路径</sys:String>
+    <sys:String x:Key="Delete">删除</sys:String>
+    <sys:String x:Key="ClearAll">清空</sys:String>
+    <sys:String x:Key="DeleteNoAsk">删除时不询问</sys:String>
+    <sys:String x:Key="CleanOnExit">退出清空</sys:String>
+
+    <!-- 设置窗口 -->
+    <sys:String x:Key="SettingsTitle">设置</sys:String>
+    <sys:String x:Key="Personalization">个性化</sys:String>
+    <sys:String x:Key="ThemeMode">主题模式</sys:String>
+    <sys:String x:Key="Light">浅色</sys:String>
+    <sys:String x:Key="Dark">深色</sys:String>
+    <sys:String x:Key="FollowSystem">跟随系统</sys:String>
+    <sys:String x:Key="Transparency">透明度</sys:String>
+    <sys:String x:Key="Language">语言</sys:String>
+    <sys:String x:Key="Storage">存储</sys:String>
+    <sys:String x:Key="TempFolder">临时文件夹位置</sys:String>
+    <sys:String x:Key="SelectFolder">选择文件夹</sys:String>
+    <sys:String x:Key="RestoreDefault">恢复默认</sys:String>
+    <sys:String x:Key="OpenFolder">打开文件夹</sys:String>
+    <sys:String x:Key="DeleteNoConfirm">删除时不再询问</sys:String>
+    <sys:String x:Key="AutoCleanOnExit">退出时自动清空临时文件</sys:String>
+    <sys:String x:Key="ResourcesSection">资源</sys:String>
+    <sys:String x:Key="DisableBlur">禁用毛玻璃背景以节省资源</sys:String>
+    <sys:String x:Key="Help">帮助</sys:String>
+    <sys:String x:Key="Tutorial">使用教程</sys:String>
+    <sys:String x:Key="Step1">1. 拖入图片到窗口，或按 Ctrl+V 粘贴截图</sys:String>
+    <sys:String x:Key="Step2">2. 勾选需要的图片，点击「复制路径」</sys:String>
+    <sys:String x:Key="Step3">3. 在 AI 终端中 Ctrl+V 粘贴路径即可</sys:String>
+    <sys:String x:Key="Step4">4. 点击「粘贴到窗口」可自动粘贴到前台窗口</sys:String>
+    <sys:String x:Key="FAQ">常见问题</sys:String>
+    <sys:String x:Key="Q1">Q: 粘贴到窗口没有反应？</sys:String>
+    <sys:String x:Key="A1">A: 点击后在2秒内切换到目标窗口，工具会自动发送 Ctrl+V。</sys:String>
+    <sys:String x:Key="Q2">Q: 图片保存在哪里？</sys:String>
+    <sys:String x:Key="A2">A: 默认保存在系统临时目录，可在存储设置中自定义位置。</sys:String>
+    <sys:String x:Key="Q3">Q: 关闭后图片还在吗？</sys:String>
+    <sys:String x:Key="A3">A: 勾选「退出清空」后关闭窗口会自动删除临时文件。</sys:String>
+    <sys:String x:Key="About">关于</sys:String>
+    <sys:String x:Key="AppName">应用名称</sys:String>
+    <sys:String x:Key="AppVersion">版本</sys:String>
+    <sys:String x:Key="Framework">框架</sys:String>
+    <sys:String x:Key="License">协议</sys:String>
+    <sys:String x:Key="OpenSourceDev">开源工具开发者</sys:String>
+
+</ResourceDictionary>

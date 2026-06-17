@@ -61,6 +61,10 @@ public partial class App : Application
         // 应用保存的主题
         var configService = _serviceProvider.GetRequiredService<IConfigService>();
         var settingsVm = _serviceProvider.GetRequiredService<SettingsViewModel>();
+
+        // 应用保存的语言
+        LanguageManager.ApplyLanguage(configService.Language);
+
         settingsVm.ApplyTheme(configService.Theme, configService.Transparency);
 
         // 显示主窗口

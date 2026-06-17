@@ -256,7 +256,7 @@
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Grid.Column="0" Text="{DynamicResource AppName}" FontSize="12"
                                            Foreground="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}"/>
-                                <TextBlock Grid.Column="1" Text="图片管理助手" FontSize="12"
+                                <TextBlock Grid.Column="1" Text="{DynamicResource AppTitle}" FontSize="12"
                                            Foreground="{Binding TextPrimary, Source={x:Static svc:ThemeManager.Instance}}"/>
                             </Grid>
                             <Grid Margin="0,0,0,6">

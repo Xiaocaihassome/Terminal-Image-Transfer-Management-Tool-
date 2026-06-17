@@ -3,7 +3,7 @@
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
     <!-- 主窗口 -->
-    <sys:String x:Key="AppTitle">图片管理助手</sys:String>
+    <sys:String x:Key="AppTitle">终端图片中转管理工具</sys:String>
     <sys:String x:Key="DropHint">拖入图片或 Ctrl+V 粘贴截图</sys:String>
     <sys:String x:Key="SelectAll">全选</sys:String>
     <sys:String x:Key="Items">项</sys:String>

@@ -3,7 +3,7 @@
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
     <!-- Main Window -->
-    <sys:String x:Key="AppTitle">Image Manager</sys:String>
+    <sys:String x:Key="AppTitle">Terminal Image Transfer Manager</sys:String>
     <sys:String x:Key="DropHint">Drop images here or Ctrl+V to paste screenshots</sys:String>
     <sys:String x:Key="SelectAll">Select All</sys:String>
     <sys:String x:Key="Items">items</sys:String>

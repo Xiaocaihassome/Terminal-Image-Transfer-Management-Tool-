@@ -3,7 +3,7 @@
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
     <!-- 메인 창 -->
-    <sys:String x:Key="AppTitle">이미지 관리 도우미</sys:String>
+    <sys:String x:Key="AppTitle">터미널 이미지 전송 관리 도구</sys:String>
     <sys:String x:Key="DropHint">이미지를 여기에 드래그하거나 Ctrl+V로 스크린샷 붙여넣기</sys:String>
     <sys:String x:Key="SelectAll">전체 선택</sys:String>
     <sys:String x:Key="Items">항목</sys:String>

@@ -3,7 +3,7 @@
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
     <!-- メインウィンドウ -->
-    <sys:String x:Key="AppTitle">画像管理アシスタント</sys:String>
+    <sys:String x:Key="AppTitle">ターミナル画像転送管理ツール</sys:String>
     <sys:String x:Key="DropHint">画像をここにドラッグまたは Ctrl+V でスクリーンショットを貼り付け</sys:String>
     <sys:String x:Key="SelectAll">すべて選択</sys:String>
     <sys:String x:Key="Items">件</sys:String>

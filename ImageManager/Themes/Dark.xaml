@@ -1,0 +1,24 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Windows 11 深色主题 — 参考系统设置配色 -->
+    <SolidColorBrush x:Key="WindowBackground" Color="Transparent"/>
+    <SolidColorBrush x:Key="CardBackground" Color="#2D2D2D"/>
+    <SolidColorBrush x:Key="ListBackground" Color="#202020"/>
+    <SolidColorBrush x:Key="CardBorder" Color="#404040"/>
+    <SolidColorBrush x:Key="TextPrimary" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="TextSecondary" Color="#9E9E9E"/>
+    <SolidColorBrush x:Key="Accent" Color="#60CDFF"/>
+    <SolidColorBrush x:Key="ButtonBg" Color="#3D3D3D"/>
+    <SolidColorBrush x:Key="ButtonHover" Color="#4A4A4A"/>
+    <SolidColorBrush x:Key="ButtonPressed" Color="#555555"/>
+    <SolidColorBrush x:Key="DangerBg" Color="#4A2020"/>
+    <SolidColorBrush x:Key="DangerFg" Color="#FF6B6B"/>
+    <SolidColorBrush x:Key="DangerHover" Color="#5A2525"/>
+    <SolidColorBrush x:Key="DropZoneBorder" Color="#4A4A4A"/>
+    <SolidColorBrush x:Key="Separator" Color="#404040"/>
+    <SolidColorBrush x:Key="ToggleOff" Color="#555555"/>
+    <SolidColorBrush x:Key="ToggleOn" Color="#60CDFF"/>
+    <SolidColorBrush x:Key="SettingsSectionBg" Color="#383838"/>
+
+</ResourceDictionary>

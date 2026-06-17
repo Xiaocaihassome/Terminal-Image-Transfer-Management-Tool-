@@ -1,0 +1,141 @@
+using System.Diagnostics;
+using System.IO;
+using System.Threading;
+using System.Windows;
+using ImageManager.Services;
+using ImageManager.ViewModels;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace ImageManager;
+
+public partial class App : Application
+{
+    private Mutex? _mutex;
+    private bool _hasMutex;
+    private ServiceProvider? _serviceProvider;
+
+    [System.Runtime.InteropServices.DllImport("user32.dll")]
+    private static extern bool SetForegroundWindow(IntPtr hWnd);
+
+    [System.Runtime.InteropServices.DllImport("user32.dll")]
+    private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+    private const string MutexName = "ImageManager_SingleInstance";
+    private const int SW_RESTORE = 9;
+
+    protected override void OnStartup(StartupEventArgs e)
+    {
+        // 单实例检查
+        _mutex = new Mutex(true, MutexName, out bool createdNew);
+        _hasMutex = createdNew;
+
+        if (!createdNew)
+        {
+            // 激活已有窗口
+            var current = Process.GetCurrentProcess();
+            var existing = Process.GetProcessesByName(current.ProcessName)
+                .FirstOrDefault(p => p.Id != current.Id);
+
+            if (existing?.MainWindowHandle != IntPtr.Zero)
+            {
+                ShowWindow(existing.MainWindowHandle, SW_RESTORE);
+                SetForegroundWindow(existing.MainWindowHandle);
+            }
+
+            Shutdown();
+            return;
+        }
+
+        // 全局异常处理
+        SetupExceptionHandling();
+
+        // DI 容器
+        var services = new ServiceCollection();
+        ConfigureServices(services);
+        _serviceProvider = services.BuildServiceProvider();
+
+        // 启动清理孤儿目录
+        var fileService = _serviceProvider.GetRequiredService<IFileService>();
+        fileService.CleanupOrphanDirectories();
+
+        // 应用保存的主题
+        var configService = _serviceProvider.GetRequiredService<IConfigService>();
+        var settingsVm = _serviceProvider.GetRequiredService<SettingsViewModel>();
+        settingsVm.ApplyTheme(configService.Theme, configService.Transparency);
+
+        // 显示主窗口
+        var mainWindow = new MainWindow(
+            _serviceProvider.GetRequiredService<MainViewModel>(),
+            _serviceProvider.GetRequiredService<IToastService>(),
+            _serviceProvider.GetRequiredService<IPasteService>(),
+            _serviceProvider.GetRequiredService<IConfigService>(),
+            _serviceProvider);
+
+        mainWindow.Show();
+
+        base.OnStartup(e);
+    }
+
+    private void ConfigureServices(IServiceCollection services)
+    {
+        services.AddSingleton<IFileService, FileService>();
+        services.AddSingleton<IThumbnailService, ThumbnailService>();
+        services.AddSingleton<IClipboardService, ClipboardService>();
+        services.AddSingleton<IConfigService, ConfigService>();
+        services.AddSingleton<IToastService, ToastService>();
+        services.AddSingleton<IPasteService, PasteService>();
+        services.AddTransient<MainViewModel>();
+        services.AddTransient<SettingsViewModel>();
+    }
+
+    private void SetupExceptionHandling()
+    {
+        AppDomain.CurrentDomain.UnhandledException += (s, args) =>
+        {
+            LogError(args.ExceptionObject as Exception);
+            MessageBox.Show("程序遇到未知错误，请重试", "错误",
+                MessageBoxButton.OK, MessageBoxImage.Error);
+        };
+
+        TaskScheduler.UnobservedTaskException += (s, args) =>
+        {
+            LogError(args.Exception);
+            args.SetObserved();
+        };
+
+        DispatcherUnhandledException += (s, args) =>
+        {
+            LogError(args.Exception);
+            args.Handled = true;
+        };
+    }
+
+    private static void LogError(Exception? ex)
+    {
+        if (ex == null) return;
+
+        try
+        {
+            var logDir = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                "ImageManager");
+            Directory.CreateDirectory(logDir);
+
+            var logPath = Path.Combine(logDir, "error.log");
+            File.AppendAllText(logPath,
+                $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] {ex}\n\n");
+        }
+        catch { }
+    }
+
+    protected override void OnExit(ExitEventArgs e)
+    {
+        if (_hasMutex)
+        {
+            _mutex?.ReleaseMutex();
+        }
+        _mutex?.Dispose();
+        _serviceProvider?.Dispose();
+        base.OnExit(e);
+    }
+}

@@ -2,6 +2,10 @@
 bin/
 obj/
 publish/
+installer/
+
+# Logs
+*.log
 
 # Visual Studio
 .vs/

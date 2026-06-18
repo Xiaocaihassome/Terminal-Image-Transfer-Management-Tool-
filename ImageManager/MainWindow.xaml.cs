@@ -75,6 +75,10 @@ public partial class MainWindow : Window
 
         InitializeComponent();
 
+        // 加载窗口图标
+        try { Icon = new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/Resources/app.png", UriKind.Absolute)); }
+        catch { }
+
         PreviewKeyDown += MainWindow_PreviewKeyDown;
         Closing += MainWindow_Closing;
         Loaded += MainWindow_Loaded;

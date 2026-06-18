@@ -4,7 +4,6 @@
         xmlns:conv="clr-namespace:ImageManager.Converters"
         xmlns:svc="clr-namespace:ImageManager.Services"
         Title="{DynamicResource AppTitle}"
-        Icon="pack://application:,,,/Resources/app.png"
         Width="480" Height="600"
         MinWidth="380" MinHeight="420"
         WindowStartupLocation="CenterScreen"

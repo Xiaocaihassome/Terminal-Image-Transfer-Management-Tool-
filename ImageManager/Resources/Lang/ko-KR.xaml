@@ -1,0 +1,57 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <!-- 메인 창 -->
+    <sys:String x:Key="AppTitle">터미널 이미지 전송 관리 도구</sys:String>
+    <sys:String x:Key="DropHint">이미지를 여기에 드래그하거나 Ctrl+V로 스크린샷 붙여넣기</sys:String>
+    <sys:String x:Key="SelectAll">전체 선택</sys:String>
+    <sys:String x:Key="Items">항목</sys:String>
+    <sys:String x:Key="Selected">선택됨</sys:String>
+    <sys:String x:Key="EmptyState">이미지 없음</sys:String>
+    <sys:String x:Key="PasteToWindow">창에 붙여넣기</sys:String>
+    <sys:String x:Key="CopyPath">경로 복사</sys:String>
+    <sys:String x:Key="Delete">삭제</sys:String>
+    <sys:String x:Key="ClearAll">전체 지우기</sys:String>
+    <sys:String x:Key="DeleteNoAsk">삭제 시 확인 없음</sys:String>
+    <sys:String x:Key="CleanOnExit">종료 시 정리</sys:String>
+
+    <!-- 설정 창 -->
+    <sys:String x:Key="SettingsTitle">설정</sys:String>
+    <sys:String x:Key="Personalization">개인 설정</sys:String>
+    <sys:String x:Key="ThemeMode">테마 모드</sys:String>
+    <sys:String x:Key="Light">밝게</sys:String>
+    <sys:String x:Key="Dark">어둡게</sys:String>
+    <sys:String x:Key="FollowSystem">시스템 설정 따르기</sys:String>
+    <sys:String x:Key="Transparency">투명도</sys:String>
+    <sys:String x:Key="Language">언어</sys:String>
+    <sys:String x:Key="Storage">저장소</sys:String>
+    <sys:String x:Key="TempFolder">임시 폴더 위치</sys:String>
+    <sys:String x:Key="SelectFolder">폴더 선택</sys:String>
+    <sys:String x:Key="RestoreDefault">기본값 복원</sys:String>
+    <sys:String x:Key="OpenFolder">폴더 열기</sys:String>
+    <sys:String x:Key="DeleteNoConfirm">삭제 시 확인 없음</sys:String>
+    <sys:String x:Key="AutoCleanOnExit">종료 시 임시 파일 자동 삭제</sys:String>
+    <sys:String x:Key="ResourcesSection">리소스</sys:String>
+    <sys:String x:Key="DisableBlur">리소스 절약을 위해 유리 배경 비활성화</sys:String>
+    <sys:String x:Key="Help">도움말</sys:String>
+    <sys:String x:Key="Tutorial">사용 설명서</sys:String>
+    <sys:String x:Key="Step1">1. 이미지를 창에 드래그하거나 Ctrl+V로 스크린샷을 붙여넣으세요</sys:String>
+    <sys:String x:Key="Step2">2. 필요한 이미지를 선택하고「경로 복사」를 클릭하세요</sys:String>
+    <sys:String x:Key="Step3">3. AI 터미널에서 Ctrl+V로 경로를 붙여넣으세요</sys:String>
+    <sys:String x:Key="Step4">4.「창에 붙여넣기」를 클릭하면 현재 창에 자동으로 붙여넣습니다</sys:String>
+    <sys:String x:Key="FAQ">자주 묻는 질문</sys:String>
+    <sys:String x:Key="Q1">Q: 창에 붙여넣기가 작동하지 않나요?</sys:String>
+    <sys:String x:Key="A1">A: 클릭 후 2초 이내에 대상 창으로 전환하세요. 도구가 자동으로 Ctrl+V를 전송합니다.</sys:String>
+    <sys:String x:Key="Q2">Q: 이미지가 어디에 저장되나요?</sys:String>
+    <sys:String x:Key="A2">A: 기본적으로 시스템 임시 폴더에 저장됩니다. 저장소 설정에서 위치를 변경할 수 있습니다.</sys:String>
+    <sys:String x:Key="Q3">Q: 종료 후에도 이미지가 남아있나요?</sys:String>
+    <sys:String x:Key="A3">A:「종료 시 정리」를 활성화하면 창을 닫을 때 임시 파일이 자동으로 삭제됩니다.</sys:String>
+    <sys:String x:Key="About">정보</sys:String>
+    <sys:String x:Key="AppName">앱 이름</sys:String>
+    <sys:String x:Key="AppVersion">버전</sys:String>
+    <sys:String x:Key="Framework">프레임워크</sys:String>
+    <sys:String x:Key="License">라이선스</sys:String>
+    <sys:String x:Key="OpenSourceDev">오픈소스 개발자</sys:String>
+
+</ResourceDictionary>

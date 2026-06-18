@@ -1,0 +1,57 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <!-- Main Window -->
+    <sys:String x:Key="AppTitle">Terminal Image Transfer Manager</sys:String>
+    <sys:String x:Key="DropHint">Drop images here or Ctrl+V to paste screenshots</sys:String>
+    <sys:String x:Key="SelectAll">Select All</sys:String>
+    <sys:String x:Key="Items">items</sys:String>
+    <sys:String x:Key="Selected">Selected</sys:String>
+    <sys:String x:Key="EmptyState">No images</sys:String>
+    <sys:String x:Key="PasteToWindow">Paste to Window</sys:String>
+    <sys:String x:Key="CopyPath">Copy Path</sys:String>
+    <sys:String x:Key="Delete">Delete</sys:String>
+    <sys:String x:Key="ClearAll">Clear All</sys:String>
+    <sys:String x:Key="DeleteNoAsk">Delete without confirmation</sys:String>
+    <sys:String x:Key="CleanOnExit">Clean on exit</sys:String>
+
+    <!-- Settings Window -->
+    <sys:String x:Key="SettingsTitle">Settings</sys:String>
+    <sys:String x:Key="Personalization">Personalization</sys:String>
+    <sys:String x:Key="ThemeMode">Theme</sys:String>
+    <sys:String x:Key="Light">Light</sys:String>
+    <sys:String x:Key="Dark">Dark</sys:String>
+    <sys:String x:Key="FollowSystem">Follow System</sys:String>
+    <sys:String x:Key="Transparency">Transparency</sys:String>
+    <sys:String x:Key="Language">Language</sys:String>
+    <sys:String x:Key="Storage">Storage</sys:String>
+    <sys:String x:Key="TempFolder">Temp folder location</sys:String>
+    <sys:String x:Key="SelectFolder">Select Folder</sys:String>
+    <sys:String x:Key="RestoreDefault">Restore Default</sys:String>
+    <sys:String x:Key="OpenFolder">Open Folder</sys:String>
+    <sys:String x:Key="DeleteNoConfirm">Delete without confirmation</sys:String>
+    <sys:String x:Key="AutoCleanOnExit">Auto clean temp files on exit</sys:String>
+    <sys:String x:Key="ResourcesSection">Resources</sys:String>
+    <sys:String x:Key="DisableBlur">Disable frosted glass background to save resources</sys:String>
+    <sys:String x:Key="Help">Help</sys:String>
+    <sys:String x:Key="Tutorial">Tutorial</sys:String>
+    <sys:String x:Key="Step1">1. Drop images into the window, or press Ctrl+V to paste screenshots</sys:String>
+    <sys:String x:Key="Step2">2. Select the images you need, click "Copy Path"</sys:String>
+    <sys:String x:Key="Step3">3. Press Ctrl+V in the AI terminal to paste the path</sys:String>
+    <sys:String x:Key="Step4">4. Click "Paste to Window" to auto-paste to the foreground window</sys:String>
+    <sys:String x:Key="FAQ">FAQ</sys:String>
+    <sys:String x:Key="Q1">Q: Paste to window not working?</sys:String>
+    <sys:String x:Key="A1">A: After clicking, switch to the target window within 2 seconds. The tool will automatically send Ctrl+V.</sys:String>
+    <sys:String x:Key="Q2">Q: Where are images saved?</sys:String>
+    <sys:String x:Key="A2">A: By default, images are saved in the system temp directory. You can customize the location in storage settings.</sys:String>
+    <sys:String x:Key="Q3">Q: Are images kept after closing?</sys:String>
+    <sys:String x:Key="A3">A: Enable "Clean on exit" to automatically delete temp files when closing.</sys:String>
+    <sys:String x:Key="About">About</sys:String>
+    <sys:String x:Key="AppName">App Name</sys:String>
+    <sys:String x:Key="AppVersion">Version</sys:String>
+    <sys:String x:Key="Framework">Framework</sys:String>
+    <sys:String x:Key="License">License</sys:String>
+    <sys:String x:Key="OpenSourceDev">Open Source Developer</sys:String>
+
+</ResourceDictionary>

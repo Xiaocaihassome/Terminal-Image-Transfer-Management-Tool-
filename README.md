@@ -17,7 +17,7 @@
 - **自定义临时目录** — 可设置图片存储位置
 - **单实例运行** — 防止重复打开
 - **退出自动清理** — 可选关闭时清空临时文件
-<img width="1155" height="762" alt="image" src="https://github.com/user-attachments/assets/9be058cf-2f71-49a1-829e-4cd7a1d59e09" /><<img width="1136" height="750" alt="image" src="https://github.com/user-attachments/assets/d83541ff-efde-40fc-9bac-27e9f89c2296" />
+<img width="1155" height="762" alt="image" src="https://github.com/user-attachments/assets/9be058cf-2f71-49a1-829e-4cd7a1d59e09" /><img width="1136" height="750" alt="image" src="https://github.com/user-attachments/assets/d83541ff-efde-40fc-9bac-27e9f89c2296" />
 
 
 ## 环境要求

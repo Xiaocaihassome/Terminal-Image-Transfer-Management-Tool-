@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+
+    <!-- 发布配置 -->
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>true</SelfContained>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+
+    <!-- 程序集信息 -->
+    <AssemblyName>ImageManager</AssemblyName>
+    <RootNamespace>ImageManager</RootNamespace>
+    <Version>1.0.0</Version>
+    <Authors>小蔡有点料</Authors>
+    <Description>AI 终端图片中转管理工具</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ApplicationManifest Include="app.manifest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ApplicationIcon Include="Resources\app.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\app.png" />
+    <Resource Include="Resources\avatar.png" />
+    <Resource Include="Resources\Lang\zh-CN.xaml" />
+    <Resource Include="Resources\Lang\zh-TW.xaml" />
+    <Resource Include="Resources\Lang\en-US.xaml" />
+    <Resource Include="Resources\Lang\ko-KR.xaml" />
+    <Resource Include="Resources\Lang\ja-JP.xaml" />
+  </ItemGroup>
+
+</Project>

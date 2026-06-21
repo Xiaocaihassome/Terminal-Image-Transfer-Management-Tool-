@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
@@ -13,6 +14,8 @@ public partial class SettingsViewModel : ObservableObject
 {
     private readonly IConfigService _configService;
     private readonly IToastService _toastService;
+    private readonly IUpdateService _updateService;
+    private readonly MainViewModel? _mainViewModel;
 
     // 由 SettingsWindow 设置，用于切换设置后刷新毛玻璃效果
     public Action? RefreshBackdrop { get; set; }
@@ -34,21 +37,79 @@ public partial class SettingsViewModel : ObservableObject
     private bool _disableBlur;
 
     [ObservableProperty]
+    private string _backgroundMode = "Glass";
+
+    [ObservableProperty]
     private bool _deleteWithoutConfirm;
 
     [ObservableProperty]
     private bool _autoCleanOnExit = true;
 
-    public string DefaultTempPath => Path.Combine(Path.GetTempPath(), "ImageManager");
-    public string DisplayTempPath => string.IsNullOrEmpty(CustomTempPath)
-        ? $"默认: {DefaultTempPath}"
-        : $"自定义: {CustomTempPath}";
-    public string Version => "1.0.0";
+    [ObservableProperty]
+    private bool _privacyMode;
 
-    public SettingsViewModel(IConfigService configService, IToastService toastService)
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(FontWeightLabel))]
+    private string _selectedFontFamily = "";
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(FontWeightLabel))]
+    private int _selectedFontWeight = 400;
+
+    // 更新相关
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(UpdateButtonText))]
+    private bool _hasUpdate;
+
+    [ObservableProperty]
+    private UpdateInfo? _latestUpdate;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(UpdateButtonText))]
+    private string _updateStatus = "";
+
+    public string UpdateButtonText => HasUpdate ? $"★ {LatestUpdate?.Version}" : UpdateStatus;
+    public string FontWeightLabel => SelectedFontWeight switch
+    {
+        100 => "Thin",
+        200 => "ExtraLight",
+        300 => "Light",
+        400 => "Regular",
+        500 => "Medium",
+        600 => "SemiBold",
+        700 => "Bold",
+        800 => "ExtraBold",
+        900 => "Black",
+        _ => SelectedFontWeight.ToString()
+    };
+    public List<string> InstalledFonts { get; } = new();
+    public List<int> FontWeights { get; } = new() { 100, 200, 300, 400, 500, 600, 700, 800, 900 };
+
+    public string DefaultTempPath => Path.Combine(Path.GetTempPath(), "ImageManager");
+    public string DisplayTempPath
+    {
+        get
+        {
+            if (PrivacyMode)
+                return "默认: ********";
+            return string.IsNullOrEmpty(CustomTempPath)
+                ? $"默认: {DefaultTempPath}"
+                : $"自定义: {CustomTempPath}";
+        }
+    }
+    public string Version => "1.1.0";
+
+    public SettingsViewModel(IConfigService configService, IToastService toastService, IUpdateService updateService, MainViewModel mainViewModel)
     {
         _configService = configService;
         _toastService = toastService;
+        _updateService = updateService;
+        _mainViewModel = mainViewModel;
+
+        // 加载系统已安装字体
+        foreach (var family in Fonts.SystemFontFamilies)
+            InstalledFonts.Add(family.Source);
+
         LoadFromConfig();
     }
 
@@ -61,6 +122,10 @@ public partial class SettingsViewModel : ObservableObject
         Transparency = _configService.Transparency;
         CurrentLanguage = _configService.Language;
         DisableBlur = _configService.DisableBlur;
+        BackgroundMode = _configService.BackgroundMode;
+        PrivacyMode = _configService.PrivacyMode;
+        SelectedFontFamily = _configService.FontFamily;
+        SelectedFontWeight = _configService.FontWeight;
     }
 
     partial void OnTransparencyChanged(double value)
@@ -81,6 +146,64 @@ public partial class SettingsViewModel : ObservableObject
     partial void OnDisableBlurChanged(bool value)
     {
         _configService.DisableBlur = value;
+        _configService.Save();
+        RefreshBackdrop?.Invoke();
+    }
+
+    partial void OnPrivacyModeChanged(bool value)
+    {
+        _configService.PrivacyMode = value;
+        _configService.Save();
+        OnPropertyChanged(nameof(DisplayTempPath));
+    }
+
+    partial void OnSelectedFontFamilyChanged(string value)
+    {
+        _configService.FontFamily = value;
+        _configService.Save();
+        ApplyGlobalFont();
+    }
+
+    partial void OnSelectedFontWeightChanged(int value)
+    {
+        _configService.FontWeight = value;
+        _configService.Save();
+        ApplyGlobalFont();
+    }
+
+    public void ApplyGlobalFont()
+    {
+        var app = Application.Current;
+        if (app == null) return;
+
+        var family = string.IsNullOrEmpty(SelectedFontFamily)
+            ? new FontFamily("Microsoft YaHei UI")
+            : new FontFamily(SelectedFontFamily);
+
+        app.Resources["GlobalFontFamily"] = family;
+        app.Resources["GlobalFontWeight"] = SelectedFontWeight switch
+        {
+            100 => System.Windows.FontWeights.Thin,
+            200 => System.Windows.FontWeights.ExtraLight,
+            300 => System.Windows.FontWeights.Light,
+            400 => System.Windows.FontWeights.Normal,
+            500 => System.Windows.FontWeights.Medium,
+            600 => System.Windows.FontWeights.SemiBold,
+            700 => System.Windows.FontWeights.Bold,
+            800 => System.Windows.FontWeights.ExtraBold,
+            900 => System.Windows.FontWeights.Black,
+            _ => System.Windows.FontWeights.Normal
+        };
+    }
+
+    [RelayCommand]
+    private void SetBackgroundMode(string mode)
+    {
+        BackgroundMode = mode;
+        _configService.BackgroundMode = mode;
+        // 同步旧字段，保持兼容
+        DisableBlur = mode == "None";
+        _configService.DisableBlur = DisableBlur;
         _configService.Save();
         RefreshBackdrop?.Invoke();
     }
@@ -150,6 +273,44 @@ public partial class SettingsViewModel : ObservableObject
     private void OpenHelpUrl()
     {
         Process.Start(new ProcessStartInfo("https://github.com/xiaocaiyou-dianliao/ImageManager") { UseShellExecute = true });
+    }
+
+    [RelayCommand]
+    private async Task CheckUpdateAsync()
+    {
+        UpdateStatus = "检查中...";
+        HasUpdate = false;
+        LatestUpdate = null;
+
+        var update = await _updateService.CheckAsync();
+        if (update != null)
+        {
+            LatestUpdate = update;
+            HasUpdate = true;
+            if (_mainViewModel != null) _mainViewModel.HasUpdate = true;
+            UpdateStatus = $"发现新版本 {update.Version}";
+        }
+        else
+        {
+            UpdateStatus = "已是最新版本";
+        }
+    }
+
+    [RelayCommand]
+    private async Task DownloadUpdateAsync()
+    {
+        if (LatestUpdate == null) return;
+
+        UpdateStatus = "正在下载...";
+        try
+        {
+            await _updateService.DownloadAndInstallAsync(LatestUpdate);
+        }
+        catch (Exception ex)
+        {
+            UpdateStatus = $"下载失败：{ex.Message}";
+            _toastService.Show("下载失败，请手动下载", ToastType.Error);
+        }
     }
 
     public void ApplyTheme(string theme, double? transparency = null)

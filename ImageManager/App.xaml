@@ -13,6 +13,10 @@
 
             <conv:BoolToVisibilityConverter x:Key="BoolToVis"/>
             <conv:ThemeToBoolConverter x:Key="ThemeToBool"/>
+
+            <!-- 全局字体 -->
+            <FontFamily x:Key="GlobalFontFamily">Microsoft YaHei UI</FontFamily>
+            <FontWeight x:Key="GlobalFontWeight">Regular</FontWeight>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -18,6 +18,7 @@
 
     <!-- 设置窗口 -->
     <sys:String x:Key="SettingsTitle">設定</sys:String>
+    <sys:String x:Key="Appearance">外觀</sys:String>
     <sys:String x:Key="Personalization">個人化</sys:String>
     <sys:String x:Key="ThemeMode">主題模式</sys:String>
     <sys:String x:Key="Light">淺色</sys:String>
@@ -32,26 +33,42 @@
     <sys:String x:Key="OpenFolder">打開資料夾</sys:String>
     <sys:String x:Key="DeleteNoConfirm">刪除時不再詢問</sys:String>
     <sys:String x:Key="AutoCleanOnExit">退出時自動清空臨時檔案</sys:String>
+    <sys:String x:Key="PrivacyMode">隱私模式</sys:String>
+    <sys:String x:Key="PrivacyModeDesc">開啟後隱藏檔案路徑等敏感資訊，適用於螢幕共享或簡報場景</sys:String>
+    <sys:String x:Key="FontSelect">字型設定</sys:String>
+    <sys:String x:Key="FontWeightSelect">字重</sys:String>
+    <sys:String x:Key="FontSettingDesc">自訂應用字型和字重</sys:String>
     <sys:String x:Key="ResourcesSection">資源</sys:String>
     <sys:String x:Key="DisableBlur">禁用毛玻璃背景以節省資源</sys:String>
+    <sys:String x:Key="BackgroundEffect">背景效果</sys:String>
+    <sys:String x:Key="BgGlass">毛玻璃</sys:String>
+    <sys:String x:Key="BgMica">Win11 壓克力</sys:String>
+    <sys:String x:Key="BgNone">無（純色）</sys:String>
+    <sys:String x:Key="BgHint">毛玻璃即時模糊桌面；Win11 壓克力使用系統材質（需 Windows 10/11）。</sys:String>
     <sys:String x:Key="Help">幫助</sys:String>
     <sys:String x:Key="Tutorial">使用教程</sys:String>
     <sys:String x:Key="Step1">1. 拖入圖片到視窗，或按 Ctrl+V 貼上截圖</sys:String>
-    <sys:String x:Key="Step2">2. 勾選需要的圖片，點擊「複製路徑」</sys:String>
-    <sys:String x:Key="Step3">3. 在 AI 終端中 Ctrl+V 貼上路徑即可</sys:String>
-    <sys:String x:Key="Step4">4. 點擊「貼上到視窗」可自動貼上到前台視窗</sys:String>
+    <sys:String x:Key="Step2">2. 勾選需要的圖片，點擊「複製路徑」複製到剪貼簿</sys:String>
+    <sys:String x:Key="Step3">3. 在 AI 終端或任意視窗中 Ctrl+V 貼上路徑即可</sys:String>
+    <sys:String x:Key="Step4">4. 點擊「貼上到視窗」可自動將路徑貼上到前台視窗</sys:String>
+    <sys:String x:Key="Step5">5. 設定中可切換背景效果、字型、語言和隱私模式</sys:String>
     <sys:String x:Key="FAQ">常見問題</sys:String>
     <sys:String x:Key="Q1">Q: 貼上到視窗沒有反應？</sys:String>
     <sys:String x:Key="A1">A: 點擊後在2秒內切換到目標視窗，工具會自動發送 Ctrl+V。</sys:String>
-    <sys:String x:Key="Q2">Q: 圖片儲存在哪裡？</sys:String>
-    <sys:String x:Key="A2">A: 預設儲存在系統臨時目錄，可在儲存設定中自訂位置。</sys:String>
-    <sys:String x:Key="Q3">Q: 關閉後圖片還在嗎？</sys:String>
-    <sys:String x:Key="A3">A: 勾選「退出清空」後關閉視窗會自動刪除臨時檔案。</sys:String>
+    <sys:String x:Key="Q2">Q: 隱私模式有什麼用？</sys:String>
+    <sys:String x:Key="A2">A: 開啟後所有檔案路徑會被遮罩為 ********，適用於螢幕共享或簡報場景。</sys:String>
+    <sys:String x:Key="Q3">Q: 背景效果該選哪個？</sys:String>
+    <sys:String x:Key="A3">A: 毛玻璃適合大多數場景；Win11 壓克力使用系統材質更通透；無則為純色背景。</sys:String>
+    <sys:String x:Key="Q4">Q: 字型設定如何生效？</sys:String>
+    <sys:String x:Key="A4">A: 在外觀設定中點擊字型設定，選擇字型和字重後點擊「套用」即可全域生效。</sys:String>
     <sys:String x:Key="About">關於</sys:String>
     <sys:String x:Key="AppName">應用程式名稱</sys:String>
     <sys:String x:Key="AppVersion">版本</sys:String>
     <sys:String x:Key="Framework">框架</sys:String>
     <sys:String x:Key="License">協議</sys:String>
+    <sys:String x:Key="CheckUpdate">檢查更新</sys:String>
+    <sys:String x:Key="InstallNow">立即安裝</sys:String>
+    <sys:String x:Key="UpdateBannerText">發現新版本，點擊查看詳情</sys:String>
     <sys:String x:Key="OpenSourceDev">開源工具開發者</sys:String>
 
 </ResourceDictionary>

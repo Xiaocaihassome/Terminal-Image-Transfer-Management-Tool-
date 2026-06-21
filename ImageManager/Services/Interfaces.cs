@@ -44,6 +44,10 @@ public interface IConfigService
     double Transparency { get; set; } // 0=全透明, 1=不透明
     string Language { get; set; }
     bool DisableBlur { get; set; }
+    string BackgroundMode { get; set; } // Glass=毛玻璃, Mica=Win11云母, None=纯色
+    bool PrivacyMode { get; set; }
+    string FontFamily { get; set; }
+    int FontWeight { get; set; } // 100-900
     string GetTempRoot();
     void Load();
     void Save();

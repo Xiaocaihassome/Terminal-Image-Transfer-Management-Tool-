@@ -45,3 +45,25 @@ public class ThemeToBoolConverter : IValueConverter
         return DependencyProperty.UnsetValue;
     }
 }
+
+/// <summary>隐私模式下遮罩文件路径，只显示文件名。</summary>
+public class PrivacyPathConverter : IMultiValueConverter
+{
+    public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+    {
+        string path = values.Length > 0 ? values[0] as string ?? "" : "";
+        if (values.Length < 2) return path;
+
+        bool privacyMode = values[1] is bool pm && pm;
+        if (!privacyMode) return path;
+
+        // 只显示文件名，路径用 * 遮罩
+        var dir = System.IO.Path.GetDirectoryName(path);
+        var name = System.IO.Path.GetFileName(path);
+        if (string.IsNullOrEmpty(dir)) return name ?? path;
+        return name + " (" + new string('*', Math.Min(dir.Length, 8)) + ")";
+    }
+
+    public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture) =>
+        throw new NotImplementedException();
+}

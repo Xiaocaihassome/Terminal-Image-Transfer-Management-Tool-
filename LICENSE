@@ -19,3 +19,20 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+---
+
+Third-party dependencies:
+
+1. CommunityToolkit.Mvvm
+   Copyright (c) .NET Foundation and Contributors
+   Licensed under the MIT License. https://github.com/CommunityToolkit/WindowsCommunityToolkit
+
+2. Microsoft.Extensions.DependencyInjection
+   Copyright (c) .NET Foundation and Contributors
+   Licensed under the MIT License. https://github.com/dotnet/runtime
+
+3. Game Icon Pack (应用内界面图标)
+   Copyright (c) Nieobie
+   Licensed under the MIT License. https://github.com/Nieobie/Game-Icon-Pack
+   图标用于应用内 UI 界面

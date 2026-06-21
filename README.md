@@ -12,12 +12,16 @@
 - **粘贴截图** — Ctrl+V 粘贴剪贴板中的图片
 - **复制路径** — 勾选图片后一键复制文件路径
 - **粘贴到窗口** — 自动将路径粘贴到前台窗口（2秒倒计时切换目标窗口）
-- **毛玻璃效果** — 窗口背景实时模糊桌面，视觉效果优雅
+- **背景效果** — 毛玻璃 / Win11 亚克力 / 纯色 三种背景模式
+- **字体设置** — 自定义字体族、字重，实时预览，快速选择常用字体
+- **隐私模式** — 图片模糊遮挡，防止意外展示敏感内容
+- **更新检查** — 自动检测 GitHub Releases 新版本，一键下载安装
 - **深色/浅色主题** — 支持手动切换或跟随系统
 - **透明度调节** — 自定义窗口透明度（30% ~ 100%）
 - **自定义临时目录** — 可设置图片存储位置
 - **单实例运行** — 防止重复打开
 - **退出自动清理** — 可选关闭时清空临时文件
+- **多语言支持** — 简体中文、繁體中文、English、日本語、한국어
 
 <img width="1155" height="762" alt="Screenshot 1" src="https://github.com/user-attachments/assets/9be058cf-2f71-49a1-829e-4cd7a1d59e09" />
 <img width="1136" height="750" alt="Screenshot 2" src="https://github.com/user-attachments/assets/d83541ff-efde-40fc-9bac-27e9f89c2296" />
@@ -54,30 +58,35 @@ dotnet publish -c Release -r win-x64 --self-contained -p:PublishSingleFile=true
 
 ```
 ImageManager/
-├── App.xaml / App.xaml.cs          # 应用入口、DI 容器、单实例
-├── MainWindow.xaml / .cs           # 主窗口
-├── SettingsWindow.xaml / .cs       # 设置窗口
+├── App.xaml / App.xaml.cs              # 应用入口、DI 容器、单实例
+├── MainWindow.xaml / .cs               # 主窗口
+├── SettingsWindow.xaml / .cs           # 设置窗口
+├── FontSettingsWindow.xaml / .cs       # 字体设置窗口
 ├── ViewModels/
-│   ├── MainViewModel.cs            # 主窗口逻辑
-│   └── SettingsViewModel.cs        # 设置逻辑
+│   ├── MainViewModel.cs                # 主窗口逻辑
+│   └── SettingsViewModel.cs            # 设置逻辑
 ├── Services/
-│   ├── ConfigService.cs            # 配置持久化
-│   ├── ThemeManager.cs             # 主题管理（单例）
-│   ├── PasteService.cs             # 粘贴到窗口（Win32 SendInput）
-│   ├── FileService.cs              # 文件操作
-│   ├── ThumbnailService.cs         # 缩略图生成
-│   ├── ClipboardService.cs         # 剪贴板操作
-│   └── ToastService.cs             # 提示消息
+│   ├── ConfigService.cs                # 配置持久化
+│   ├── ThemeManager.cs                 # 主题管理（单例）
+│   ├── BackdropService.cs              # 背景效果（毛玻璃/亚克力/纯色）
+│   ├── PasteService.cs                 # 粘贴到窗口（Win32 SendInput）
+│   ├── UpdateService.cs                # 更新检查（GitHub Releases）
+│   ├── FileService.cs                  # 文件操作
+│   ├── ThumbnailService.cs             # 缩略图生成
+│   ├── ClipboardService.cs             # 剪贴板操作
+│   └── ToastService.cs                 # 提示消息
 ├── Models/
-│   └── ImageItem.cs                # 图片数据模型
+│   └── ImageItem.cs                    # 图片数据模型
 ├── Converters/
-│   └── Converters.cs               # XAML 转换器
+│   └── Converters.cs                   # XAML 转换器
 ├── Resources/
-│   ├── Styles.xaml                 # 控件样式
-│   └── avatar.png                  # 作者头像
+│   ├── Icons/                          # 主题图标（PNG）
+│   ├── Lang/                           # 多语言资源（5种语言）
+│   ├── Styles.xaml                     # 控件样式
+│   └── app.ico / app.png              # 应用图标
 └── Themes/
-    ├── Light.xaml                  # 浅色主题资源
-    └── Dark.xaml                   # 深色主题资源
+    ├── Light.xaml                      # 浅色主题资源
+    └── Dark.xaml                       # 深色主题资源
 ```
 
 ## 技术栈
@@ -85,8 +94,9 @@ ImageManager/
 - **框架**: .NET 8 + WPF
 - **架构**: MVVM（CommunityToolkit.Mvvm）
 - **依赖注入**: Microsoft.Extensions.DependencyInjection
-- **毛玻璃效果**: WPF 桌面捕获 + 高斯模糊
+- **背景效果**: DWM Acrylic API / 桌面捕获 + 高斯模糊
 - **粘贴模拟**: Win32 SendInput API
+- **更新检测**: GitHub Releases API
 
 ## 使用须知与免责声明
 
@@ -113,26 +123,22 @@ ImageManager/
 
 A lightweight image transfer management tool designed for AI terminals. Supports drag & drop, clipboard paste, path copying, and one-click paste to target windows.
 
-<img width="151" height="151" alt="App Icon" src="https://github.com/user-attachments/assets/ba13be46-055b-42f4-a09a-078ffd105bdf" />
-
 ## Features
 
 - **Drag & Drop** — Drop images directly into the window
 - **Paste Screenshots** — Ctrl+V to paste images from clipboard
 - **Copy Paths** — Select images and copy file paths with one click
 - **Paste to Window** — Automatically paste the path to the foreground window (2-second countdown to switch target)
-- **Frosted Glass Effect** — Real-time desktop blur background for an elegant visual experience
+- **Background Effects** — Frosted Glass / Win11 Acrylic / Solid color modes
+- **Font Settings** — Customize font family & weight with live preview and quick selection
+- **Privacy Mode** — Blur images to prevent accidental exposure of sensitive content
+- **Update Check** — Auto-detect new releases on GitHub, one-click download & install
 - **Light / Dark Theme** — Manual switching or follow system preference
 - **Transparency Control** — Customizable window opacity (30% ~ 100%)
 - **Custom Temp Directory** — Configure where images are stored
 - **Single Instance** — Prevents duplicate instances
 - **Auto Cleanup on Exit** — Optionally clear temp files when closing
-
-<img width="1147" height="747" alt="image" src="https://github.com/user-attachments/assets/cbcb4281-8345-44c0-a66e-22ed132c28ba" /><img width="1152" height="760" alt="image" src="https://github.com/user-attachments/assets/d90ff267-82ee-4a7f-96fb-39822e353326" />
-
-
-
-
+- **Multi-language** — 简体中文, 繁體中文, English, 日本語, 한국어
 
 ## Requirements
 
@@ -167,8 +173,9 @@ The output EXE is at `bin/Release/net8.0-windows/win-x64/publish/ImageManager.ex
 - **Framework**: .NET 8 + WPF
 - **Architecture**: MVVM (CommunityToolkit.Mvvm)
 - **Dependency Injection**: Microsoft.Extensions.DependencyInjection
-- **Frosted Glass**: Desktop capture + Gaussian blur
+- **Backdrop Effects**: DWM Acrylic API / Desktop capture + Gaussian blur
 - **Paste Simulation**: Win32 SendInput API
+- **Update Detection**: GitHub Releases API
 
 ## Usage Notice & Disclaimer
 
@@ -192,7 +199,6 @@ The output EXE is at `bin/Release/net8.0-windows/win-x64/publish/ImageManager.ex
 # 繁體中文
 
 <a id="繁體中文"></a>
-<img width="151" height="151" alt="App Icon" src="https://github.com/user-attachments/assets/ba13be46-055b-42f4-a09a-078ffd105bdf" />
 
 一款專為 AI 終端設計的輕量級圖片中轉管理工具，支援拖曳、貼上、路徑複製和一鍵貼上到目標視窗。
 
@@ -202,16 +208,16 @@ The output EXE is at `bin/Release/net8.0-windows/win-x64/publish/ImageManager.ex
 - **貼上截圖** — Ctrl+V 貼上剪貼簿中的圖片
 - **複製路徑** — 勾選圖片後一鍵複製檔案路徑
 - **貼上到視窗** — 自動將路徑貼上到前景視窗（2秒倒數計時切換目標視窗）
-- **毛玻璃效果** — 視窗背景即時模糊桌面，視覺效果優雅
+- **背景效果** — 毛玻璃 / Win11 亞克力 / 純色 三種背景模式
+- **字型設定** — 自訂字型族、字重，即時預覽，快速選擇常用字型
+- **隱私模式** — 圖片模糊遮擋，防止意外展示敏感內容
+- **更新檢查** — 自動偵測 GitHub Releases 新版本，一鍵下載安裝
 - **深色/淺色主題** — 支援手動切換或跟隨系統
 - **透明度調節** — 自訂視窗透明度（30% ~ 100%）
 - **自訂暫存目錄** — 可設定圖片儲存位置
 - **單一執行個體** — 防止重複開啟
 - **離開自動清理** — 選擇關閉時清空暫存檔案
-
-  <img width="1161" height="761" alt="image" src="https://github.com/user-attachments/assets/f17886fc-50cb-4471-9639-65b6efc496f5" /><img width="1162" height="756" alt="image" src="https://github.com/user-attachments/assets/24c684a6-5f76-4509-9ffb-d6e28a16b95b" />
-
-
+- **多語言支援** — 簡體中文、繁體中文、English、日本語、한국어
 
 ## 環境需求
 
@@ -246,8 +252,9 @@ dotnet publish -c Release -r win-x64 --self-contained -p:PublishSingleFile=true
 - **框架**: .NET 8 + WPF
 - **架構**: MVVM（CommunityToolkit.Mvvm）
 - **依賴注入**: Microsoft.Extensions.DependencyInjection
-- **毛玻璃效果**: WPF 桌面擷取 + 高斯模糊
+- **背景效果**: DWM Acrylic API / 桌面擷取 + 高斯模糊
 - **貼上模擬**: Win32 SendInput API
+- **更新偵測**: GitHub Releases API
 
 ## 使用須知與免責聲明
 
@@ -271,7 +278,6 @@ dotnet publish -c Release -r win-x64 --self-contained -p:PublishSingleFile=true
 # 日本語
 
 <a id="日本語"></a>
-<img width="151" height="151" alt="App Icon" src="https://github.com/user-attachments/assets/ba13be46-055b-42f4-a09a-078ffd105bdf" />
 
 AIターミナル向けの軽量画像転送管理ツール。ドラッグ＆ドロップ、クリップボード貼り付け、パスコピー、ターゲットウィンドウへのワンクリック貼り付けに対応しています。
 
@@ -281,15 +287,16 @@ AIターミナル向けの軽量画像転送管理ツール。ドラッグ＆ド
 - **スクリーンショット貼り付け** — Ctrl+Vでクリップボードから画像を貼り付け
 - **パスコピー** — 画像を選択してワンクリックでファイルパスをコピー
 - **ウィンドウに貼り付け** — パスをフロントウィンドウに自動貼り付け（2秒カウントダウンでターゲット切替）
-- **フロストグラス効果** — ウィンドウ背景でリアルタイムにデスクトップをぼかし、エレガントなビジュアル体験
+- **背景エフェクト** — フロストグラス / Win11 アクリリック / ソリッドカラー 3種類
+- **フォント設定** — フォントファミリー・ウェイトのカスタマイズ、ライブプレビュー、クイック選択
+- **プライバシーモード** — 画像をぼかして機密情報の誤表示を防止
+- **更新チェック** — GitHub Releasesの新バージョンを自動検出、ワンクリックダウンロード＆インストール
 - **ライト/ダークテーマ** — 手動切替またはシステム設定に追従
 - **透過度調整** — ウィンドウの透過度をカスタマイズ（30% ~ 100%）
 - **カスタム一時ディレクトリ** — 画像の保存先を設定可能
 - **シングルインスタンス** — 重複起動を防止
 - **終了時自動クリーンアップ** — 閉じる際に一時ファイルを削除可能
-
-<img width="1167" height="747" alt="image" src="https://github.com/user-attachments/assets/d98ffd34-ff26-4787-96f9-3097f65ff56a" /><img width="1157" height="762" alt="image" src="https://github.com/user-attachments/assets/3d43f1ea-2095-4968-bbf1-90e7fc886fd0" />
-
+- **多言語対応** — 簡体中文、繁體中文、English、日本語、한국어
 
 ## システム要件
 
@@ -324,8 +331,9 @@ dotnet publish -c Release -r win-x64 --self-contained -p:PublishSingleFile=true
 - **フレームワーク**: .NET 8 + WPF
 - **アーキテクチャ**: MVVM (CommunityToolkit.Mvvm)
 - **依存性注入**: Microsoft.Extensions.DependencyInjection
-- **フロストグラス**: デスクトップキャプチャ + ガウスぼかし
+- **背景エフェクト**: DWM Acrylic API / デスクトップキャプチャ + ガウスぼかし
 - **貼り付けシミュレーション**: Win32 SendInput API
+- **更新検出**: GitHub Releases API
 
 ## 利用規約・免責事項
 
@@ -336,9 +344,9 @@ dotnet publish -c Release -r win-x64 --self-contained -p:PublishSingleFile=true
 - 本ツールは「現状」で提供され、操作ミス、ファイル消失、システム互換性の問題などの潜在的リスクについて保証しません。すべての使用リスクはユーザーが負担します。
 - 本プロジェクトはAIの広範な支援を受けて開発されたため、微細で気づきにくいプログラム上の問題が残っている可能性があります。ご不便をおかけした場合はご理解をお願いいたします。
 
-##许可证
+## ライセンス
 
-[MIT许可证](许可证)
+[MIT License](LICENSE)
 
 ## 作者
 
@@ -349,39 +357,38 @@ dotnet publish -c Release -r win-x64 --self-contained -p:PublishSingleFile=true
 # 한국어
 
 <a id="한국어"></a>
-<img width="151" height="151" alt="App Icon" src="https://github.com/user-attachments/assets/ba13be46-055b-42f4-a09a-078ffd105bdf" />
 
 AI 터미널용 경량 이미지 전송 관리 도구입니다. 드래그 앤 드롭, 클립보드 붙여넣기, 경로 복사 및 대상 윈도우에 원클릭 붙여넣기를 지원합니다.
 
 ## 기능
 
-- **拖放**— 直接将图像拖放到窗口中
+- **드래그 앤 드롭** — 윈도우에 이미지를 직접 드롭
 - **스크린샷 붙여넣기** — Ctrl+V로 클립보드에서 이미지를 붙여넣기
 - **경로 복사** — 이미지를 선택하고 원클릭으로 파일 경로 복사
-- **粘贴到窗口**— 将路径自动粘贴到当前窗口（通过2秒倒计时切换目标）
-- **玻璃效果**— 通过实时桌面模糊效果打造优雅的窗口背景视觉体验
+- **윈도우에 붙여넣기** — 경로를 전면 윈도우에 자동 붙여넣기 (2초 카운트다운으로 대상 전환)
+- **배경 효과** — 프로스트 글래스 / Win11 아크릴리ック / 솔리드 컬러 3가지 모드
+- **폰트 설정** — 폰트 패밀리 및 굵기 커스터마이즈, 라이브 미리보기, 빠른 선택
+- **프라이버시 모드** — 이미지 블러 처리로 민감한 정보 노출 방지
+- **업데이트 확인** — GitHub Releases 새 버전 자동 감지, 원클릭 다운로드 및 설치
 - **라이트/다크 테마** — 수동 전환 또는 시스템 설정 따르기
 - **투명도 조절** — 윈도우 투명도 커스터마이즈 (30% ~ 100%)
 - **커스텀 임시 디렉토리** — 이미지 저장 위치 설정 가능
-- **单实例**— 防止重复运行
+- **단일 인스턴스** — 중복 실행 방지
 - **종료 시 자동 정리** — 종료 시 임시 파일 삭제 선택 가능
+- **다국어 지원** — 簡体中文、繁體中文、English、日本語、한국어
 
-  <img width="1166" height="762" alt="image" src="https://github.com/user-attachments/assets/84515bb4-a97d-4c9c-8f3d-ebd1cdb16ebb" /><img width="1150" height="760" alt="image" src="https://github.com/user-attachments/assets/7289fe08-037c-498e-b001-353ec3c24468" />
-
-
-
-##系统要求
+## 시스템 요구사항
 
 - Windows 10 (build 1809+) 또는 Windows 11
--.NET 8.0 运行时（或使用自包含构建）
+- .NET 8.0 Runtime (또는 self-contained 빌드 사용)
 
-##快速入门
+## 빠른 시작
 
-###方法1：下载安装文件
+### 방법 1: 설치 파일 다운로드
 
-[版本](https://github.com/Xiaocaihassome/Terminal-Image-Transfer-Management-Tool-/releases)从下载最新版本，并解压`ImageManager.exe`后运行
+[Releases](https://github.com/Xiaocaihassome/Terminal-Image-Transfer-Management-Tool-/releases)에서 최신 버전을 다운로드하고, 압축을 풀어 `ImageManager.exe`를 실행하세요.
 
-###方法2：从源码构建
+### 방법 2: 소스에서 빌드
 
 ```bash
 git clone https://github.com/Xiaocaihassome/Terminal-Image-Transfer-Management-Tool-.git
@@ -389,36 +396,37 @@ cd ImageManager
 dotnet publish -c Release -r win-x64 --self-contained -p:PublishSingleFile=true
 ```
 
-生成的EXE文件位于`bin/Release/net8.0-windows/win-x64/publish/ImageManager.exe``
+출력된 EXE는 `bin/Release/net8.0-windows/win-x64/publish/ImageManager.exe`에 있습니다.
 
-##使用方法
+## 사용 방법
 
-1. **添加图片**: 将图片拖拽至窗口，或使用Ctrl+V粘贴截图
-2. **选择图片**: 勾选所需图片（支持全选）
-**: 点击“复制路径”按钮
-4. **粘贴到窗口**: 点击“粘贴到窗口”后，在2秒内切换到目标窗口，即可自动发送Ctrl+V
+1. **이미지 추가**: 이미지를 윈도우에 드래그하거나 Ctrl+V로 스크린샷을 붙여넣기
+2. **이미지 선택**: 필요한 이미지에 체크 (전체 선택 지원)
+3. **경로 복사**: "경로 복사" 버튼 클릭
+4. **윈도우에 붙여넣기**: "윈도우에 붙여넣기" 클릭 후 2초 이내에 대상 윈도우로 전환하면 Ctrl+V가 자동 전송됨
 
-##技术栈
+## 기술 스택
 
-- **框架**: .NET 8 + WPF
-- **架构**: MVVM（CommunityToolkit.Mvvm）
-- **依赖注入**: Microsoft.Extensions.DependencyInjection
-- **玻璃效果**: 桌面捕获 + 高斯模糊
-**: Win32 SendInput API
+- **프레임워크**: .NET 8 + WPF
+- **아키텍처**: MVVM (CommunityToolkit.Mvvm)
+- **의존성 주입**: Microsoft.Extensions.DependencyInjection
+- **배경 효과**: DWM Acrylic API / 데스크톱 캡처 + 가우시안 블러
+- **붙여넣기 시뮬레이션**: Win32 SendInput API
+- **업데이트 감지**: GitHub Releases API
 
-##使用条款及免责声明
+## 이용약관 및 면책조항
 
--本仓库及相关工具仅用于个人学习、技术交流及非商业性测试目的。作者恳请勿将其用于任何商业用途。
--项目源代码的官方许可协议遵循MIT许可证。如用于商业用途，请自行评估合规风险。
--本工具作为图像传输管理工具，完全在本地运行，不包含或托管任何在线图像资源。用户导入或粘贴的本地图像、截图以及程序生成的临时文件的版权、合规性及一切使用后果，均由用户自行承担全部责任。
--因本项目的源代码或编译后程序的分发、修改、再分发，或与第三方镜像托管服务及在线资源的结合使用而引发的著作权纠纷或其他法律责任，均由用户自行承担，项目开发者不承担任何法律责任。
--本工具按“原样”提供，不就操作失误、文件丢失、系统兼容性问题等潜在风险作出任何保证。所有使用风险均由用户自行承担。
--本项目在人工智能的广泛支持下开发，因此可能仍存在一些细微且不易察觉的程序问题。由此给您带来的不便，敬请谅解。
+- 본 리포지토리 및 관련 도구는 개인 학습, 기술 교류, 비영리 테스트를 목적으로 공개되었습니다. 저자는 상업적 이익을 위해 직접 사용하지 않기를 요청하고 있습니다.
+- 프로젝트 소스 코드의 공식 라이선스 규정은 MIT 라이선스를 따릅니다. 상업적 사용의 경우 컴플라이언스 리스크를 자체 평가해 주세요.
+- 본 도구는 이미지 전송 관리 도구로서 로컬에서 완전히 작동하며, 온라인 이미지 리소스를 포함하거나 호스팅하지 않습니다. 사용자가 가져오거나 붙여넣은 로컬 이미지, 스크린샷 및 프로그램이 생성한 임시 파일의 저작권, 컴플라이언스 및 모든 사용 결과는 사용자가 전적으로 책임을 집니다.
+- 본 프로젝트의 소스 코드나 컴파일된 프로그램의 배포, 수정, 재배포, 또는 서드파티 이미지 호스팅 서비스나 온라인 리소스와의 병용으로 인해 저작권 분쟁이나 기타 법적 책임이 발생한 경우, 모든 책임은 사용자에게 있으며 프로젝트 개발자는 법적 책임을 지지 않습니다.
+- 본 도구는 "있는 그대로" 제공되며, 작업 실수, 파일 손실, 시스템 호환성 문제 등 잠재적 위험에 대해 보증하지 않습니다. 모든 사용 위험은 사용자가 부담합니다.
+- 본 프로젝트는 AI의 광범위한 지원을 받아 개발되었으므로, 미세하고 눈에 띄기 어려운 프로그램 문제가 남아 있을 수 있습니다. 불편을 끼쳐 드린 점 양해 부탁드립니다.
 
-##许可证
+## 라이선스
 
-[MIT许可证](许可证)
+[MIT License](LICENSE)
 
-##作者
+## 저자
 
-**小蔡有点料 (Xiaocaihassome)**— 开源工具开发者
+**小蔡有點料 (Xiaocaihassome)** — 오픈소스 도구 개발자

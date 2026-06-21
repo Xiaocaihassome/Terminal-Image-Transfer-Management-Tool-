@@ -18,6 +18,15 @@ public class ConfigService : IConfigService
     public double Transparency { get; set; } = 0.75;
     public string Language { get; set; } = "zh-CN";
     public bool DisableBlur { get; set; }
+    public string BackgroundMode { get; set; } = "Glass";
+    public bool PrivacyMode { get; set; }
+    public string FontFamily { get; set; } = "";
+    public int FontWeight { get; set; } = 400;
+
+    public ConfigService()
+    {
+        Load();
+    }
 
     public void Load()
     {
@@ -38,6 +47,17 @@ public class ConfigService : IConfigService
                 Transparency = data.Transparency > 0 && data.Transparency <= 1 ? data.Transparency : 0.75;
                 Language = string.IsNullOrEmpty(data.Language) ? "zh-CN" : data.Language;
                 DisableBlur = data.DisableBlur;
+                // 兼容旧配置：未写入 BackgroundMode 时，依据 DisableBlur 推断
+                if (!string.IsNullOrEmpty(data.BackgroundMode))
+                    BackgroundMode = data.BackgroundMode;
+                else
+                    BackgroundMode = data.DisableBlur ? "None" : "Glass";
+                // 已移除的液态玻璃模式归一化为毛玻璃
+                if (BackgroundMode == "Liquid")
+                    BackgroundMode = "Glass";
+                PrivacyMode = data.PrivacyMode;
+                FontFamily = string.IsNullOrEmpty(data.FontFamily) ? "" : data.FontFamily;
+                FontWeight = data.FontWeight > 0 ? data.FontWeight : 400;
             }
         }
         catch { }
@@ -55,7 +75,11 @@ public class ConfigService : IConfigService
             CustomTempPath = CustomTempPath,
             Transparency = Transparency,
             Language = Language,
-            DisableBlur = DisableBlur
+            DisableBlur = DisableBlur,
+            BackgroundMode = BackgroundMode,
+            PrivacyMode = PrivacyMode,
+            FontFamily = FontFamily,
+            FontWeight = FontWeight
         };
         var json = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });
         File.WriteAllText(ConfigPath, json);
@@ -76,5 +100,9 @@ public class ConfigService : IConfigService
         public double Transparency { get; set; } = 0.75;
         public string? Language { get; set; }
         public bool DisableBlur { get; set; }
+        public string? BackgroundMode { get; set; }
+        public bool PrivacyMode { get; set; }
+        public string? FontFamily { get; set; }
+        public int FontWeight { get; set; }
     }
 }

@@ -1,11 +1,8 @@
-using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Interop;
 using System.Windows.Media;
-using System.Windows.Media.Effects;
-using System.Windows.Media.Imaging;
+using System.Windows.Media.Animation;
 using ImageManager.Services;
 using ImageManager.ViewModels;
 
@@ -13,40 +10,6 @@ namespace ImageManager;
 
 public partial class SettingsWindow : Window
 {
-    [DllImport("user32.dll")]
-    private static extern IntPtr GetDesktopWindow();
-
-    [DllImport("user32.dll")]
-    private static extern IntPtr GetWindowDC(IntPtr hWnd);
-
-    [DllImport("user32.dll")]
-    private static extern int ReleaseDC(IntPtr hWnd, IntPtr hDC);
-
-    [DllImport("gdi32.dll")]
-    private static extern IntPtr CreateCompatibleDC(IntPtr hdc);
-
-    [DllImport("gdi32.dll")]
-    private static extern IntPtr CreateCompatibleBitmap(IntPtr hdc, int width, int height);
-
-    [DllImport("gdi32.dll")]
-    private static extern IntPtr SelectObject(IntPtr hdc, IntPtr hgdiobj);
-
-    [DllImport("gdi32.dll")]
-    private static extern bool BitBlt(IntPtr hdcDest, int xDest, int yDest, int width, int height, IntPtr hdcSrc, int xSrc, int ySrc, int rop);
-
-    [DllImport("gdi32.dll")]
-    private static extern bool DeleteObject(IntPtr hObject);
-
-    [DllImport("gdi32.dll")]
-    private static extern bool DeleteDC(IntPtr hdc);
-
-    [DllImport("user32.dll")]
-    private static extern int GetSystemMetrics(int nIndex);
-
-    private const int SM_CXSCREEN = 0;
-    private const int SM_CYSCREEN = 1;
-    private const int SRCCOPY = 0x00CC0020;
-
     public IConfigService ConfigService { get; }
 
     public SettingsWindow()
@@ -62,61 +25,121 @@ public partial class SettingsWindow : Window
         DataContext = viewModel;
         ConfigService = configService;
         viewModel.RefreshBackdrop = () =>
-        {
-            if (configService.DisableBlur)
-                Background = new SolidColorBrush(Color.FromArgb(240, 240, 240, 240));
-            else
-                ApplyFrostedGlass();
-        };
+            BackdropService.Apply(this, configService.BackgroundMode);
     }
 
     private async void SettingsWindow_Loaded(object sender, RoutedEventArgs e)
     {
         await Task.Delay(50);
-        if (ConfigService?.DisableBlur != true)
-            ApplyFrostedGlass();
+        BackdropService.Apply(this, ConfigService?.BackgroundMode ?? "Glass");
+
+        // 延迟订阅发光事件，避免 XAML 解析时触发
+        SubscribeGlowEvents();
     }
 
-    private void ApplyFrostedGlass()
+    private void SubscribeGlowEvents()
     {
+        // 给每个卡片里的所有交互元素统一加发光
+        SubscribeCard(AppearanceCard);
+        SubscribeCard(LanguageCard);
+        SubscribeCard(StorageCard, Color.FromRgb(0xE8, 0x11, 0x23)); // 红色（高危操作）
+        SubscribeCard(PrivacyCard);
+        SubscribeCard(AboutCard);
+
+        // 字体设置卡片（如果有的话）
+        var fontCard = FindName("FontCard") as Border;
+        if (fontCard != null) SubscribeCard(fontCard);
+    }
+
+    private void SubscribeCard(Border card, Color? glowColor = null)
+    {
+        if (card == null) return;
+
+        // RadioButton
+        foreach (var rb in FindVisualChildren<RadioButton>(card))
+            rb.Checked += (_, _) => PlayGlow(card, glowColor);
+
+        // CheckBox
+        foreach (var cb in FindVisualChildren<CheckBox>(card))
+        {
+            cb.Checked += (_, _) => PlayGlow(card, glowColor);
+            cb.Unchecked += (_, _) => PlayGlow(card, glowColor);
+        }
+
+        // Button
+        foreach (var btn in FindVisualChildren<System.Windows.Controls.Button>(card))
+            btn.Click += (_, _) => PlayGlow(card, glowColor);
+    }
+
+    private static IEnumerable<T> FindVisualChildren<T>(System.Windows.DependencyObject dep) where T : System.Windows.DependencyObject
+    {
+        if (dep == null) yield break;
+        for (int i = 0; i < System.Windows.Media.VisualTreeHelper.GetChildrenCount(dep); i++)
+        {
+            var child = System.Windows.Media.VisualTreeHelper.GetChild(dep, i);
+            if (child is T typed) yield return typed;
+            foreach (var c in FindVisualChildren<T>(child)) yield return c;
+        }
+    }
+
+    private void PrivacyCheckBox_Changed(object sender, RoutedEventArgs e)
+    {
+        if (PrivacyCard != null) PlayGlow(PrivacyCard);
+    }
+
+    private void ThemeRadio_Checked(object sender, RoutedEventArgs e) { if (AppearanceCard != null) PlayGlow(AppearanceCard); }
+    private void LanguageRadio_Checked(object sender, RoutedEventArgs e) { if (LanguageCard != null) PlayGlow(LanguageCard); }
+    private void StorageButton_Click(object sender, RoutedEventArgs e) { if (StorageCard != null) PlayGlow(StorageCard); }
+    private void StorageCheckBox_Changed(object sender, RoutedEventArgs e) { if (StorageCard != null) PlayGlow(StorageCard); }
+    private void UpdateButton_Click(object sender, RoutedEventArgs e) { if (AboutCard != null) PlayGlow(AboutCard); }
+
+    private void PlayGlow(Border card, Color? glowColor = null)
+    {
+        if (card == null) return;
         try
         {
-            int w = GetSystemMetrics(SM_CXSCREEN);
-            int h = GetSystemMetrics(SM_CYSCREEN);
+            var originalBrush = card.BorderBrush;
 
-            IntPtr hDesktop = GetDesktopWindow();
-            IntPtr hDCDesktop = GetWindowDC(hDesktop);
-            IntPtr hDCMem = CreateCompatibleDC(hDCDesktop);
-            IntPtr hBitmap = CreateCompatibleBitmap(hDCDesktop, w, h);
-            IntPtr hOld = SelectObject(hDCMem, hBitmap);
-
-            BitBlt(hDCMem, 0, 0, w, h, hDCDesktop, 0, 0, SRCCOPY);
-
-            SelectObject(hDCMem, hOld);
-            DeleteDC(hDCMem);
-            ReleaseDC(hDesktop, hDCDesktop);
-
-            var bmp = Imaging.CreateBitmapSourceFromHBitmap(
-                hBitmap, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-            DeleteObject(hBitmap);
-            bmp.Freeze();
-
-            var visualBrush = new VisualBrush(new Image { Source = bmp, Stretch = Stretch.None });
-            visualBrush.Freeze();
-
-            var blurBrush = new VisualBrush(new Border
+            // 用指定色或主题 Accent 色
+            Color accentColor;
+            if (glowColor.HasValue)
             {
-                Background = visualBrush,
-                Effect = new BlurEffect { Radius = 30, KernelType = KernelType.Gaussian }
-            });
-            blurBrush.Freeze();
+                accentColor = glowColor.Value;
+            }
+            else if (ThemeManager.Instance.Accent is SolidColorBrush ab)
+            {
+                accentColor = ab.Color;
+            }
+            else
+            {
+                accentColor = Color.FromRgb(96, 205, 255);
+            }
 
-            Background = blurBrush;
+            var anim = new ColorAnimationUsingKeyFrames
+            {
+                Duration = TimeSpan.FromMilliseconds(1200),
+            };
+            anim.KeyFrames.Add(new LinearColorKeyFrame(accentColor, KeyTime.FromTimeSpan(TimeSpan.Zero)));
+            anim.KeyFrames.Add(new LinearColorKeyFrame(accentColor, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(500))));
+            anim.KeyFrames.Add(new LinearColorKeyFrame(Colors.Transparent, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(1200))));
+
+            var glowBrush = new SolidColorBrush(accentColor);
+            card.BorderBrush = glowBrush;
+            glowBrush.BeginAnimation(SolidColorBrush.ColorProperty, anim);
+
+            // 动画结束后恢复原始 brush
+            var timer = new System.Windows.Threading.DispatcherTimer
+            {
+                Interval = TimeSpan.FromMilliseconds(1300)
+            };
+            timer.Tick += (_, _) =>
+            {
+                timer.Stop();
+                card.BorderBrush = originalBrush;
+            };
+            timer.Start();
         }
-        catch
-        {
-            Background = new SolidColorBrush(Color.FromArgb(200, 240, 240, 240));
-        }
+        catch { }
     }
 
     #region 窗口缩放
@@ -136,7 +159,8 @@ public partial class SettingsWindow : Window
 
         void OnMove(object s, MouseEventArgs ev)
         {
-            var cur = PointToScreenMouse();
+            var p = Mouse.GetPosition(this);
+            var cur = new Point(p.X + Left, p.Y + Top);
             double dx = cur.X - anchor.X, dy = cur.Y - anchor.Y;
 
             if (direction.Contains("W"))
@@ -168,23 +192,19 @@ public partial class SettingsWindow : Window
         el.MouseLeftButtonUp += OnUp;
     }
 
-    private Point PointToScreenMouse()
-    {
-        var p = Mouse.GetPosition(this);
-        return new Point(p.X + Left, p.Y + Top);
-    }
-
     #endregion
+
+    #region 标题栏
 
     private void TitleBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
         DragMove();
     }
 
-    private void Close_Click(object sender, RoutedEventArgs e)
-    {
+    private void Close_Click(object sender, RoutedEventArgs e) =>
         Close();
-    }
+
+    #endregion
 
     private void OpenRepo_Click(object sender, MouseButtonEventArgs e)
     {
@@ -193,5 +213,13 @@ public partial class SettingsWindow : Window
             FileName = "https://github.com/Xiaocaihassome/Terminal-Image-Transfer-Management-Tool-",
             UseShellExecute = true
         });
+    }
+
+    private void OpenFontSettings_Click(object sender, MouseButtonEventArgs e)
+    {
+        var vm = DataContext as SettingsViewModel;
+        if (vm == null) return;
+        var fontWindow = new FontSettingsWindow(vm, ConfigService) { Owner = this };
+        fontWindow.ShowDialog();
     }
 }

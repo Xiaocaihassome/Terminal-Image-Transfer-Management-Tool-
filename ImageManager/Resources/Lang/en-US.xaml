@@ -18,6 +18,7 @@
 
     <!-- Settings Window -->
     <sys:String x:Key="SettingsTitle">Settings</sys:String>
+    <sys:String x:Key="Appearance">Appearance</sys:String>
     <sys:String x:Key="Personalization">Personalization</sys:String>
     <sys:String x:Key="ThemeMode">Theme</sys:String>
     <sys:String x:Key="Light">Light</sys:String>
@@ -32,26 +33,42 @@
     <sys:String x:Key="OpenFolder">Open Folder</sys:String>
     <sys:String x:Key="DeleteNoConfirm">Delete without confirmation</sys:String>
     <sys:String x:Key="AutoCleanOnExit">Auto clean temp files on exit</sys:String>
+    <sys:String x:Key="PrivacyMode">Privacy Mode</sys:String>
+    <sys:String x:Key="PrivacyModeDesc">Hides file paths and other sensitive info. Ideal for screen sharing or presentations.</sys:String>
+    <sys:String x:Key="FontSelect">Font Settings</sys:String>
+    <sys:String x:Key="FontWeightSelect">Font Weight</sys:String>
+    <sys:String x:Key="FontSettingDesc">Customize app font and weight</sys:String>
     <sys:String x:Key="ResourcesSection">Resources</sys:String>
     <sys:String x:Key="DisableBlur">Disable frosted glass background to save resources</sys:String>
+    <sys:String x:Key="BackgroundEffect">Background Effect</sys:String>
+    <sys:String x:Key="BgGlass">Frosted Glass</sys:String>
+    <sys:String x:Key="BgMica">Win11 Acrylic</sys:String>
+    <sys:String x:Key="BgNone">None (Solid)</sys:String>
+    <sys:String x:Key="BgHint">Frosted Glass blurs the desktop in real time; Win11 Acrylic uses the system material (requires Windows 10/11).</sys:String>
     <sys:String x:Key="Help">Help</sys:String>
     <sys:String x:Key="Tutorial">Tutorial</sys:String>
     <sys:String x:Key="Step1">1. Drop images into the window, or press Ctrl+V to paste screenshots</sys:String>
-    <sys:String x:Key="Step2">2. Select the images you need, click "Copy Path"</sys:String>
-    <sys:String x:Key="Step3">3. Press Ctrl+V in the AI terminal to paste the path</sys:String>
-    <sys:String x:Key="Step4">4. Click "Paste to Window" to auto-paste to the foreground window</sys:String>
+    <sys:String x:Key="Step2">2. Select the images you need, click "Copy Path" to copy to clipboard</sys:String>
+    <sys:String x:Key="Step3">3. Press Ctrl+V in any AI terminal or window to paste the path</sys:String>
+    <sys:String x:Key="Step4">4. Click "Paste to Window" to automatically paste the path to the foreground window</sys:String>
+    <sys:String x:Key="Step5">5. Settings allow you to change background effect, font, language and privacy mode</sys:String>
     <sys:String x:Key="FAQ">FAQ</sys:String>
     <sys:String x:Key="Q1">Q: Paste to window not working?</sys:String>
     <sys:String x:Key="A1">A: After clicking, switch to the target window within 2 seconds. The tool will automatically send Ctrl+V.</sys:String>
-    <sys:String x:Key="Q2">Q: Where are images saved?</sys:String>
-    <sys:String x:Key="A2">A: By default, images are saved in the system temp directory. You can customize the location in storage settings.</sys:String>
-    <sys:String x:Key="Q3">Q: Are images kept after closing?</sys:String>
-    <sys:String x:Key="A3">A: Enable "Clean on exit" to automatically delete temp files when closing.</sys:String>
+    <sys:String x:Key="Q2">Q: What does Privacy Mode do?</sys:String>
+    <sys:String x:Key="A2">A: When enabled, all file paths are masked as ********. Ideal for screen sharing or presentations.</sys:String>
+    <sys:String x:Key="Q3">Q: Which background effect should I choose?</sys:String>
+    <sys:String x:Key="A3">A: Frosted Glass suits most scenarios; Win11 Acrylic uses system material for a more transparent look; None gives a solid background.</sys:String>
+    <sys:String x:Key="Q4">Q: How does the font setting work?</sys:String>
+    <sys:String x:Key="A4">A: Click Font Settings in Appearance, select a font and weight, then click "Apply" to take effect globally.</sys:String>
     <sys:String x:Key="About">About</sys:String>
     <sys:String x:Key="AppName">App Name</sys:String>
     <sys:String x:Key="AppVersion">Version</sys:String>
     <sys:String x:Key="Framework">Framework</sys:String>
     <sys:String x:Key="License">License</sys:String>
+    <sys:String x:Key="CheckUpdate">Check for Updates</sys:String>
+    <sys:String x:Key="InstallNow">Install Now</sys:String>
+    <sys:String x:Key="UpdateBannerText">New version available, click to view</sys:String>
     <sys:String x:Key="OpenSourceDev">Open Source Developer</sys:String>
 
 </ResourceDictionary>

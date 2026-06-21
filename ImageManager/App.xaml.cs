@@ -67,15 +67,37 @@ public partial class App : Application
 
         settingsVm.ApplyTheme(configService.Theme, configService.Transparency);
 
+        // 应用保存的字体
+        if (!string.IsNullOrEmpty(configService.FontFamily))
+        {
+            Resources["GlobalFontFamily"] = new System.Windows.Media.FontFamily(configService.FontFamily);
+            Resources["GlobalFontWeight"] = MapFontWeight(configService.FontWeight);
+        }
+
         // 显示主窗口
+        var mainVm = _serviceProvider.GetRequiredService<MainViewModel>();
         var mainWindow = new MainWindow(
-            _serviceProvider.GetRequiredService<MainViewModel>(),
+            mainVm,
             _serviceProvider.GetRequiredService<IToastService>(),
             _serviceProvider.GetRequiredService<IPasteService>(),
             _serviceProvider.GetRequiredService<IConfigService>(),
             _serviceProvider);
 
         mainWindow.Show();
+
+        // 后台静默检查更新（3秒后）
+        _ = Task.Run(async () =>
+        {
+            await Task.Delay(3000);
+            var updateService = _serviceProvider.GetRequiredService<IUpdateService>();
+            var update = await updateService.CheckAsync();
+            if (update != null)
+            {
+                settingsVm.LatestUpdate = update;
+                settingsVm.HasUpdate = true;
+                mainVm.HasUpdate = true;
+            }
+        });
 
         base.OnStartup(e);
     }
@@ -88,8 +110,9 @@ public partial class App : Application
         services.AddSingleton<IConfigService, ConfigService>();
         services.AddSingleton<IToastService, ToastService>();
         services.AddSingleton<IPasteService, PasteService>();
+        services.AddSingleton<IUpdateService, UpdateService>();
         services.AddTransient<MainViewModel>();
-        services.AddTransient<SettingsViewModel>();
+        services.AddSingleton<SettingsViewModel>();
     }
 
     private void SetupExceptionHandling()
@@ -131,6 +154,20 @@ public partial class App : Application
         }
         catch { }
     }
+
+    private static System.Windows.FontWeight MapFontWeight(int w) => w switch
+    {
+        100 => System.Windows.FontWeights.Thin,
+        200 => System.Windows.FontWeights.ExtraLight,
+        300 => System.Windows.FontWeights.Light,
+        400 => System.Windows.FontWeights.Normal,
+        500 => System.Windows.FontWeights.Medium,
+        600 => System.Windows.FontWeights.SemiBold,
+        700 => System.Windows.FontWeights.Bold,
+        800 => System.Windows.FontWeights.ExtraBold,
+        900 => System.Windows.FontWeights.Black,
+        _ => System.Windows.FontWeights.Normal
+    };
 
     protected override void OnExit(ExitEventArgs e)
     {

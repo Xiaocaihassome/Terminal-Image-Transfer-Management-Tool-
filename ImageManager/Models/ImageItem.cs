@@ -11,6 +11,25 @@ public class ImageItem : INotifyPropertyChanged
     public string FileName => Path.GetFileName(FilePath);
     public DateTime CreatedTime { get; }
 
+    private bool _isPrivacyMode;
+    public bool IsPrivacyMode
+    {
+        get => _isPrivacyMode;
+        set
+        {
+            if (_isPrivacyMode != value)
+            {
+                _isPrivacyMode = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(DisplayPath));
+            }
+        }
+    }
+
+    public string DisplayPath => IsPrivacyMode
+        ? $"{FileName}  (********)"
+        : FilePath;
+
     private ImageSource? _thumbnail;
     public ImageSource? Thumbnail
     {

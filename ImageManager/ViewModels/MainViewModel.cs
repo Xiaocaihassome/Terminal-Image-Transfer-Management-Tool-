@@ -37,7 +37,26 @@ public partial class MainViewModel : ObservableObject
     private bool _autoCleanOnExit = true;
 
     [ObservableProperty]
+    private bool _hasUpdate;
+
+    [ObservableProperty]
     private string _selectedFilePath = string.Empty;
+
+    partial void OnSelectedFilePathChanged(string value)
+    {
+        if (IsPrivacyMode && !string.IsNullOrEmpty(value))
+        {
+            var fileName = Path.GetFileName(value);
+            if (!string.IsNullOrEmpty(fileName) && !value.EndsWith("********)"))
+            {
+                _selectedFilePath = $"{fileName}  (********)";
+                OnPropertyChanged(nameof(SelectedFilePath));
+            }
+        }
+    }
+
+    [ObservableProperty]
+    private bool _isPrivacyMode;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsAny))]
@@ -69,6 +88,7 @@ public partial class MainViewModel : ObservableObject
         configService.Load();
         DeleteWithoutConfirm = configService.DeleteWithoutConfirm;
         AutoCleanOnExit = configService.AutoCleanOnExit;
+        IsPrivacyMode = configService.PrivacyMode;
 
         _tempDir = fileService.InitializeTempDirectory();
     }
@@ -83,6 +103,14 @@ public partial class MainViewModel : ObservableObject
     {
         _configService.AutoCleanOnExit = value;
         _configService.Save();
+    }
+
+    partial void OnIsPrivacyModeChanged(bool value)
+    {
+        _configService.PrivacyMode = value;
+        _configService.Save();
+        foreach (var item in ImageItems)
+            item.IsPrivacyMode = value;
     }
 
     partial void OnIsAllSelectedChanged(bool value)
@@ -100,7 +128,7 @@ public partial class MainViewModel : ObservableObject
         if (!File.Exists(filePath)) return;
         if (ImageItems.Any(i => i.FilePath == filePath)) return;
 
-        var item = new ImageItem(filePath) { IsSelected = true };
+        var item = new ImageItem(filePath) { IsSelected = true, IsPrivacyMode = IsPrivacyMode };
         item.SelectionChanged += (_, _) => UpdateSelectedCount();
 
         ImageItems.Insert(0, item);
@@ -285,6 +313,7 @@ public partial class MainViewModel : ObservableObject
     {
         DeleteWithoutConfirm = config.DeleteWithoutConfirm;
         AutoCleanOnExit = config.AutoCleanOnExit;
+        IsPrivacyMode = config.PrivacyMode;
     }
 
     public void CleanupOnExit()

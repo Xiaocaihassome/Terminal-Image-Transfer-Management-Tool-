@@ -18,6 +18,7 @@
 
     <!-- 设置窗口 -->
     <sys:String x:Key="SettingsTitle">设置</sys:String>
+    <sys:String x:Key="Appearance">外观</sys:String>
     <sys:String x:Key="Personalization">个性化</sys:String>
     <sys:String x:Key="ThemeMode">主题模式</sys:String>
     <sys:String x:Key="Light">浅色</sys:String>
@@ -32,26 +33,42 @@
     <sys:String x:Key="OpenFolder">打开文件夹</sys:String>
     <sys:String x:Key="DeleteNoConfirm">删除时不再询问</sys:String>
     <sys:String x:Key="AutoCleanOnExit">退出时自动清空临时文件</sys:String>
+    <sys:String x:Key="PrivacyMode">隐私模式</sys:String>
+    <sys:String x:Key="PrivacyModeDesc">开启后隐藏文件路径等敏感信息，适用于屏幕共享或演示场景</sys:String>
+    <sys:String x:Key="FontSelect">字体设置</sys:String>
+    <sys:String x:Key="FontWeightSelect">字重</sys:String>
+    <sys:String x:Key="FontSettingDesc">自定义应用字体和字重</sys:String>
     <sys:String x:Key="ResourcesSection">资源</sys:String>
     <sys:String x:Key="DisableBlur">禁用毛玻璃背景以节省资源</sys:String>
+    <sys:String x:Key="BackgroundEffect">背景效果</sys:String>
+    <sys:String x:Key="BgGlass">毛玻璃</sys:String>
+    <sys:String x:Key="BgMica">Win11 亚克力</sys:String>
+    <sys:String x:Key="BgNone">无（纯色）</sys:String>
+    <sys:String x:Key="BgHint">毛玻璃实时模糊桌面；Win11 亚克力使用系统材质（需 Windows 10/11）。</sys:String>
     <sys:String x:Key="Help">帮助</sys:String>
     <sys:String x:Key="Tutorial">使用教程</sys:String>
     <sys:String x:Key="Step1">1. 拖入图片到窗口，或按 Ctrl+V 粘贴截图</sys:String>
-    <sys:String x:Key="Step2">2. 勾选需要的图片，点击「复制路径」</sys:String>
-    <sys:String x:Key="Step3">3. 在 AI 终端中 Ctrl+V 粘贴路径即可</sys:String>
-    <sys:String x:Key="Step4">4. 点击「粘贴到窗口」可自动粘贴到前台窗口</sys:String>
+    <sys:String x:Key="Step2">2. 勾选需要的图片，点击「复制路径」复制到剪贴板</sys:String>
+    <sys:String x:Key="Step3">3. 在 AI 终端或任意窗口中 Ctrl+V 粘贴路径即可</sys:String>
+    <sys:String x:Key="Step4">4. 点击「粘贴到窗口」可自动将路径粘贴到前台窗口</sys:String>
+    <sys:String x:Key="Step5">5. 设置中可切换背景效果、字体、语言和隐私模式</sys:String>
     <sys:String x:Key="FAQ">常见问题</sys:String>
     <sys:String x:Key="Q1">Q: 粘贴到窗口没有反应？</sys:String>
     <sys:String x:Key="A1">A: 点击后在2秒内切换到目标窗口，工具会自动发送 Ctrl+V。</sys:String>
-    <sys:String x:Key="Q2">Q: 图片保存在哪里？</sys:String>
-    <sys:String x:Key="A2">A: 默认保存在系统临时目录，可在存储设置中自定义位置。</sys:String>
-    <sys:String x:Key="Q3">Q: 关闭后图片还在吗？</sys:String>
-    <sys:String x:Key="A3">A: 勾选「退出清空」后关闭窗口会自动删除临时文件。</sys:String>
+    <sys:String x:Key="Q2">Q: 隐私模式有什么用？</sys:String>
+    <sys:String x:Key="A2">A: 开启后所有文件路径会被遮罩为 ********，适用于屏幕共享或演示场景。</sys:String>
+    <sys:String x:Key="Q3">Q: 背景效果该选哪个？</sys:String>
+    <sys:String x:Key="A3">A: 毛玻璃适合大多数场景；Win11 亚克力使用系统材质更通透；无则为纯色背景。</sys:String>
+    <sys:String x:Key="Q4">Q: 字体设置如何生效？</sys:String>
+    <sys:String x:Key="A4">A: 在外观设置中点击字体设置，选择字体和字重后点击「应用」即可全局生效。</sys:String>
     <sys:String x:Key="About">关于</sys:String>
     <sys:String x:Key="AppName">应用名称</sys:String>
     <sys:String x:Key="AppVersion">版本</sys:String>
     <sys:String x:Key="Framework">框架</sys:String>
     <sys:String x:Key="License">协议</sys:String>
+    <sys:String x:Key="CheckUpdate">检查更新</sys:String>
+    <sys:String x:Key="InstallNow">立即安装</sys:String>
+    <sys:String x:Key="UpdateBannerText">发现新版本，点击查看详情</sys:String>
     <sys:String x:Key="OpenSourceDev">开源工具开发者</sys:String>
 
 </ResourceDictionary>

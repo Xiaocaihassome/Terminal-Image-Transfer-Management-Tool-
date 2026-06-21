@@ -1,14 +1,7 @@
 using System.Diagnostics;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Interop;
-using System.Windows.Media;
-using System.Windows.Media.Effects;
-using System.Windows.Media.Imaging;
-using System.Windows.Threading;
 using ImageManager.Services;
 using ImageManager.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,47 +16,6 @@ public partial class MainWindow : Window
     private readonly IConfigService _configService;
     private readonly IServiceProvider _serviceProvider;
 
-    [DllImport("user32.dll")]
-    private static extern bool SetForegroundWindow(IntPtr hWnd);
-
-    [DllImport("user32.dll")]
-    private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
-
-    [DllImport("user32.dll")]
-    private static extern IntPtr GetDesktopWindow();
-
-    [DllImport("user32.dll")]
-    private static extern IntPtr GetWindowDC(IntPtr hWnd);
-
-    [DllImport("user32.dll")]
-    private static extern int ReleaseDC(IntPtr hWnd, IntPtr hDC);
-
-    [DllImport("gdi32.dll")]
-    private static extern IntPtr CreateCompatibleDC(IntPtr hdc);
-
-    [DllImport("gdi32.dll")]
-    private static extern IntPtr CreateCompatibleBitmap(IntPtr hdc, int width, int height);
-
-    [DllImport("gdi32.dll")]
-    private static extern IntPtr SelectObject(IntPtr hdc, IntPtr hgdiobj);
-
-    [DllImport("gdi32.dll")]
-    private static extern bool BitBlt(IntPtr hdcDest, int xDest, int yDest, int width, int height, IntPtr hdcSrc, int xSrc, int ySrc, int rop);
-
-    [DllImport("gdi32.dll")]
-    private static extern bool DeleteObject(IntPtr hObject);
-
-    [DllImport("gdi32.dll")]
-    private static extern bool DeleteDC(IntPtr hdc);
-
-    [DllImport("user32.dll")]
-    private static extern int GetSystemMetrics(int nIndex);
-
-    private const int SW_RESTORE = 9;
-    private const int SM_CXSCREEN = 0;
-    private const int SM_CYSCREEN = 1;
-    private const int SRCCOPY = 0x00CC0020;
-
     public MainWindow(MainViewModel viewModel, IToastService toastService, IPasteService pasteService, IConfigService configService, IServiceProvider serviceProvider)
     {
         _viewModel = viewModel;
@@ -75,7 +27,6 @@ public partial class MainWindow : Window
 
         InitializeComponent();
 
-        // 加载窗口图标
         try { Icon = new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/Resources/app.png", UriKind.Absolute)); }
         catch { }
 
@@ -88,51 +39,23 @@ public partial class MainWindow : Window
     {
         _toastService.SetContainer(ToastContainer);
         await Task.Delay(50);
-        if (!_configService.DisableBlur)
-            ApplyFrostedGlass();
+        BackdropService.Apply(this, _configService.BackgroundMode);
+
+        // 轮询检查 HasUpdate，更新 banner 可见性
+        _ = PollUpdateBanner();
     }
 
-    private void ApplyFrostedGlass()
+    private async Task PollUpdateBanner()
     {
-        try
+        // 等后台检查完成
+        for (int i = 0; i < 20; i++)
         {
-            int w = GetSystemMetrics(SM_CXSCREEN);
-            int h = GetSystemMetrics(SM_CYSCREEN);
-
-            IntPtr hDesktop = GetDesktopWindow();
-            IntPtr hDCDesktop = GetWindowDC(hDesktop);
-            IntPtr hDCMem = CreateCompatibleDC(hDCDesktop);
-            IntPtr hBitmap = CreateCompatibleBitmap(hDCDesktop, w, h);
-            IntPtr hOld = SelectObject(hDCMem, hBitmap);
-
-            BitBlt(hDCMem, 0, 0, w, h, hDCDesktop, 0, 0, SRCCOPY);
-
-            SelectObject(hDCMem, hOld);
-            DeleteDC(hDCMem);
-            ReleaseDC(hDesktop, hDCDesktop);
-
-            var bmp = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
-                hBitmap, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-            DeleteObject(hBitmap);
-
-            bmp.Freeze();
-
-            var visualBrush = new VisualBrush(new Image { Source = bmp, Stretch = Stretch.None });
-            visualBrush.Freeze();
-
-            var blurBrush = new VisualBrush(new Border
+            if (_viewModel.HasUpdate)
             {
-                Background = visualBrush,
-                Effect = new BlurEffect { Radius = 30, KernelType = KernelType.Gaussian }
-            });
-            blurBrush.Freeze();
-
-            Background = blurBrush;
-        }
-        catch
-        {
-            // 捕获失败时使用纯色背景
-            Background = new SolidColorBrush(Color.FromArgb(200, 240, 240, 240));
+                UpdateBanner.Visibility = Visibility.Visible;
+                return;
+            }
+            await Task.Delay(500);
         }
     }
 
@@ -142,10 +65,10 @@ public partial class MainWindow : Window
     {
         if (e.Data.GetDataPresent(DataFormats.FileDrop))
         {
-            if (ThemeManager.Instance.Accent is SolidColorBrush accentBrush)
+            if (ThemeManager.Instance.Accent is System.Windows.Media.SolidColorBrush accentBrush)
             {
                 var c = accentBrush.Color;
-                DropZone.Background = new SolidColorBrush(Color.FromArgb(30, c.R, c.G, c.B));
+                DropZone.Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(30, c.R, c.G, c.B));
             }
             DropZone.BorderBrush = ThemeManager.Instance.Accent;
             e.Handled = true;
@@ -154,7 +77,7 @@ public partial class MainWindow : Window
 
     private void DropZone_DragLeave(object sender, DragEventArgs e)
     {
-        DropZone.Background = Brushes.Transparent;
+        DropZone.Background = System.Windows.Media.Brushes.Transparent;
         DropZone.BorderBrush = ThemeManager.Instance.DropZoneBorder;
         e.Handled = true;
     }
@@ -167,7 +90,7 @@ public partial class MainWindow : Window
 
     private async void DropZone_Drop(object sender, DragEventArgs e)
     {
-        DropZone.Background = Brushes.Transparent;
+        DropZone.Background = System.Windows.Media.Brushes.Transparent;
         DropZone.BorderBrush = ThemeManager.Instance.DropZoneBorder;
 
         if (e.Data.GetDataPresent(DataFormats.FileDrop))
@@ -222,7 +145,8 @@ public partial class MainWindow : Window
 
         void OnMove(object s, MouseEventArgs ev)
         {
-            var cur = PointToScreenMouse();
+            var p = Mouse.GetPosition(this);
+            var cur = new Point(p.X + Left, p.Y + Top);
             double dx = cur.X - anchor.X, dy = cur.Y - anchor.Y;
 
             if (direction.Contains("W"))
@@ -254,19 +178,20 @@ public partial class MainWindow : Window
         el.MouseLeftButtonUp += OnUp;
     }
 
-    private Point PointToScreenMouse()
-    {
-        var p = Mouse.GetPosition(this);
-        return new Point(p.X + Left, p.Y + Top);
-    }
-
     #endregion
 
     #region 标题栏
 
     private void TitleBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-        DragMove();
+        if (e.ClickCount == 2)
+        {
+            WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+        }
+        else
+        {
+            DragMove();
+        }
     }
 
     private void Minimize_Click(object sender, RoutedEventArgs e) =>
@@ -322,10 +247,7 @@ public partial class MainWindow : Window
         {
             _viewModel.SyncFromConfig(_configService);
             settingsVm.ApplyTheme(_configService.Theme, _configService.Transparency);
-            if (_configService.DisableBlur)
-                Background = new SolidColorBrush(Color.FromArgb(240, 240, 240, 240));
-            else
-                ApplyFrostedGlass();
+            BackdropService.Apply(this, _configService.BackgroundMode);
         };
 
         settingsWindow.ShowDialog();
@@ -339,4 +261,7 @@ public partial class MainWindow : Window
         _viewModel.CleanupOnExit();
 
     #endregion
+
+    private void UpdateBanner_Click(object sender, RoutedEventArgs e) =>
+        Settings_Click(sender, e);
 }

@@ -8,18 +8,21 @@
         MinWidth="380" MinHeight="420"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
-        AllowsTransparency="True">
+        AllowsTransparency="True"
+        FontFamily="{DynamicResource GlobalFontFamily}"
+        FontWeight="{DynamicResource GlobalFontWeight}">
 
     <Window.Resources>
-        <conv:BoolToVisibilityConverter x:Key="BoolToVis"/>
     </Window.Resources>
 
     <Grid>
-    <Border x:Name="RootBorder" CornerRadius="12" Background="{Binding CardBackground, Source={x:Static svc:ThemeManager.Instance}}"
-            BorderThickness="0">
+    <Border x:Name="RootBorder" CornerRadius="8"
+            Background="{Binding CardBackground, Source={x:Static svc:ThemeManager.Instance}}"
+            BorderThickness="1"
+            BorderBrush="{Binding CardBorder, Source={x:Static svc:ThemeManager.Instance}}">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="36"/>
+                <RowDefinition Height="32"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
@@ -27,20 +30,24 @@
             <!-- 标题栏 -->
             <Grid Grid.Row="0" MouseLeftButtonDown="TitleBar_MouseLeftButtonDown"
                   Background="Transparent">
-                <TextBlock Text="{DynamicResource AppTitle}" FontSize="13" FontWeight="Medium"
+                <TextBlock Text="{DynamicResource AppTitle}" FontSize="12" FontWeight="Medium"
                            Foreground="{Binding TextPrimary, Source={x:Static svc:ThemeManager.Instance}}"
-                           VerticalAlignment="Center" Margin="14,0,0,0"/>
+                           VerticalAlignment="Center" Margin="12,0,0,0"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
                             VerticalAlignment="Center">
                     <Button Click="Minimize_Click" Width="36" Height="28"
-                            Background="Transparent" BorderThickness="0" FontSize="13"
-                            Foreground="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}" Cursor="Hand">
-                        <TextBlock Text="─" FontSize="10" Margin="0,-2,0,0"/>
+                            Background="Transparent" BorderThickness="0" Cursor="Hand">
+                        <TextBlock Text="─" FontSize="11" Foreground="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}"
+                                   Margin="0,-2,0,0"/>
                     </Button>
                     <Button Click="Close_Click" Width="36" Height="28"
-                            Background="Transparent" BorderThickness="0" FontSize="13"
-                            Foreground="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}" Cursor="Hand">
-                        <TextBlock Text="✕" FontSize="11" Margin="0,-1,0,0"/>
+                            Background="Transparent" BorderThickness="0" Cursor="Hand">
+                        <Border Width="14" Height="14"
+                                Background="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}">
+                            <Border.OpacityMask>
+                                <ImageBrush ImageSource="pack://application:,,,/Resources/Icons/close.png"/>
+                            </Border.OpacityMask>
+                        </Border>
                     </Button>
                 </StackPanel>
             </Grid>
@@ -49,7 +56,7 @@
                     Background="{Binding Separator, Source={x:Static svc:ThemeManager.Instance}}"/>
 
             <!-- 主内容 -->
-            <Grid Grid.Row="1" Margin="20,16,20,12">
+            <Grid Grid.Row="1" Margin="16,10,16,8">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
@@ -59,65 +66,81 @@
 
                 <!-- 拖放区 -->
                 <Border Grid.Row="0" x:Name="DropZone"
-                        CornerRadius="10"
+                        CornerRadius="8"
                         BorderBrush="{Binding DropZoneBorder, Source={x:Static svc:ThemeManager.Instance}}"
-                        BorderThickness="1.5"
+                        BorderThickness="1"
                         Background="Transparent"
-                        Margin="0,0,0,12"
-                        Padding="0,20"
+                        Margin="0,0,0,10"
+                        Padding="0,16"
                         AllowDrop="True"
                         Drop="DropZone_Drop"
                         DragEnter="DropZone_DragEnter"
                         DragLeave="DropZone_DragLeave"
                         DragOver="DropZone_DragOver">
                     <StackPanel HorizontalAlignment="Center">
-                        <TextBlock Text="+" FontSize="20" FontWeight="Light"
+                        <TextBlock Text="+" FontSize="18" FontWeight="Light"
                                    Foreground="{Binding Accent, Source={x:Static svc:ThemeManager.Instance}}" HorizontalAlignment="Center"/>
                         <TextBlock Text="{DynamicResource DropHint}"
-                                   FontSize="12" Foreground="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}"
-                                   HorizontalAlignment="Center" Margin="0,4,0,0"/>
+                                   FontSize="11" Foreground="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}"
+                                   HorizontalAlignment="Center" Margin="0,2,0,0"/>
                     </StackPanel>
                 </Border>
 
                 <!-- 工具栏 -->
-                <Grid Grid.Row="1" Margin="0,0,0,8">
+                <Grid Grid.Row="1" Margin="0,0,0,6">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <CheckBox Content="{DynamicResource SelectAll}"
                                   IsChecked="{Binding IsAllSelected}"
-                                  FontSize="12" Foreground="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}"/>
-                        <TextBlock FontSize="11" Foreground="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}"
-                                   VerticalAlignment="Center" Margin="10,0,0,0">
+                                  FontSize="11" Foreground="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}"/>
+                        <TextBlock FontSize="10" Foreground="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}"
+                                   VerticalAlignment="Center" Margin="8,0,0,0">
                             <Run Text="{Binding TotalCount, Mode=OneWay}"/><Run Text=" "/><Run Text="{DynamicResource Items}"/>
                         </TextBlock>
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
                                 VerticalAlignment="Center">
-                        <TextBlock FontSize="11" Foreground="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}">
+                        <TextBlock FontSize="10" Foreground="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}">
                             <Run Text="{DynamicResource Selected}"/> <Run Text="{Binding SelectedCount, Mode=OneWay}"/>
                         </TextBlock>
                         <Button Click="Settings_Click" Padding="4,2" Margin="8,0,0,0"
                                 Background="Transparent" BorderThickness="0" Cursor="Hand"
                                 ToolTip="设置">
-                            <TextBlock Text="⚙" FontSize="14" Foreground="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}"/>
+                            <Grid>
+                                <Border Width="18" Height="18"
+                                        Background="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}">
+                                    <Border.OpacityMask>
+                                        <ImageBrush ImageSource="pack://application:,,,/Resources/Icons/settings2.png"/>
+                                    </Border.OpacityMask>
+                                </Border>
+                                <!-- 更新红点 -->
+                                <Ellipse Width="8" Height="8" Fill="#E81123"
+                                         HorizontalAlignment="Right" VerticalAlignment="Top"
+                                         Margin="0,-2,-2,0"
+                                         Visibility="{Binding HasUpdate, Converter={StaticResource BoolToVis}}"/>
+                            </Grid>
                         </Button>
                     </StackPanel>
                 </Grid>
 
                 <!-- 文件列表 -->
-                <Border Grid.Row="2" CornerRadius="10"
+                <Border Grid.Row="2" CornerRadius="8"
                         Background="{Binding ListBackground, Source={x:Static svc:ThemeManager.Instance}}"
                         BorderBrush="{Binding CardBorder, Source={x:Static svc:ThemeManager.Instance}}" BorderThickness="1">
                     <Grid>
                         <!-- 空状态 -->
                         <StackPanel VerticalAlignment="Center"
                                     Visibility="{Binding IsAny, Converter={StaticResource BoolToVis}, ConverterParameter=Invert}">
-                            <TextBlock Text="&#x25A1;" FontSize="36" HorizontalAlignment="Center"
-                                       Foreground="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}"/>
-                            <TextBlock Text="{DynamicResource EmptyState}" FontSize="14" FontWeight="SemiBold"
+                            <Border Width="36" Height="36" HorizontalAlignment="Center"
+                                    Background="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}">
+                                <Border.OpacityMask>
+                                    <ImageBrush ImageSource="pack://application:,,,/Resources/Icons/image.png"/>
+                                </Border.OpacityMask>
+                            </Border>
+                            <TextBlock Text="{DynamicResource EmptyState}" FontSize="13" FontWeight="SemiBold"
                                        Foreground="{Binding TextPrimary, Source={x:Static svc:ThemeManager.Instance}}" HorizontalAlignment="Center"
-                                       Margin="0,6,0,0"/>
-                            <TextBlock Text="{DynamicResource DropHint}" FontSize="11"
+                                       Margin="0,4,0,0"/>
+                            <TextBlock Text="{DynamicResource DropHint}" FontSize="10"
                                        Foreground="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}" HorizontalAlignment="Center"
                                        Margin="0,4,0,0"/>
                         </StackPanel>
@@ -131,7 +154,7 @@
                                  ScrollViewer.VerticalScrollBarVisibility="Auto">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <Border CornerRadius="8" Padding="8,7" Margin="2,1"
+                                    <Border CornerRadius="6" Padding="6,5" Margin="2,1"
                                             Background="Transparent">
                                         <Grid>
                                             <Grid.ColumnDefinitions>
@@ -141,32 +164,32 @@
 
                                             <CheckBox Grid.Column="0"
                                                       IsChecked="{Binding IsSelected, Mode=TwoWay}"
-                                                      Margin="0,0,10,0"
+                                                      Margin="0,0,8,0"
                                                       VerticalAlignment="Center"/>
 
                                             <Grid Grid.Column="1">
                                                 <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="44"/>
+                                                    <ColumnDefinition Width="40"/>
                                                     <ColumnDefinition Width="*"/>
                                                 </Grid.ColumnDefinitions>
 
                                                 <Border Grid.Column="0"
-                                                        Width="44" Height="32"
+                                                        Width="40" Height="28"
                                                         CornerRadius="4"
                                                         Background="{Binding ButtonBg, Source={x:Static svc:ThemeManager.Instance}}"
                                                         ClipToBounds="True"
-                                                        Margin="0,0,10,0">
+                                                        Margin="0,0,8,0">
                                                     <Image Source="{Binding Thumbnail}"
                                                            Stretch="UniformToFill"/>
                                                 </Border>
 
                                                 <StackPanel Grid.Column="1" VerticalAlignment="Center">
                                                     <TextBlock Text="{Binding FileName}"
-                                                               FontSize="12" FontWeight="SemiBold"
+                                                               FontSize="11" FontWeight="SemiBold"
                                                                Foreground="{Binding TextPrimary, Source={x:Static svc:ThemeManager.Instance}}"
                                                                TextTrimming="CharacterEllipsis"/>
-                                                    <TextBlock Text="{Binding FilePath}"
-                                                               FontSize="10"
+                                                    <TextBlock Text="{Binding DisplayPath}"
+                                                               FontSize="9"
                                                                Foreground="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}"
                                                                TextTrimming="CharacterEllipsis"
                                                                Margin="0,1,0,0"/>
@@ -206,16 +229,16 @@
                 </Border>
 
                 <!-- 操作按钮 -->
-                <Grid Grid.Row="3" Margin="0,12,0,0">
+                <Grid Grid.Row="3" Margin="0,10,0,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
                     <StackPanel Grid.Column="0" Orientation="Horizontal">
-                        <Button Click="PasteToWindow_Click" Padding="14,7" Cursor="Hand"
+                        <Button Click="PasteToWindow_Click" Padding="12,6" Cursor="Hand"
                                 Background="{Binding Accent, Source={x:Static svc:ThemeManager.Instance}}" Foreground="White"
-                                FontSize="12" FontWeight="SemiBold" BorderThickness="0">
+                                FontSize="11" FontWeight="SemiBold" BorderThickness="0">
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
                                     <Border x:Name="bd" CornerRadius="6"
@@ -234,14 +257,19 @@
                                 </ControlTemplate>
                             </Button.Template>
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="&#x2191;" FontSize="12" Margin="0,0,4,0"/>
+                                <Border Width="14" Height="14" Margin="0,0,4,0"
+                                        Background="White">
+                                    <Border.OpacityMask>
+                                        <ImageBrush ImageSource="pack://application:,,,/Resources/Icons/upload.png"/>
+                                    </Border.OpacityMask>
+                                </Border>
                                 <TextBlock Text="{DynamicResource PasteToWindow}"/>
                             </StackPanel>
                         </Button>
 
-                        <Button Click="CopyPaths_Click" Padding="14,7" Cursor="Hand"
+                        <Button Click="CopyPaths_Click" Padding="12,6" Cursor="Hand"
                                 Background="{Binding ButtonBg, Source={x:Static svc:ThemeManager.Instance}}" Foreground="{Binding TextPrimary, Source={x:Static svc:ThemeManager.Instance}}"
-                                FontSize="12" Margin="6,0,0,0" BorderThickness="0">
+                                FontSize="11" Margin="6,0,0,0" BorderThickness="0">
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
                                     <Border x:Name="bd" CornerRadius="6"
@@ -260,16 +288,21 @@
                                 </ControlTemplate>
                             </Button.Template>
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="&#x2398;" FontSize="12" Margin="0,0,4,0"/>
+                                <Border Width="14" Height="14" Margin="0,0,4,0"
+                                        Background="{Binding TextPrimary, Source={x:Static svc:ThemeManager.Instance}}">
+                                    <Border.OpacityMask>
+                                        <ImageBrush ImageSource="pack://application:,,,/Resources/Icons/copy.png"/>
+                                    </Border.OpacityMask>
+                                </Border>
                                 <TextBlock Text="{DynamicResource CopyPath}"/>
                             </StackPanel>
                         </Button>
                     </StackPanel>
 
                     <StackPanel Grid.Column="1" Orientation="Horizontal">
-                        <Button Click="DeleteSelected_Click" Padding="14,7" Cursor="Hand"
+                        <Button Click="DeleteSelected_Click" Padding="12,6" Cursor="Hand"
                                 Background="Transparent" Foreground="{Binding DangerFg, Source={x:Static svc:ThemeManager.Instance}}"
-                                FontSize="12" Margin="0,0,6,0" BorderThickness="1"
+                                FontSize="11" Margin="0,0,6,0" BorderThickness="1"
                                 BorderBrush="{Binding DangerFg, Source={x:Static svc:ThemeManager.Instance}}">
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
@@ -291,14 +324,19 @@
                                 </ControlTemplate>
                             </Button.Template>
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="&#x2715;" FontSize="12" Margin="0,0,4,0"/>
+                                <Border Width="14" Height="14" Margin="0,0,4,0"
+                                        Background="{Binding DangerFg, Source={x:Static svc:ThemeManager.Instance}}">
+                                    <Border.OpacityMask>
+                                        <ImageBrush ImageSource="pack://application:,,,/Resources/Icons/delete.png"/>
+                                    </Border.OpacityMask>
+                                </Border>
                                 <TextBlock Text="{DynamicResource Delete}"/>
                             </StackPanel>
                         </Button>
 
-                        <Button Click="ClearAll_Click" Padding="14,7" Cursor="Hand"
+                        <Button Click="ClearAll_Click" Padding="12,6" Cursor="Hand"
                                 Background="Transparent" Foreground="{Binding DangerFg, Source={x:Static svc:ThemeManager.Instance}}"
-                                FontSize="12" BorderThickness="1"
+                                FontSize="11" BorderThickness="1"
                                 BorderBrush="{Binding DangerFg, Source={x:Static svc:ThemeManager.Instance}}">
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
@@ -320,7 +358,12 @@
                                 </ControlTemplate>
                             </Button.Template>
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="&#x21BA;" FontSize="12" Margin="0,0,4,0"/>
+                                <Border Width="14" Height="14" Margin="0,0,4,0"
+                                        Background="{Binding DangerFg, Source={x:Static svc:ThemeManager.Instance}}">
+                                    <Border.OpacityMask>
+                                        <ImageBrush ImageSource="pack://application:,,,/Resources/Icons/refresh.png"/>
+                                    </Border.OpacityMask>
+                                </Border>
                                 <TextBlock Text="{DynamicResource ClearAll}"/>
                             </StackPanel>
                         </Button>
@@ -328,22 +371,47 @@
                 </Grid>
             </Grid>
 
-            <!-- 底栏 -->
-            <Grid Grid.Row="2" Margin="20,0,20,10">
-                <TextBlock FontSize="10" Foreground="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}"
-                           VerticalAlignment="Center" TextTrimming="CharacterEllipsis"
-                           Text="{Binding SelectedFilePath, Mode=OneWay}"/>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
-                            VerticalAlignment="Center">
-                    <CheckBox Content="{DynamicResource DeleteNoAsk}"
-                              IsChecked="{Binding DeleteWithoutConfirm}"
-                              FontSize="10" Foreground="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}"/>
-                    <CheckBox Content="{DynamicResource CleanOnExit}"
-                              IsChecked="{Binding AutoCleanOnExit}"
-                              FontSize="10" Foreground="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}"
-                              Margin="10,0,0,0"/>
-                </StackPanel>
-            </Grid>
+            <!-- 底部区域：更新提示 + 底栏 -->
+            <StackPanel Grid.Row="2">
+                <!-- 更新提示 -->
+                <Border x:Name="UpdateBanner" Margin="12,0,12,4" Padding="10,6"
+                        CornerRadius="6" Cursor="Hand"
+                        Visibility="Collapsed"
+                        MouseLeftButtonDown="UpdateBanner_Click"
+                        Background="#0078D4">
+                    <StackPanel Orientation="Horizontal">
+                        <Border Width="14" Height="14" Margin="0,0,6,0"
+                                Background="White">
+                            <Border.OpacityMask>
+                                <ImageBrush ImageSource="pack://application:,,,/Resources/Icons/download.png"/>
+                            </Border.OpacityMask>
+                        </Border>
+                        <TextBlock FontSize="10" FontWeight="SemiBold" Foreground="White"
+                                   VerticalAlignment="Center">
+                            <Run Text="{DynamicResource UpdateBannerText}"/>
+                        </TextBlock>
+                        <TextBlock Text=" →" FontSize="10" Foreground="White" Margin="6,0,0,0"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- 底栏 -->
+                <Grid Margin="16,0,16,8">
+                    <TextBlock FontSize="9" Foreground="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}"
+                               VerticalAlignment="Center" TextTrimming="CharacterEllipsis"
+                               Text="{Binding SelectedFilePath, Mode=OneWay}"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
+                                VerticalAlignment="Center">
+                        <CheckBox Content="{DynamicResource DeleteNoAsk}"
+                                  IsChecked="{Binding DeleteWithoutConfirm}"
+                                  FontSize="9" Foreground="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}"/>
+                        <CheckBox Content="{DynamicResource CleanOnExit}"
+                                  IsChecked="{Binding AutoCleanOnExit}"
+                                  FontSize="9" Foreground="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}"
+                                  Margin="10,0,0,0"/>
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
 
             <Border Grid.Row="2" Height="1" VerticalAlignment="Top"
                     Background="{Binding Separator, Source={x:Static svc:ThemeManager.Instance}}"/>
@@ -359,13 +427,13 @@
     </Border>
 
     <!-- 缩放拖拽手柄 -->
-    <Border x:Name="ResizeN"  Height="5" VerticalAlignment="Top"    HorizontalAlignment="Stretch" Cursor="SizeNS" Background="Transparent" MouseLeftButtonDown="Resize_MouseLeftButtonDown"/>
-    <Border x:Name="ResizeS"  Height="5" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Cursor="SizeNS" Background="Transparent" MouseLeftButtonDown="Resize_MouseLeftButtonDown"/>
-    <Border x:Name="ResizeW"  Width="5"  VerticalAlignment="Stretch" HorizontalAlignment="Left"   Cursor="SizeWE" Background="Transparent" MouseLeftButtonDown="Resize_MouseLeftButtonDown"/>
-    <Border x:Name="ResizeE"  Width="5"  VerticalAlignment="Stretch" HorizontalAlignment="Right"  Cursor="SizeWE" Background="Transparent" MouseLeftButtonDown="Resize_MouseLeftButtonDown"/>
-    <Border x:Name="ResizeNW" Width="10" Height="10" VerticalAlignment="Top"    HorizontalAlignment="Left"   Cursor="SizeNWSE" Background="Transparent" MouseLeftButtonDown="Resize_MouseLeftButtonDown"/>
-    <Border x:Name="ResizeNE" Width="10" Height="10" VerticalAlignment="Top"    HorizontalAlignment="Right"  Cursor="SizeNESW" Background="Transparent" MouseLeftButtonDown="Resize_MouseLeftButtonDown"/>
-    <Border x:Name="ResizeSW" Width="10" Height="10" VerticalAlignment="Bottom" HorizontalAlignment="Left"   Cursor="SizeNESW" Background="Transparent" MouseLeftButtonDown="Resize_MouseLeftButtonDown"/>
-    <Border x:Name="ResizeSE" Width="10" Height="10" VerticalAlignment="Bottom" HorizontalAlignment="Right"  Cursor="SizeNWSE" Background="Transparent" MouseLeftButtonDown="Resize_MouseLeftButtonDown"/>
+    <Border x:Name="ResizeN"  Height="4" VerticalAlignment="Top"    HorizontalAlignment="Stretch" Cursor="SizeNS" Background="Transparent" MouseLeftButtonDown="Resize_MouseLeftButtonDown"/>
+    <Border x:Name="ResizeS"  Height="4" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Cursor="SizeNS" Background="Transparent" MouseLeftButtonDown="Resize_MouseLeftButtonDown"/>
+    <Border x:Name="ResizeW"  Width="4"  VerticalAlignment="Stretch" HorizontalAlignment="Left"   Cursor="SizeWE" Background="Transparent" MouseLeftButtonDown="Resize_MouseLeftButtonDown"/>
+    <Border x:Name="ResizeE"  Width="4"  VerticalAlignment="Stretch" HorizontalAlignment="Right"  Cursor="SizeWE" Background="Transparent" MouseLeftButtonDown="Resize_MouseLeftButtonDown"/>
+    <Border x:Name="ResizeNW" Width="8" Height="8" VerticalAlignment="Top"    HorizontalAlignment="Left"   Cursor="SizeNWSE" Background="Transparent" MouseLeftButtonDown="Resize_MouseLeftButtonDown"/>
+    <Border x:Name="ResizeNE" Width="8" Height="8" VerticalAlignment="Top"    HorizontalAlignment="Right"  Cursor="SizeNESW" Background="Transparent" MouseLeftButtonDown="Resize_MouseLeftButtonDown"/>
+    <Border x:Name="ResizeSW" Width="8" Height="8" VerticalAlignment="Bottom" HorizontalAlignment="Left"   Cursor="SizeNESW" Background="Transparent" MouseLeftButtonDown="Resize_MouseLeftButtonDown"/>
+    <Border x:Name="ResizeSE" Width="8" Height="8" VerticalAlignment="Bottom" HorizontalAlignment="Right"  Cursor="SizeNWSE" Background="Transparent" MouseLeftButtonDown="Resize_MouseLeftButtonDown"/>
     </Grid>
 </Window>

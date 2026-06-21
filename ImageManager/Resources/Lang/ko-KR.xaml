@@ -18,6 +18,7 @@
 
     <!-- 설정 창 -->
     <sys:String x:Key="SettingsTitle">설정</sys:String>
+    <sys:String x:Key="Appearance">외관</sys:String>
     <sys:String x:Key="Personalization">개인 설정</sys:String>
     <sys:String x:Key="ThemeMode">테마 모드</sys:String>
     <sys:String x:Key="Light">밝게</sys:String>
@@ -32,26 +33,42 @@
     <sys:String x:Key="OpenFolder">폴더 열기</sys:String>
     <sys:String x:Key="DeleteNoConfirm">삭제 시 확인 없음</sys:String>
     <sys:String x:Key="AutoCleanOnExit">종료 시 임시 파일 자동 삭제</sys:String>
+    <sys:String x:Key="PrivacyMode">프라이버시 모드</sys:String>
+    <sys:String x:Key="PrivacyModeDesc">파일 경로 등 민감한 정보를 숨깁니다. 화면 공유나 프레젠테이션에 적합합니다.</sys:String>
+    <sys:String x:Key="FontSelect">글꼴 설정</sys:String>
+    <sys:String x:Key="FontWeightSelect">글꼴 굵기</sys:String>
+    <sys:String x:Key="FontSettingDesc">앱 글꼴과 굵기를 사용자 정의</sys:String>
     <sys:String x:Key="ResourcesSection">리소스</sys:String>
     <sys:String x:Key="DisableBlur">리소스 절약을 위해 유리 배경 비활성화</sys:String>
+    <sys:String x:Key="BackgroundEffect">배경 효과</sys:String>
+    <sys:String x:Key="BgGlass">유리</sys:String>
+    <sys:String x:Key="BgMica">Win11 아크릴</sys:String>
+    <sys:String x:Key="BgNone">없음(단색)</sys:String>
+    <sys:String x:Key="BgHint">유리는 바탕화면을 실시간으로 흐리게 합니다. Win11 아크릴은 시스템 머티리얼을 사용합니다(Windows 10/11 필요).</sys:String>
     <sys:String x:Key="Help">도움말</sys:String>
     <sys:String x:Key="Tutorial">사용 설명서</sys:String>
     <sys:String x:Key="Step1">1. 이미지를 창에 드래그하거나 Ctrl+V로 스크린샷을 붙여넣으세요</sys:String>
     <sys:String x:Key="Step2">2. 필요한 이미지를 선택하고「경로 복사」를 클릭하세요</sys:String>
-    <sys:String x:Key="Step3">3. AI 터미널에서 Ctrl+V로 경로를 붙여넣으세요</sys:String>
-    <sys:String x:Key="Step4">4.「창에 붙여넣기」를 클릭하면 현재 창에 자동으로 붙여넣습니다</sys:String>
+    <sys:String x:Key="Step3">3. AI 터미널이나 모든 창에서 Ctrl+V로 경로를 붙여넣으세요</sys:String>
+    <sys:String x:Key="Step4">4.「창에 붙여넣기」를 클릭하면 경로가 전면 창에 자동으로 붙여넣어집니다</sys:String>
+    <sys:String x:Key="Step5">5. 설정에서 배경 효과, 글꼴, 언어, 프라이버시 모드를 변경할 수 있습니다</sys:String>
     <sys:String x:Key="FAQ">자주 묻는 질문</sys:String>
     <sys:String x:Key="Q1">Q: 창에 붙여넣기가 작동하지 않나요?</sys:String>
     <sys:String x:Key="A1">A: 클릭 후 2초 이내에 대상 창으로 전환하세요. 도구가 자동으로 Ctrl+V를 전송합니다.</sys:String>
-    <sys:String x:Key="Q2">Q: 이미지가 어디에 저장되나요?</sys:String>
-    <sys:String x:Key="A2">A: 기본적으로 시스템 임시 폴더에 저장됩니다. 저장소 설정에서 위치를 변경할 수 있습니다.</sys:String>
-    <sys:String x:Key="Q3">Q: 종료 후에도 이미지가 남아있나요?</sys:String>
-    <sys:String x:Key="A3">A:「종료 시 정리」를 활성화하면 창을 닫을 때 임시 파일이 자동으로 삭제됩니다.</sys:String>
+    <sys:String x:Key="Q2">Q: 프라이버시 모드란?</sys:String>
+    <sys:String x:Key="A2">A: 활성화하면 모든 파일 경로가 ********로 마스킹됩니다. 화면 공유나 프레젠테이션에 적합합니다.</sys:String>
+    <sys:String x:Key="Q3">Q: 배경 효과는 어떻게 선택하나요?</sys:String>
+    <sys:String x:Key="A3">A: 유리는 대부분의 상황에 적합합니다. Win11 아크릴은 시스템 머티리얼을 사용하여 더 투명합니다. 없음은 단색 배경입니다.</sys:String>
+    <sys:String x:Key="Q4">Q: 글꼴 설정은 어떻게 사용하나요?</sys:String>
+    <sys:String x:Key="A4">A: 외관 설정에서 글꼴 설정을 클릭하고 글꼴과 굵기를 선택한 후「적용」을 누르면 전역으로 적용됩니다.</sys:String>
     <sys:String x:Key="About">정보</sys:String>
     <sys:String x:Key="AppName">앱 이름</sys:String>
     <sys:String x:Key="AppVersion">버전</sys:String>
     <sys:String x:Key="Framework">프레임워크</sys:String>
     <sys:String x:Key="License">라이선스</sys:String>
+    <sys:String x:Key="CheckUpdate">업데이트 확인</sys:String>
+    <sys:String x:Key="InstallNow">지금 설치</sys:String>
+    <sys:String x:Key="UpdateBannerText">새 버전이 있습니다. 클릭하여 확인하세요</sys:String>
     <sys:String x:Key="OpenSourceDev">오픈소스 개발자</sys:String>
 
 </ResourceDictionary>

@@ -18,6 +18,7 @@
 
     <!-- 設定ウィンドウ -->
     <sys:String x:Key="SettingsTitle">設定</sys:String>
+    <sys:String x:Key="Appearance">外観</sys:String>
     <sys:String x:Key="Personalization">パーソナライズ</sys:String>
     <sys:String x:Key="ThemeMode">テーマモード</sys:String>
     <sys:String x:Key="Light">ライト</sys:String>
@@ -32,26 +33,42 @@
     <sys:String x:Key="OpenFolder">フォルダを開く</sys:String>
     <sys:String x:Key="DeleteNoConfirm">削除時に確認しない</sys:String>
     <sys:String x:Key="AutoCleanOnExit">終了時に一時ファイルを自動削除</sys:String>
+    <sys:String x:Key="PrivacyMode">プライバシーモード</sys:String>
+    <sys:String x:Key="PrivacyModeDesc">ファイルパスなどの機密情報を非表示にします。画面共有やプレゼンテーションに最適です。</sys:String>
+    <sys:String x:Key="FontSelect">フォント設定</sys:String>
+    <sys:String x:Key="FontWeightSelect">フォントウェイト</sys:String>
+    <sys:String x:Key="FontSettingDesc">アプリのフォントとウェイトをカスタマイズ</sys:String>
     <sys:String x:Key="ResourcesSection">リソース</sys:String>
     <sys:String x:Key="DisableBlur">リソース節約のためにフロストガラス背景を無効にする</sys:String>
+    <sys:String x:Key="BackgroundEffect">背景エフェクト</sys:String>
+    <sys:String x:Key="BgGlass">フロストガラス</sys:String>
+    <sys:String x:Key="BgMica">Win11 アクリル</sys:String>
+    <sys:String x:Key="BgNone">なし（単色）</sys:String>
+    <sys:String x:Key="BgHint">フロストガラスはデスクトップをリアルタイムにぼかします。Win11 アクリルはシステムマテリアルを使用します（Windows 10/11 が必要）。</sys:String>
     <sys:String x:Key="Help">ヘルプ</sys:String>
     <sys:String x:Key="Tutorial">使い方</sys:String>
     <sys:String x:Key="Step1">1. 画像をウィンドウにドラッグするか、Ctrl+V でスクリーンショットを貼り付けます</sys:String>
-    <sys:String x:Key="Step2">2. 必要な画像を選択し、「パスをコピー」をクリックします</sys:String>
-    <sys:String x:Key="Step3">3. AI ターミナルで Ctrl+V を押してパスを貼り付けます</sys:String>
-    <sys:String x:Key="Step4">4.「ウィンドウに貼り付け」をクリックすると前台のウィンドウに自動で貼り付きます</sys:String>
+    <sys:String x:Key="Step2">2. 必要な画像を選択し、「パスをコピー」でクリップボードにコピーします</sys:String>
+    <sys:String x:Key="Step3">3. AI ターミナルや任意のウィンドウで Ctrl+V を押してパスを貼り付けます</sys:String>
+    <sys:String x:Key="Step4">4.「ウィンドウに貼り付け」をクリックすると、パスが前台ウィンドウに自動で貼り付きます</sys:String>
+    <sys:String x:Key="Step5">5. 設定で背景エフェクト、フォント、言語、プライバシーモードを変更できます</sys:String>
     <sys:String x:Key="FAQ">よくある質問</sys:String>
     <sys:String x:Key="Q1">Q: ウィンドウへの貼り付けが反応しません</sys:String>
     <sys:String x:Key="A1">A: クリック後2秒以内にターゲットウィンドウに切り替えてください。ツールが自動で Ctrl+V を送信します。</sys:String>
-    <sys:String x:Key="Q2">Q: 画像はどこに保存されますか？</sys:String>
-    <sys:String x:Key="A2">A: デフォルトではシステムの一時ディレクトリに保存されます。ストレージ設定で場所を変更できます。</sys:String>
-    <sys:String x:Key="Q3">Q: 閉じた後も画像は残りますか？</sys:String>
-    <sys:String x:Key="A3">A:「終了時にクリーンアップ」を有効にすると、ウィンドウを閉じた時に一時ファイルが自動的に削除されます。</sys:String>
+    <sys:String x:Key="Q2">Q: プライバシーモードとは？</sys:String>
+    <sys:String x:Key="A2">A: 有効にするとファイルパスが ******** にマスクされます。画面共有やプレゼンテーションに最適です。</sys:String>
+    <sys:String x:Key="Q3">Q: 背景エフェクトはどう選びますか？</sys:String>
+    <sys:String x:Key="A3">A: フロストガラスはほとんどの場面で適しています。Win11 アクリルはシステムマテリアルを使用しより透明感があります。なしは単色背景です。</sys:String>
+    <sys:String x:Key="Q4">Q: フォント設定はどう使えますか？</sys:String>
+    <sys:String x:Key="A4">A: 外観設定のフォント設定をクリックし、フォントとウェイトを選択して「適用」を押すと全体に反映されます。</sys:String>
     <sys:String x:Key="About">バージョン情報</sys:String>
     <sys:String x:Key="AppName">アプリ名</sys:String>
     <sys:String x:Key="AppVersion">バージョン</sys:String>
     <sys:String x:Key="Framework">フレームワーク</sys:String>
     <sys:String x:Key="License">ライセンス</sys:String>
+    <sys:String x:Key="CheckUpdate">更新を確認</sys:String>
+    <sys:String x:Key="InstallNow">今すぐインストール</sys:String>
+    <sys:String x:Key="UpdateBannerText">新しいバージョンがあります。クリックして詳細を確認</sys:String>
     <sys:String x:Key="OpenSourceDev">オープンソース開発者</sys:String>
 
 </ResourceDictionary>

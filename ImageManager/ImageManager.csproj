@@ -17,9 +17,10 @@
     <!-- 程序集信息 -->
     <AssemblyName>ImageManager</AssemblyName>
     <RootNamespace>ImageManager</RootNamespace>
-    <Version>1.0.0</Version>
+    <Version>1.1.0</Version>
     <Authors>小蔡有点料</Authors>
     <Description>AI 终端图片中转管理工具</Description>
+    <ApplicationIcon>Resources\app.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -32,12 +33,39 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ApplicationIcon Include="Resources\app.ico" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Resource Include="Resources\app.png" />
     <Resource Include="Resources\avatar.png" />
+    <Resource Include="Resources\Icons\close.png" />
+    <Resource Include="Resources\Icons\settings.png" />
+    <Resource Include="Resources\Icons\settings2.png" />
+    <Resource Include="Resources\Icons\image.png" />
+    <Resource Include="Resources\Icons\arrow_up.png" />
+    <Resource Include="Resources\Icons\copy.png" />
+    <Resource Include="Resources\Icons\delete.png" />
+    <Resource Include="Resources\Icons\refresh.png" />
+    <Resource Include="Resources\Icons\minimize.png" />
+    <Resource Include="Resources\Icons\folder.png" />
+    <Resource Include="Resources\Icons\download.png" />
+    <Resource Include="Resources\Icons\hidden.png" />
+    <Resource Include="Resources\Icons\visible.png" />
+    <Resource Include="Resources\Icons\folder2.png" />
+    <Resource Include="Resources\Icons\lock.png" />
+    <Resource Include="Resources\Icons\unlock.png" />
+    <Resource Include="Resources\Icons\trash.png" />
+    <Resource Include="Resources\Icons\info.png" />
+    <Resource Include="Resources\Icons\reload.png" />
+    <Resource Include="Resources\Icons\globe.png" />
+    <Resource Include="Resources\Icons\location.png" />
+    <Resource Include="Resources\Icons\light_mode.png" />
+    <Resource Include="Resources\Icons\dark_mode.png" />
+    <Resource Include="Resources\Icons\slider.png" />
+    <Resource Include="Resources\Icons\avatar_icon.png" />
+    <Resource Include="Resources\Icons\download2.png" />
+    <Resource Include="Resources\Icons\font.png" />
+    <Resource Include="Resources\Icons\tune.png" />
+    <Resource Include="Resources\Icons\upload.png" />
+    <Resource Include="Resources\Icons\palette.png" />
+    <Resource Include="Resources\Icons\font2.png" />
     <Resource Include="Resources\Lang\zh-CN.xaml" />
     <Resource Include="Resources\Lang\zh-TW.xaml" />
     <Resource Include="Resources\Lang\en-US.xaml" />

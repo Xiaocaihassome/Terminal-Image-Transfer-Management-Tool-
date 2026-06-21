@@ -1,114 +1,106 @@
-using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
-using System.Windows.Media.Imaging;
-using System.Windows.Threading;
 
 namespace ImageManager.Services;
 
 public class PasteService : IPasteService
 {
     private readonly IToastService _toastService;
-    private readonly Dispatcher _dispatcher;
-
-    [DllImport("user32.dll", SetLastError = true)]
-    private static extern uint SendInput(uint nInputs, INPUT[] pInputs, int cbSize);
 
     [DllImport("user32.dll")]
-    private static extern IntPtr GetForegroundWindow();
+    private static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, IntPtr dwExtraInfo);
 
     [DllImport("user32.dll")]
-    private static extern bool SetForegroundWindow(IntPtr hWnd);
+    private static extern bool OpenClipboard(IntPtr hWndNewOwner);
 
     [DllImport("user32.dll")]
-    private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+    private static extern bool CloseClipboard();
 
-    private const uint INPUT_KEYBOARD = 1;
+    [DllImport("user32.dll")]
+    private static extern bool EmptyClipboard();
+
+    [DllImport("user32.dll")]
+    private static extern IntPtr SetClipboardData(uint uFormat, IntPtr hMem);
+
     private const uint KEYEVENTF_KEYUP = 0x0002;
-    private const ushort VK_CONTROL = 0x11;
-    private const ushort VK_V = 0x56;
-    private const int SW_RESTORE = 9;
-
-    [StructLayout(LayoutKind.Sequential)]
-    private struct INPUT
-    {
-        public uint type;
-        public INPUTUNION U;
-    }
-
-    [StructLayout(LayoutKind.Explicit)]
-    private struct INPUTUNION
-    {
-        [FieldOffset(0)] public KEYBDINPUT ki;
-    }
-
-    [StructLayout(LayoutKind.Sequential)]
-    private struct KEYBDINPUT
-    {
-        public ushort wVk;
-        public ushort wScan;
-        public uint dwFlags;
-        public uint time;
-        public IntPtr extraInfo;
-    }
+    private const uint CF_UNICODETEXT = 13;
+    private const uint CF_HDROP = 15;
 
     public PasteService(IToastService toastService)
     {
         _toastService = toastService;
-        _dispatcher = Application.Current.Dispatcher;
     }
 
     public async Task PasteImageAsync(string filePath, Window ownerWindow)
     {
-        // 2秒倒计时
-        for (int i = 2; i > 0; i--)
+        // 写剪贴板
+        if (!WriteClipboard(filePath))
         {
-            _toastService.Show($"请切换到目标窗口，{i}秒后粘贴路径...", ToastType.Info);
-            await Task.Delay(1000);
+            _toastService.Show("剪贴板写入失败", ToastType.Error);
+            return;
         }
 
-        // 写入剪贴板 + 发送 Ctrl+V（同一 dispatcher 调用，确保时序）
-        await _dispatcher.InvokeAsync(() =>
-        {
-            var hwnd = new WindowInteropHelper(ownerWindow).Handle;
-            if (GetForegroundWindow() == hwnd)
-            {
-                _toastService.Show("请先切换到目标窗口", ToastType.Warning);
-                return;
-            }
+        await Task.Delay(100);
 
-            // 写入多种格式，确保兼容性
-            var dataObject = new DataObject();
-            dataObject.SetData(DataFormats.UnicodeText, filePath, true);
-            dataObject.SetData(DataFormats.Text, filePath, true);
-            dataObject.SetData(DataFormats.FileDrop, new string[] { filePath }, true);
-            Clipboard.SetDataObject(dataObject, true);
+        // 最小化窗口 → 目标窗口自动获得前台焦点
+        ownerWindow.WindowState = WindowState.Minimized;
+        await Task.Delay(200);
 
-            Thread.Sleep(100);
-            SendCtrlV();
-            _toastService.Show("已粘贴路径", ToastType.Success);
-        });
+        // 用 keybd_event 发 Ctrl+V（与 PowerShell 版本一致）
+        SendCtrlV();
+        await Task.Delay(300);
+
+        // 恢复窗口
+        ownerWindow.WindowState = WindowState.Normal;
+        _toastService.Show("已粘贴路径", ToastType.Success);
     }
 
-    private void SendCtrlV()
+    private static void SendCtrlV()
     {
-        var inputs = new INPUT[4];
+        keybd_event(0x11, 0, 0, IntPtr.Zero);       // Ctrl down
+        keybd_event(0x56, 0, 0, IntPtr.Zero);       // V down
+        keybd_event(0x56, 0, KEYEVENTF_KEYUP, IntPtr.Zero);  // V up
+        keybd_event(0x11, 0, KEYEVENTF_KEYUP, IntPtr.Zero);  // Ctrl up
+    }
 
-        inputs[0].type = INPUT_KEYBOARD;
-        inputs[0].U.ki.wVk = VK_CONTROL;
+    private static bool WriteClipboard(string filePath)
+    {
+        for (int attempt = 0; attempt < 5; attempt++)
+        {
+            if (OpenClipboard(IntPtr.Zero))
+            {
+                try
+                {
+                    EmptyClipboard();
+                    IntPtr hText = Marshal.StringToHGlobalUni(filePath + "\0");
+                    SetClipboardData(CF_UNICODETEXT, hText);
+                    IntPtr hDrop = CreateHDrop(filePath);
+                    if (hDrop != IntPtr.Zero)
+                        SetClipboardData(CF_HDROP, hDrop);
+                    return true;
+                }
+                finally { CloseClipboard(); }
+            }
+            Thread.Sleep(50);
+        }
+        return false;
+    }
 
-        inputs[1].type = INPUT_KEYBOARD;
-        inputs[1].U.ki.wVk = VK_V;
-
-        inputs[2].type = INPUT_KEYBOARD;
-        inputs[2].U.ki.wVk = VK_V;
-        inputs[2].U.ki.dwFlags = KEYEVENTF_KEYUP;
-
-        inputs[3].type = INPUT_KEYBOARD;
-        inputs[3].U.ki.wVk = VK_CONTROL;
-        inputs[3].U.ki.dwFlags = KEYEVENTF_KEYUP;
-
-        SendInput(4, inputs, Marshal.SizeOf<INPUT>());
+    private static IntPtr CreateHDrop(string filePath)
+    {
+        int headerSize = 20;
+        byte[] pathBytes = System.Text.Encoding.Unicode.GetBytes(filePath + "\0\0");
+        int totalSize = headerSize + pathBytes.Length;
+        IntPtr hMem = Marshal.AllocHGlobal(totalSize);
+        try
+        {
+            for (int i = 0; i < totalSize; i++) Marshal.WriteByte(hMem, i, 0);
+            Marshal.WriteInt32(hMem, 0, headerSize);
+            Marshal.WriteInt32(hMem, 16, 1);
+            Marshal.Copy(pathBytes, 0, hMem + headerSize, pathBytes.Length);
+            return hMem;
+        }
+        catch { Marshal.FreeHGlobal(hMem); return IntPtr.Zero; }
     }
 }

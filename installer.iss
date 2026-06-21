@@ -1,6 +1,6 @@
 ; 终端图片中转管理工具 - Inno Setup 安装脚本
 #define MyAppName "终端图片中转管理工具"
-#define MyAppVersion "1.0.0"
+#define MyAppVersion "1.1.0"
 #define MyAppPublisher "小蔡有点料"
 #define MyAppExeName "ImageManager.exe"
 #define MyAppId "E8C2F5A1-3B7D-4F9E-A6D4-1C8E5B2F7A39"

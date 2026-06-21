@@ -45,23 +45,44 @@ public class ThemeManager : INotifyPropertyChanged
 
     private void Apply(bool isDark, double t = 0.75)
     {
-        // 透明度越低，alpha 越小，毛玻璃模糊越明显
-        double a = 0.08 + t * 0.35;
-        CardBackground = MakeA(isDark ? "#1A1A1A" : "#F5F5F5", a);
-        ListBackground = MakeA(isDark ? "#151515" : "#FFFFFF", a * 0.85);
-        CardBorder = MakeA(isDark ? "#404040" : "#D0D0D0", a * 0.4);
+        // 非线性曲线：低透明度时通透，高透明度时接近实色
+        double a = 0.08 + Math.Pow(t, 1.5) * 0.88;
+
+        if (isDark)
+        {
+            // 深色主题：高透明度时使用更深的底色，低透明度时提亮避免发灰
+            double lift = (1.0 - t) * 0.12; // 低透明度时轻微提亮
+            CardBackground = MakeA(Lighten("#1A1A1A", lift), a);
+            ListBackground = MakeA(Lighten("#121212", lift), a * 0.9);
+            CardBorder = MakeA(Lighten("#3A3A3A", lift), Math.Min(1.0, a * 0.5 + 0.1));
+            ButtonBg = MakeA(Lighten("#2A2A2A", lift), a);
+            ButtonHover = MakeA(Lighten("#3A3A3A", lift), a);
+            ButtonPressed = MakeA(Lighten("#4A4A4A", lift), a);
+            DangerBg = MakeA("#502020", a);
+            DangerHover = MakeA("#602525", a);
+            DropZoneBorder = MakeA(Lighten("#454545", lift), Math.Min(1.0, a * 0.5 + 0.08));
+            Separator = MakeA(Lighten("#353535", lift), Math.Min(1.0, a * 0.4 + 0.08));
+            SettingsSectionBg = MakeA(Lighten("#1E1E1E", lift), a * 0.9);
+        }
+        else
+        {
+            CardBackground = MakeA("#F5F5F5", a);
+            ListBackground = MakeA("#FFFFFF", a * 0.9);
+            CardBorder = MakeA("#D0D0D0", a * 0.5);
+            ButtonBg = MakeA("#E0E0E0", a);
+            ButtonHover = MakeA("#D0D0D0", a);
+            ButtonPressed = MakeA("#C0C0C0", a);
+            DangerBg = MakeA("#FDE7E7", a);
+            DangerHover = MakeA("#F5D0D0", a);
+            DropZoneBorder = MakeA("#C0C0C0", a * 0.5);
+            Separator = MakeA("#D0D0D0", a * 0.35);
+            SettingsSectionBg = MakeA("#F0F0F0", a * 0.9);
+        }
+
         TextPrimary = Make(isDark ? "#FFFFFF" : "#1A1A1A");
-        TextSecondary = Make(isDark ? "#AAAAAA" : "#666666");
+        TextSecondary = Make(isDark ? "#B0B0B0" : "#666666");
         Accent = Make(isDark ? "#60CDFF" : "#0078D4");
-        ButtonBg = MakeA(isDark ? "#383838" : "#E0E0E0", a);
-        ButtonHover = MakeA(isDark ? "#484848" : "#D0D0D0", a);
-        ButtonPressed = MakeA(isDark ? "#585858" : "#C0C0C0", a);
-        DangerBg = MakeA(isDark ? "#502020" : "#FDE7E7", a);
         DangerFg = Make(isDark ? "#FF6B6B" : "#E81123");
-        DangerHover = MakeA(isDark ? "#602525" : "#F5D0D0", a);
-        DropZoneBorder = MakeA(isDark ? "#505050" : "#C0C0C0", a * 0.5);
-        Separator = MakeA(isDark ? "#404040" : "#D0D0D0", a * 0.3);
-        SettingsSectionBg = MakeA(isDark ? "#252525" : "#F0F0F0", a * 0.85);
 
         // 通知所有属性变更
         OnChanged(nameof(CardBackground));
@@ -92,10 +113,20 @@ public class ThemeManager : INotifyPropertyChanged
     private static Brush MakeA(string hex, double opacity)
     {
         var c = (Color)ColorConverter.ConvertFromString(hex);
-        c.A = (byte)(opacity * 255);
+        c.A = (byte)(Math.Clamp(opacity, 0, 1) * 255);
         var b = new SolidColorBrush(c);
         b.Freeze();
         return b;
+    }
+
+    /// <summary>将深色往白色方向提亮（用于低透明度时避免发灰）。</summary>
+    private static string Lighten(string hex, double amount)
+    {
+        var c = (Color)ColorConverter.ConvertFromString(hex);
+        int r = c.R + (int)((255 - c.R) * amount);
+        int g = c.G + (int)((255 - c.G) * amount);
+        int b = c.B + (int)((255 - c.B) * amount);
+        return $"#{r:X2}{g:X2}{b:X2}";
     }
 
     private static bool IsSystemDark()

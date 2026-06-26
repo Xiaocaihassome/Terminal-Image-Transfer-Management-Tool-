@@ -61,6 +61,14 @@
     <sys:String x:Key="A3">A: フロストガラスはほとんどの場面で適しています。Win11 アクリルはシステムマテリアルを使用しより透明感があります。なしは単色背景です。</sys:String>
     <sys:String x:Key="Q4">Q: フォント設定はどう使えますか？</sys:String>
     <sys:String x:Key="A4">A: 外観設定のフォント設定をクリックし、フォントとウェイトを選択して「適用」を押すと全体に反映されます。</sys:String>
+
+    <!-- 謝辞 -->
+    <sys:String x:Key="Credits">謝辞</sys:String>
+    <sys:String x:Key="CreditMVVM">CommunityToolkit.Mvvm — MVVM フレームワーク</sys:String>
+    <sys:String x:Key="CreditDI">Microsoft.Extensions.DependencyInjection — 依存性注入</sys:String>
+    <sys:String x:Key="CreditIcons">Game Icon Pack by Nieobie — UI アイコン</sys:String>
+    <sys:String x:Key="CreditInno">Inno Setup — インストーラー作成ツール</sys:String>
+
     <sys:String x:Key="About">バージョン情報</sys:String>
     <sys:String x:Key="AppName">アプリ名</sys:String>
     <sys:String x:Key="AppVersion">バージョン</sys:String>

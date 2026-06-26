@@ -61,6 +61,14 @@
     <sys:String x:Key="A3">A: 毛玻璃适合大多数场景；Win11 亚克力使用系统材质更通透；无则为纯色背景。</sys:String>
     <sys:String x:Key="Q4">Q: 字体设置如何生效？</sys:String>
     <sys:String x:Key="A4">A: 在外观设置中点击字体设置，选择字体和字重后点击「应用」即可全局生效。</sys:String>
+
+    <!-- 致谢 -->
+    <sys:String x:Key="Credits">致谢</sys:String>
+    <sys:String x:Key="CreditMVVM">CommunityToolkit.Mvvm — MVVM 框架</sys:String>
+    <sys:String x:Key="CreditDI">Microsoft.Extensions.DependencyInjection — 依赖注入</sys:String>
+    <sys:String x:Key="CreditIcons">Game Icon Pack by Nieobie — UI 图标</sys:String>
+    <sys:String x:Key="CreditInno">Inno Setup — 安装程序制作工具</sys:String>
+
     <sys:String x:Key="About">关于</sys:String>
     <sys:String x:Key="AppName">应用名称</sys:String>
     <sys:String x:Key="AppVersion">版本</sys:String>

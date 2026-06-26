@@ -61,6 +61,14 @@
     <sys:String x:Key="A3">A: Frosted Glass suits most scenarios; Win11 Acrylic uses system material for a more transparent look; None gives a solid background.</sys:String>
     <sys:String x:Key="Q4">Q: How does the font setting work?</sys:String>
     <sys:String x:Key="A4">A: Click Font Settings in Appearance, select a font and weight, then click "Apply" to take effect globally.</sys:String>
+
+    <!-- Credits -->
+    <sys:String x:Key="Credits">Credits</sys:String>
+    <sys:String x:Key="CreditMVVM">CommunityToolkit.Mvvm — MVVM framework</sys:String>
+    <sys:String x:Key="CreditDI">Microsoft.Extensions.DependencyInjection — Dependency injection</sys:String>
+    <sys:String x:Key="CreditIcons">Game Icon Pack by Nieobie — UI icons</sys:String>
+    <sys:String x:Key="CreditInno">Inno Setup — Installer maker</sys:String>
+
     <sys:String x:Key="About">About</sys:String>
     <sys:String x:Key="AppName">App Name</sys:String>
     <sys:String x:Key="AppVersion">Version</sys:String>

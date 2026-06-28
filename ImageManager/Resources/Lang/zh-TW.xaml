@@ -35,6 +35,8 @@
     <sys:String x:Key="AutoCleanOnExit">退出時自動清空臨時檔案</sys:String>
     <sys:String x:Key="PrivacyMode">隱私模式</sys:String>
     <sys:String x:Key="PrivacyModeDesc">開啟後隱藏檔案路徑等敏感資訊，適用於螢幕共享或簡報場景</sys:String>
+    <sys:String x:Key="AlwaysOnTop">視窗置頂</sys:String>
+    <sys:String x:Key="AlwaysOnTopDesc">開啟後視窗始終顯示在其他視窗上方</sys:String>
     <sys:String x:Key="FontSelect">字型設定</sys:String>
     <sys:String x:Key="FontWeightSelect">字重</sys:String>
     <sys:String x:Key="FontSettingDesc">自訂應用字型和字重</sys:String>
@@ -74,6 +76,9 @@
     <sys:String x:Key="AppVersion">版本</sys:String>
     <sys:String x:Key="Framework">框架</sys:String>
     <sys:String x:Key="License">協議</sys:String>
+    <sys:String x:Key="OpenRepo">打開倉庫</sys:String>
+    <sys:String x:Key="Website">官網</sys:String>
+    <sys:String x:Key="OpenWebsite">打開官網</sys:String>
     <sys:String x:Key="CheckUpdate">檢查更新</sys:String>
     <sys:String x:Key="InstallNow">立即安裝</sys:String>
     <sys:String x:Key="UpdateBannerText">發現新版本，點擊查看詳情</sys:String>

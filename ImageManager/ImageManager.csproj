@@ -17,7 +17,7 @@
     <!-- 程序集信息 -->
     <AssemblyName>ImageManager</AssemblyName>
     <RootNamespace>ImageManager</RootNamespace>
-    <Version>1.1.1</Version>
+    <Version>1.2.0</Version>
     <Authors>小蔡有点料</Authors>
     <Description>AI 终端图片中转管理工具</Description>
     <ApplicationIcon>Resources\app.ico</ApplicationIcon>

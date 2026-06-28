@@ -20,6 +20,7 @@ public class ConfigService : IConfigService
     public bool DisableBlur { get; set; }
     public string BackgroundMode { get; set; } = "Glass";
     public bool PrivacyMode { get; set; }
+    public bool AlwaysOnTop { get; set; }
     public string FontFamily { get; set; } = "";
     public int FontWeight { get; set; } = 400;
 
@@ -56,6 +57,7 @@ public class ConfigService : IConfigService
                 if (BackgroundMode == "Liquid")
                     BackgroundMode = "Glass";
                 PrivacyMode = data.PrivacyMode;
+                AlwaysOnTop = data.AlwaysOnTop;
                 FontFamily = string.IsNullOrEmpty(data.FontFamily) ? "" : data.FontFamily;
                 FontWeight = data.FontWeight > 0 ? data.FontWeight : 400;
             }
@@ -78,6 +80,7 @@ public class ConfigService : IConfigService
             DisableBlur = DisableBlur,
             BackgroundMode = BackgroundMode,
             PrivacyMode = PrivacyMode,
+            AlwaysOnTop = AlwaysOnTop,
             FontFamily = FontFamily,
             FontWeight = FontWeight
         };
@@ -102,6 +105,7 @@ public class ConfigService : IConfigService
         public bool DisableBlur { get; set; }
         public string? BackgroundMode { get; set; }
         public bool PrivacyMode { get; set; }
+        public bool AlwaysOnTop { get; set; }
         public string? FontFamily { get; set; }
         public int FontWeight { get; set; }
     }

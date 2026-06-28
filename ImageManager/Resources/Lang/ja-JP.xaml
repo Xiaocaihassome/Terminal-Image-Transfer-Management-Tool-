@@ -35,6 +35,8 @@
     <sys:String x:Key="AutoCleanOnExit">終了時に一時ファイルを自動削除</sys:String>
     <sys:String x:Key="PrivacyMode">プライバシーモード</sys:String>
     <sys:String x:Key="PrivacyModeDesc">ファイルパスなどの機密情報を非表示にします。画面共有やプレゼンテーションに最適です。</sys:String>
+    <sys:String x:Key="AlwaysOnTop">ウインドウを最前面に固定</sys:String>
+    <sys:String x:Key="AlwaysOnTopDesc">ウインドウを常に他のウインドウの上に表示します</sys:String>
     <sys:String x:Key="FontSelect">フォント設定</sys:String>
     <sys:String x:Key="FontWeightSelect">フォントウェイト</sys:String>
     <sys:String x:Key="FontSettingDesc">アプリのフォントとウェイトをカスタマイズ</sys:String>
@@ -74,6 +76,9 @@
     <sys:String x:Key="AppVersion">バージョン</sys:String>
     <sys:String x:Key="Framework">フレームワーク</sys:String>
     <sys:String x:Key="License">ライセンス</sys:String>
+    <sys:String x:Key="OpenRepo">リポジトリを開く</sys:String>
+    <sys:String x:Key="Website">公式サイト</sys:String>
+    <sys:String x:Key="OpenWebsite">公式サイトを開く</sys:String>
     <sys:String x:Key="CheckUpdate">更新を確認</sys:String>
     <sys:String x:Key="InstallNow">今すぐインストール</sys:String>
     <sys:String x:Key="UpdateBannerText">新しいバージョンがあります。クリックして詳細を確認</sys:String>

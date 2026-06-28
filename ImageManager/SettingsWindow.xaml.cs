@@ -44,6 +44,7 @@ public partial class SettingsWindow : Window
         SubscribeCard(LanguageCard);
         SubscribeCard(StorageCard, Color.FromRgb(0xE8, 0x11, 0x23)); // 红色（高危操作）
         SubscribeCard(PrivacyCard);
+        SubscribeCard(AlwaysOnTopCard);
         SubscribeCard(AboutCard);
 
         // 字体设置卡片（如果有的话）
@@ -211,6 +212,15 @@ public partial class SettingsWindow : Window
         System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
         {
             FileName = "https://github.com/Xiaocaihassome/Terminal-Image-Transfer-Management-Tool-",
+            UseShellExecute = true
+        });
+    }
+
+    private void OpenWebsite_Click(object sender, MouseButtonEventArgs e)
+    {
+        System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+        {
+            FileName = "https://terminal-image-transfer-management-tool--website.pages.dev/",
             UseShellExecute = true
         });
     }

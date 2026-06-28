@@ -35,6 +35,8 @@
     <sys:String x:Key="AutoCleanOnExit">退出时自动清空临时文件</sys:String>
     <sys:String x:Key="PrivacyMode">隐私模式</sys:String>
     <sys:String x:Key="PrivacyModeDesc">开启后隐藏文件路径等敏感信息，适用于屏幕共享或演示场景</sys:String>
+    <sys:String x:Key="AlwaysOnTop">窗口置顶</sys:String>
+    <sys:String x:Key="AlwaysOnTopDesc">开启后窗口始终显示在其他窗口上方</sys:String>
     <sys:String x:Key="FontSelect">字体设置</sys:String>
     <sys:String x:Key="FontWeightSelect">字重</sys:String>
     <sys:String x:Key="FontSettingDesc">自定义应用字体和字重</sys:String>
@@ -74,6 +76,9 @@
     <sys:String x:Key="AppVersion">版本</sys:String>
     <sys:String x:Key="Framework">框架</sys:String>
     <sys:String x:Key="License">协议</sys:String>
+    <sys:String x:Key="OpenRepo">打开仓库</sys:String>
+    <sys:String x:Key="Website">官网</sys:String>
+    <sys:String x:Key="OpenWebsite">打开官网</sys:String>
     <sys:String x:Key="CheckUpdate">检查更新</sys:String>
     <sys:String x:Key="InstallNow">立即安装</sys:String>
     <sys:String x:Key="UpdateBannerText">发现新版本，点击查看详情</sys:String>

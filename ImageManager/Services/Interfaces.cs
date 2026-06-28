@@ -46,6 +46,7 @@ public interface IConfigService
     bool DisableBlur { get; set; }
     string BackgroundMode { get; set; } // Glass=毛玻璃, Mica=Win11云母, None=纯色
     bool PrivacyMode { get; set; }
+    bool AlwaysOnTop { get; set; }
     string FontFamily { get; set; }
     int FontWeight { get; set; } // 100-900
     string GetTempRoot();

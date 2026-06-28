@@ -35,6 +35,8 @@
     <sys:String x:Key="AutoCleanOnExit">종료 시 임시 파일 자동 삭제</sys:String>
     <sys:String x:Key="PrivacyMode">프라이버시 모드</sys:String>
     <sys:String x:Key="PrivacyModeDesc">파일 경로 등 민감한 정보를 숨깁니다. 화면 공유나 프레젠테이션에 적합합니다.</sys:String>
+    <sys:String x:Key="AlwaysOnTop">윈도우 항상 위에</sys:String>
+    <sys:String x:Key="AlwaysOnTopDesc">윈도우를 항상 다른 윈도우 위에 표시합니다</sys:String>
     <sys:String x:Key="FontSelect">글꼴 설정</sys:String>
     <sys:String x:Key="FontWeightSelect">글꼴 굵기</sys:String>
     <sys:String x:Key="FontSettingDesc">앱 글꼴과 굵기를 사용자 정의</sys:String>
@@ -74,6 +76,9 @@
     <sys:String x:Key="AppVersion">버전</sys:String>
     <sys:String x:Key="Framework">프레임워크</sys:String>
     <sys:String x:Key="License">라이선스</sys:String>
+    <sys:String x:Key="OpenRepo">저장소 열기</sys:String>
+    <sys:String x:Key="Website">공식 사이트</sys:String>
+    <sys:String x:Key="OpenWebsite">공식 사이트 열기</sys:String>
     <sys:String x:Key="CheckUpdate">업데이트 확인</sys:String>
     <sys:String x:Key="InstallNow">지금 설치</sys:String>
     <sys:String x:Key="UpdateBannerText">새 버전이 있습니다. 클릭하여 확인하세요</sys:String>

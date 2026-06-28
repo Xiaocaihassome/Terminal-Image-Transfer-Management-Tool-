@@ -282,6 +282,38 @@
                         </Grid>
                     </Border>
 
+                    <!-- 置顶模式独立卡片 -->
+                    <Border x:Name="AlwaysOnTopCard" CornerRadius="8" Padding="12" Margin="0,8,0,0"
+                            Background="{Binding ListBackground, Source={x:Static svc:ThemeManager.Instance}}"
+                            BorderBrush="{Binding CardBorder, Source={x:Static svc:ThemeManager.Instance}}" BorderThickness="1.5">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Border Grid.Column="0" Width="32" Height="32" CornerRadius="6"
+                                    Background="{Binding Accent, Source={x:Static svc:ThemeManager.Instance}}"
+                                    VerticalAlignment="Center" Margin="0,0,10,0">
+                                <Border.OpacityMask>
+                                    <ImageBrush ImageSource="pack://application:,,,/Resources/Icons/lock.png"/>
+                                </Border.OpacityMask>
+                            </Border>
+
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                <TextBlock Text="{DynamicResource AlwaysOnTop}" FontSize="12" FontWeight="SemiBold"
+                                           Foreground="{Binding TextPrimary, Source={x:Static svc:ThemeManager.Instance}}"/>
+                                <TextBlock Text="{DynamicResource AlwaysOnTopDesc}" FontSize="10"
+                                           Foreground="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}"
+                                           TextWrapping="Wrap" Margin="0,2,0,0"/>
+                            </StackPanel>
+
+                            <CheckBox x:Name="AlwaysOnTopCheckBox" Grid.Column="2" IsChecked="{Binding AlwaysOnTop}"
+                                      VerticalAlignment="Center" Margin="8,0,0,0"/>
+                        </Grid>
+                    </Border>
+
                     <Border Height="1" Background="{Binding Separator, Source={x:Static svc:ThemeManager.Instance}}" Margin="0,12"/>
 
                     <!-- ===== 关于 ===== -->
@@ -352,16 +384,27 @@
                                 <TextBlock Grid.Column="1" Text="MIT License" FontSize="11"
                                            Foreground="{Binding TextPrimary, Source={x:Static svc:ThemeManager.Instance}}"/>
                             </Grid>
-                            <Grid Margin="0,0,0,10">
+                            <Grid Margin="0,0,0,4">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="70"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Grid.Column="0" Text="GitHub" FontSize="11"
                                            Foreground="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}"/>
-                                <TextBlock Grid.Column="1" Text="打开仓库" FontSize="11"
+                                <TextBlock Grid.Column="1" Text="{DynamicResource OpenRepo}" FontSize="11"
                                            Foreground="{Binding Accent, Source={x:Static svc:ThemeManager.Instance}}"
                                            Cursor="Hand" MouseLeftButtonDown="OpenRepo_Click"/>
+                            </Grid>
+                            <Grid Margin="0,0,0,4">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="70"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="{DynamicResource Website}" FontSize="11"
+                                           Foreground="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}"/>
+                                <TextBlock Grid.Column="1" Text="{DynamicResource OpenWebsite}" FontSize="11"
+                                           Foreground="{Binding Accent, Source={x:Static svc:ThemeManager.Instance}}"
+                                           Cursor="Hand" MouseLeftButtonDown="OpenWebsite_Click"/>
                             </Grid>
 
                             <!-- 检查更新 -->

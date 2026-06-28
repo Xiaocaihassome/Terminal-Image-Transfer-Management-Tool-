@@ -97,7 +97,7 @@ public partial class SettingsViewModel : ObservableObject
                 : $"自定义: {CustomTempPath}";
         }
     }
-    public string Version => "1.1.1";
+    public string Version => "1.2.0";
 
     public SettingsViewModel(IConfigService configService, IToastService toastService, IUpdateService updateService, MainViewModel mainViewModel)
     {
@@ -124,6 +124,7 @@ public partial class SettingsViewModel : ObservableObject
         DisableBlur = _configService.DisableBlur;
         BackgroundMode = _configService.BackgroundMode;
         PrivacyMode = _configService.PrivacyMode;
+        AlwaysOnTop = _configService.AlwaysOnTop;
         SelectedFontFamily = _configService.FontFamily;
         SelectedFontWeight = _configService.FontWeight;
     }
@@ -156,6 +157,18 @@ public partial class SettingsViewModel : ObservableObject
         _configService.Save();
         OnPropertyChanged(nameof(DisplayTempPath));
     }
+
+    [ObservableProperty]
+    private bool _alwaysOnTop;
+
+    partial void OnAlwaysOnTopChanged(bool value)
+    {
+        _configService.AlwaysOnTop = value;
+        _configService.Save();
+        ApplyAlwaysOnTop?.Invoke(value);
+    }
+
+    public Action<bool>? ApplyAlwaysOnTop { get; set; }
 
     partial void OnSelectedFontFamilyChanged(string value)
     {

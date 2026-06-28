@@ -40,6 +40,7 @@ public partial class MainWindow : Window
         _toastService.SetContainer(ToastContainer);
         await Task.Delay(50);
         BackdropService.Apply(this, _configService.BackgroundMode);
+        Topmost = _configService.AlwaysOnTop;
 
         // 轮询检查 HasUpdate，更新 banner 可见性
         _ = PollUpdateBanner();
@@ -184,14 +185,7 @@ public partial class MainWindow : Window
 
     private void TitleBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-        if (e.ClickCount == 2)
-        {
-            WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
-        }
-        else
-        {
-            DragMove();
-        }
+        DragMove();
     }
 
     private void Minimize_Click(object sender, RoutedEventArgs e) =>
@@ -241,6 +235,7 @@ public partial class MainWindow : Window
     private void Settings_Click(object sender, RoutedEventArgs e)
     {
         var settingsVm = _serviceProvider.GetRequiredService<SettingsViewModel>();
+        settingsVm.ApplyAlwaysOnTop = (on) => Topmost = on;
         var settingsWindow = new SettingsWindow(settingsVm, _configService) { Owner = this };
 
         settingsWindow.Closed += (_, _) =>

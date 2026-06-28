@@ -35,6 +35,8 @@
     <sys:String x:Key="AutoCleanOnExit">Auto clean temp files on exit</sys:String>
     <sys:String x:Key="PrivacyMode">Privacy Mode</sys:String>
     <sys:String x:Key="PrivacyModeDesc">Hides file paths and other sensitive info. Ideal for screen sharing or presentations.</sys:String>
+    <sys:String x:Key="AlwaysOnTop">Always on Top</sys:String>
+    <sys:String x:Key="AlwaysOnTopDesc">Window stays on top of other windows</sys:String>
     <sys:String x:Key="FontSelect">Font Settings</sys:String>
     <sys:String x:Key="FontWeightSelect">Font Weight</sys:String>
     <sys:String x:Key="FontSettingDesc">Customize app font and weight</sys:String>
@@ -74,6 +76,9 @@
     <sys:String x:Key="AppVersion">Version</sys:String>
     <sys:String x:Key="Framework">Framework</sys:String>
     <sys:String x:Key="License">License</sys:String>
+    <sys:String x:Key="OpenRepo">Open Repository</sys:String>
+    <sys:String x:Key="Website">Website</sys:String>
+    <sys:String x:Key="OpenWebsite">Open Website</sys:String>
     <sys:String x:Key="CheckUpdate">Check for Updates</sys:String>
     <sys:String x:Key="InstallNow">Install Now</sys:String>
     <sys:String x:Key="UpdateBannerText">New version available, click to view</sys:String>

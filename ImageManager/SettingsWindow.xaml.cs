@@ -220,7 +220,7 @@ public partial class SettingsWindow : Window
     {
         System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
         {
-            FileName = "https://terminal-image-transfer-management-tool--website.pages.dev/",
+            FileName = "https://imagemanager-6gs.pages.dev/",
             UseShellExecute = true
         });
     }

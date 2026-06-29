@@ -28,6 +28,7 @@ public partial class FontSettingsWindow : Window
     {
         await Task.Delay(50);
         BackdropService.Apply(this, _configService?.BackgroundMode ?? "Glass");
+        PreviewLarge.Text = $"{FindResource("AppTitle")} v1.2.0";
         UpdatePreview();
     }
 

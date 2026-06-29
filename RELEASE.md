@@ -18,6 +18,10 @@
 - Windows 10/11 (x64)
 - .NET 8 Runtime（包含在安装程序中）
 
+## 官网
+
+https://imagemanager-6gs.pages.dev/
+
 ---
 
 # English
@@ -41,6 +45,10 @@ Download `ImageManager_Setup_1.2.0.exe` and run the installer.
 
 - Windows 10/11 (x64)
 - .NET 8 Runtime (included in installer)
+
+## Website
+
+https://imagemanager-6gs.pages.dev/
 
 ---
 
@@ -66,6 +74,10 @@ Download `ImageManager_Setup_1.2.0.exe` and run the installer.
 - Windows 10/11 (x64)
 - .NET 8 Runtime（包含在安裝程式中）
 
+## 官網
+
+https://imagemanager-6gs.pages.dev/
+
 ---
 
 # 日本語
@@ -90,6 +102,10 @@ Download `ImageManager_Setup_1.2.0.exe` and run the installer.
 - Windows 10/11 (x64)
 - .NET 8 Runtime（インストーラーに同梱）
 
+## 公式サイト
+
+https://imagemanager-6gs.pages.dev/
+
 ---
 
 # 한국어
@@ -113,3 +129,7 @@ Download `ImageManager_Setup_1.2.0.exe` and run the installer.
 
 - Windows 10/11 (x64)
 - .NET 8 Runtime (설치 프로그램에 포함)
+
+## 공식 사이트
+
+https://imagemanager-6gs.pages.dev/

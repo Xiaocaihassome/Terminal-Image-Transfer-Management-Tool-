@@ -110,7 +110,6 @@
                             BorderBrush="{Binding CardBorder, Source={x:Static svc:ThemeManager.Instance}}" BorderThickness="1">
                         <StackPanel>
                             <TextBlock x:Name="PreviewLarge"
-                                       Text="终端图片中转管理工具 v1.2.0"
                                        FontSize="20" Margin="0,0,0,12"
                                        Foreground="{Binding TextPrimary, Source={x:Static svc:ThemeManager.Instance}}"/>
 

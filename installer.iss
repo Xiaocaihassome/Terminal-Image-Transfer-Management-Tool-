@@ -1,5 +1,5 @@
-; 终端图片中转管理工具 - Inno Setup 安装脚本
-#define MyAppName "终端图片中转管理工具"
+; Terminal Image Transfer Manager - Inno Setup Script
+#define MyAppName "Terminal Image Transfer Manager"
 #define MyAppVersion "1.2.0"
 #define MyAppPublisher "小蔡有点料"
 #define MyAppExeName "ImageManager.exe"
@@ -44,11 +44,11 @@ Source: "ImageManager\Resources\app.ico"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; IconFilename: "{app}\app.ico"
-Name: "{group}\卸载 {#MyAppName}"; Filename: "{uninstallexe}"
+Name: "{group}\Uninstall {#MyAppName}"; Filename: "{uninstallexe}"
 Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; IconFilename: "{app}\app.ico"; Tasks: desktopicon
 
 [Run]
-Filename: "{app}\{#MyAppExeName}"; Description: "启动 {#MyAppName}"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\{#MyAppExeName}"; Description: "Launch {#MyAppName}"; Flags: nowait postinstall skipifsilent
 
 [UninstallDelete]
 Type: filesandordirs; Name: "{app}"

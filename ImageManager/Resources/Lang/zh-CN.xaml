@@ -15,6 +15,8 @@
     <sys:String x:Key="ClearAll">清空</sys:String>
     <sys:String x:Key="DeleteNoAsk">删除时不询问</sys:String>
     <sys:String x:Key="CleanOnExit">退出清空</sys:String>
+    <sys:String x:Key="AutoStart">开机自启</sys:String>
+    <sys:String x:Key="AutoStartDesc">开启后系统启动时自动运行应用</sys:String>
 
     <!-- 设置窗口 -->
     <sys:String x:Key="SettingsTitle">设置</sys:String>
@@ -37,6 +39,8 @@
     <sys:String x:Key="PrivacyModeDesc">开启后隐藏文件路径等敏感信息，适用于屏幕共享或演示场景</sys:String>
     <sys:String x:Key="AlwaysOnTop">窗口置顶</sys:String>
     <sys:String x:Key="AlwaysOnTopDesc">开启后窗口始终显示在其他窗口上方</sys:String>
+    <sys:String x:Key="DeleteAfterPaste">粘贴后删除文件</sys:String>
+    <sys:String x:Key="DeleteAfterPasteDesc">开启后点击「粘贴到窗口」时自动删除源文件</sys:String>
     <sys:String x:Key="FontSelect">字体设置</sys:String>
     <sys:String x:Key="FontWeightSelect">字重</sys:String>
     <sys:String x:Key="FontSettingDesc">自定义应用字体和字重</sys:String>
@@ -47,6 +51,7 @@
     <sys:String x:Key="BgMica">Win11 亚克力</sys:String>
     <sys:String x:Key="BgNone">无（纯色）</sys:String>
     <sys:String x:Key="BgHint">毛玻璃实时模糊桌面；Win11 亚克力使用系统材质（需 Windows 10/11）。</sys:String>
+    <sys:String x:Key="Behavior">行为</sys:String>
     <sys:String x:Key="Help">帮助</sys:String>
     <sys:String x:Key="Tutorial">使用教程</sys:String>
     <sys:String x:Key="Step1">1. 拖入图片到窗口，或按 Ctrl+V 粘贴截图</sys:String>
@@ -71,6 +76,9 @@
     <sys:String x:Key="CreditIcons">Game Icon Pack by Nieobie — UI 图标</sys:String>
     <sys:String x:Key="CreditInno">Inno Setup — 安装程序制作工具</sys:String>
 
+    <sys:String x:Key="Disclaimer">使用须知与免责声明</sys:String>
+    <sys:String x:Key="DisclaimerText">本仓库及对应工具的开放目的为个人学习、技术交流与非营利测试，作者倡议请勿将其直接用于商业盈利用途。&#x0a;&#x0a;项目源码的正式授权规则以 MIT 许可证为准，商业使用请自行评估合规风险。&#x0a;&#x0a;本工具为纯本地运行的图片中转管理工具，不内置、不托管任何在线图片资源。用户自行导入、粘贴的本地图片、截图及程序生成的临时文件，其版权、合规性与全部使用后果均由使用者自行承担。&#x0a;&#x0a;若因对本项目源码、编译程序进行传播、修改、二次分发，或搭配第三方图床、在线素材资源使用而引发版权纠纷及其他法律责任，全部责任由使用者自行承担，项目开发者不承担任何法律责任。&#x0a;&#x0a;本工具按"现状"提供，不对使用过程中的操作失误、文件丢失、系统兼容问题等潜在风险提供担保，所有使用风险由使用者自行承担。&#x0a;&#x0a;本项目在 AI 的广泛协助下开发，因此仍可能存在细微或不易察觉的程序问题。若给您带来不便，敬请理解。</sys:String>
+
     <sys:String x:Key="About">关于</sys:String>
     <sys:String x:Key="AppName">应用名称</sys:String>
     <sys:String x:Key="AppVersion">版本</sys:String>
@@ -80,6 +88,10 @@
     <sys:String x:Key="Website">官网</sys:String>
     <sys:String x:Key="OpenWebsite">打开官网</sys:String>
     <sys:String x:Key="CheckUpdate">检查更新</sys:String>
+    <sys:String x:Key="CheckUpdateTip">检查新版本</sys:String>
+    <sys:String x:Key="ViewLogs">查看日志</sys:String>
+    <sys:String x:Key="ErrorLogCopied">错误已记录，修复提示已复制到剪贴板</sys:String>
+    <sys:String x:Key="SkipUpdateReminder">不再提醒新版本</sys:String>
     <sys:String x:Key="InstallNow">立即安装</sys:String>
     <sys:String x:Key="UpdateBannerText">发现新版本，点击查看详情</sys:String>
     <sys:String x:Key="OpenSourceDev">开源工具开发者</sys:String>

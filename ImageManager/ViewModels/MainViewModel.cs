@@ -34,7 +34,11 @@ public partial class MainViewModel : ObservableObject
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsAny))]
-    private bool _autoCleanOnExit = true;
+    private bool _autoCleanOnExit;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsAny))]
+    private bool _deleteAfterPaste;
 
     [ObservableProperty]
     private bool _hasUpdate;
@@ -89,6 +93,7 @@ public partial class MainViewModel : ObservableObject
         DeleteWithoutConfirm = configService.DeleteWithoutConfirm;
         AutoCleanOnExit = configService.AutoCleanOnExit;
         IsPrivacyMode = configService.PrivacyMode;
+        DeleteAfterPaste = configService.DeleteAfterPaste;
 
         _tempDir = fileService.InitializeTempDirectory();
     }
@@ -314,6 +319,7 @@ public partial class MainViewModel : ObservableObject
         DeleteWithoutConfirm = config.DeleteWithoutConfirm;
         AutoCleanOnExit = config.AutoCleanOnExit;
         IsPrivacyMode = config.PrivacyMode;
+        DeleteAfterPaste = config.DeleteAfterPaste;
     }
 
     public void CleanupOnExit()

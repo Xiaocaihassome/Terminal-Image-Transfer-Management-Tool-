@@ -17,7 +17,7 @@
     <!-- 程序集信息 -->
     <AssemblyName>ImageManager</AssemblyName>
     <RootNamespace>ImageManager</RootNamespace>
-    <Version>1.2.0</Version>
+    <Version>1.2.1</Version>
     <Authors>小蔡有点料</Authors>
     <Description>Terminal Image Transfer Management Tool</Description>
     <ApplicationIcon>Resources\app.ico</ApplicationIcon>

@@ -15,6 +15,8 @@
     <sys:String x:Key="ClearAll">すべてクリア</sys:String>
     <sys:String x:Key="DeleteNoAsk">削除時に確認しない</sys:String>
     <sys:String x:Key="CleanOnExit">終了時にクリーンアップ</sys:String>
+    <sys:String x:Key="AutoStart">自動起動</sys:String>
+    <sys:String x:Key="AutoStartDesc">Windows起動時にアプリを自動的に起動します</sys:String>
 
     <!-- 設定ウィンドウ -->
     <sys:String x:Key="SettingsTitle">設定</sys:String>
@@ -37,6 +39,8 @@
     <sys:String x:Key="PrivacyModeDesc">ファイルパスなどの機密情報を非表示にします。画面共有やプレゼンテーションに最適です。</sys:String>
     <sys:String x:Key="AlwaysOnTop">ウインドウを最前面に固定</sys:String>
     <sys:String x:Key="AlwaysOnTopDesc">ウインドウを常に他のウインドウの上に表示します</sys:String>
+    <sys:String x:Key="DeleteAfterPaste">貼り付け後にファイルを削除</sys:String>
+    <sys:String x:Key="DeleteAfterPasteDesc">「ウィンドウに貼り付け」使用時にソースファイルを自動削除します</sys:String>
     <sys:String x:Key="FontSelect">フォント設定</sys:String>
     <sys:String x:Key="FontWeightSelect">フォントウェイト</sys:String>
     <sys:String x:Key="FontSettingDesc">アプリのフォントとウェイトをカスタマイズ</sys:String>
@@ -47,6 +51,7 @@
     <sys:String x:Key="BgMica">Win11 アクリル</sys:String>
     <sys:String x:Key="BgNone">なし（単色）</sys:String>
     <sys:String x:Key="BgHint">フロストガラスはデスクトップをリアルタイムにぼかします。Win11 アクリルはシステムマテリアルを使用します（Windows 10/11 が必要）。</sys:String>
+    <sys:String x:Key="Behavior">動作</sys:String>
     <sys:String x:Key="Help">ヘルプ</sys:String>
     <sys:String x:Key="Tutorial">使い方</sys:String>
     <sys:String x:Key="Step1">1. 画像をウィンドウにドラッグするか、Ctrl+V でスクリーンショットを貼り付けます</sys:String>
@@ -71,6 +76,9 @@
     <sys:String x:Key="CreditIcons">Game Icon Pack by Nieobie — UI アイコン</sys:String>
     <sys:String x:Key="CreditInno">Inno Setup — インストーラー作成ツール</sys:String>
 
+    <sys:String x:Key="Disclaimer">利用規約と免責事項</sys:String>
+    <sys:String x:Key="DisclaimerText">本リポジトリおよび対応するツールは、個人学習、技術交流、非営利テストを目的として公開されています。著者は商業利用を直接行わないようお勧めします。&#x0a;&#x0a;ソースコードの正式なライセンスルールはMITライセンスに準拠します。商業利用の場合はコンプライアンスリスクを自行評価してください。&#x0a;&#x0a;本ツールは純粋にローカルで動作する画像中継管理ツールであり、オンライン画像リソースを内蔵・ホスティングしません。ユーザーがインポートまたは貼り付けたローカル画像、スクリーンショット、プログラムが生成する一時ファイルの著作権、コンプライアンス、およびすべての使用結果はユーザー自身が責任を負います。&#x0a;&#x0a;本プロジェクトのソースコードまたはコンパイル済みプログラムの配布、修改、二次流通、またはサードパーティの画像ホスティングサービスやオンラインリソースとの組み合わせ使用により発生する著作権紛争およびその他の法的責任について、プロジェクト開発者は一切の責任を負いません。&#x0a;&#x0a;本ツールは「現状のまま」提供され、操作ミス、ファイルの紛失、システム互換性の問題などの潜在的なリスクについて一切の保証を行いません。すべての使用リスクはユーザーが負います。&#x0a;&#x0a;本プロジェクトはAIの広範な支援を受けて開発されたため、 微細または認識しづらい問題がまだ存在する可能性があります。ご不便をおかけして申し訳ございません。</sys:String>
+
     <sys:String x:Key="About">バージョン情報</sys:String>
     <sys:String x:Key="AppName">アプリ名</sys:String>
     <sys:String x:Key="AppVersion">バージョン</sys:String>
@@ -80,6 +88,10 @@
     <sys:String x:Key="Website">公式サイト</sys:String>
     <sys:String x:Key="OpenWebsite">公式サイトを開く</sys:String>
     <sys:String x:Key="CheckUpdate">更新を確認</sys:String>
+    <sys:String x:Key="CheckUpdateTip">新しいバージョンを確認</sys:String>
+    <sys:String x:Key="ViewLogs">ログを表示</sys:String>
+    <sys:String x:Key="ErrorLogCopied">エラーを記録しました。修正ヒントをクリップボードにコピーしました</sys:String>
+    <sys:String x:Key="SkipUpdateReminder">新しいバージョンの通知を停止</sys:String>
     <sys:String x:Key="InstallNow">今すぐインストール</sys:String>
     <sys:String x:Key="UpdateBannerText">新しいバージョンがあります。クリックして詳細を確認</sys:String>
     <sys:String x:Key="OpenSourceDev">オープンソース開発者</sys:String>

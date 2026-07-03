@@ -42,12 +42,22 @@ public partial class MainWindow : Window
         BackdropService.Apply(this, _configService.BackgroundMode);
         Topmost = _configService.AlwaysOnTop;
 
+        // 注册隐藏 banner 回调
+        var settingsVm = _serviceProvider.GetRequiredService<SettingsViewModel>();
+        settingsVm.HideUpdateBanner = () =>
+        {
+            _viewModel.HasUpdate = false;
+            UpdateBanner.Visibility = Visibility.Collapsed;
+        };
+
         // 轮询检查 HasUpdate，更新 banner 可见性
         _ = PollUpdateBanner();
     }
 
     private async Task PollUpdateBanner()
     {
+        if (_configService.SkipUpdateReminder) return;
+
         // 等后台检查完成
         for (int i = 0; i < 20; i++)
         {
@@ -200,14 +210,15 @@ public partial class MainWindow : Window
 
     private async void PasteToWindow_Click(object sender, RoutedEventArgs e)
     {
-        var selected = _viewModel.ImageItems.FirstOrDefault(i => i.IsSelected);
-        if (selected == null)
+        var selected = _viewModel.ImageItems.Where(i => i.IsSelected).ToList();
+        if (selected.Count == 0)
         {
             _toastService.Show("请先选中要粘贴的图片", ToastType.Warning);
             return;
         }
 
-        if (!File.Exists(selected.FilePath))
+        var validFiles = selected.Where(i => File.Exists(i.FilePath)).ToList();
+        if (validFiles.Count == 0)
         {
             _toastService.Show("文件不存在", ToastType.Error);
             return;
@@ -215,7 +226,61 @@ public partial class MainWindow : Window
 
         try
         {
-            await _pasteService.PasteImageAsync(selected.FilePath, this);
+            var filePaths = validFiles.Select(i => i.FilePath).ToList();
+            await _pasteService.PasteImagesAsync(filePaths, this);
+
+            if (_viewModel.DeleteAfterPaste)
+            {
+                foreach (var item in validFiles)
+                {
+                    try
+                    {
+                        File.Delete(item.FilePath);
+                        _viewModel.ImageItems.Remove(item);
+                    }
+                    catch { }
+                }
+                if (validFiles.Count > 0)
+                    _toastService.Show($"已粘贴并删除 {validFiles.Count} 个文件", ToastType.Success);
+            }
+        }
+        catch (Exception ex)
+        {
+            _toastService.Show($"粘贴失败：{ex.Message}", ToastType.Error);
+        }
+    }
+
+    private async void PasteAndDelete_Click(object sender, RoutedEventArgs e)
+    {
+        var selected = _viewModel.ImageItems.Where(i => i.IsSelected).ToList();
+        if (selected.Count == 0)
+        {
+            _toastService.Show("请先选中要粘贴的图片", ToastType.Warning);
+            return;
+        }
+
+        var validFiles = selected.Where(i => File.Exists(i.FilePath)).ToList();
+        if (validFiles.Count == 0)
+        {
+            _toastService.Show("文件不存在", ToastType.Error);
+            return;
+        }
+
+        try
+        {
+            var filePaths = validFiles.Select(i => i.FilePath).ToList();
+            await _pasteService.PasteImagesAsync(filePaths, this);
+
+            foreach (var item in validFiles)
+            {
+                try
+                {
+                    File.Delete(item.FilePath);
+                    _viewModel.ImageItems.Remove(item);
+                }
+                catch { }
+            }
+            _toastService.Show($"已粘贴并删除 {validFiles.Count} 个文件", ToastType.Success);
         }
         catch (Exception ex)
         {
@@ -234,18 +299,44 @@ public partial class MainWindow : Window
 
     private void Settings_Click(object sender, RoutedEventArgs e)
     {
-        var settingsVm = _serviceProvider.GetRequiredService<SettingsViewModel>();
-        settingsVm.ApplyAlwaysOnTop = (on) => Topmost = on;
-        var settingsWindow = new SettingsWindow(settingsVm, _configService) { Owner = this };
-
-        settingsWindow.Closed += (_, _) =>
+        try
         {
-            _viewModel.SyncFromConfig(_configService);
-            settingsVm.ApplyTheme(_configService.Theme, _configService.Transparency);
-            BackdropService.Apply(this, _configService.BackgroundMode);
-        };
+            var settingsVm = _serviceProvider.GetRequiredService<SettingsViewModel>();
+            settingsVm.ApplyAlwaysOnTop = (on) => Topmost = on;
+            var settingsWindow = new SettingsWindow(settingsVm, _configService) { Owner = this };
 
-        settingsWindow.ShowDialog();
+            settingsWindow.Closed += (_, _) =>
+            {
+                _viewModel.SyncFromConfig(_configService);
+                settingsVm.ApplyTheme(_configService.Theme, _configService.Transparency);
+                BackdropService.Apply(this, _configService.BackgroundMode);
+            };
+
+            settingsWindow.ShowDialog();
+        }
+        catch (Exception ex)
+        {
+            var logService = _serviceProvider.GetRequiredService<IErrorLogService>();
+            logService.Log("设置窗口打开失败", ex);
+
+            // 复制 AI 修复提示词到剪贴板
+            var prompt = $"Please fix this error in my C# WPF application (ImageManager, .NET 8):\n\n" +
+                         $"Error: {ex.GetType().Name}: {ex.Message}\n" +
+                         $"Inner: {ex.InnerException?.Message}\n" +
+                         $"Stack Trace:\n{ex.StackTrace}\n\n" +
+                         $"Please provide the fix with code changes.";
+            try { Clipboard.SetText(prompt); } catch { }
+
+            var msg = LanguageManager.CurrentLanguage switch
+            {
+                "en-US" => "Error logged, fix prompt copied to clipboard",
+                "zh-TW" => "錯誤已記錄，修復提示已複製到剪貼簿",
+                "ja-JP" => "エラーを記録しました。修正ヒントをクリップボードにコピーしました",
+                "ko-KR" => "오류가 기록되었습니다. 수정 힌트가 클립보드에 복사되었습니다",
+                _ => "错误已记录，修复提示已复制到剪贴板"
+            };
+            _toastService.Show(msg, ToastType.Error);
+        }
     }
 
     #endregion

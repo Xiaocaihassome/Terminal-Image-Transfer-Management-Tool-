@@ -32,6 +32,7 @@ public interface IClipboardService
 public interface IPasteService
 {
     Task PasteImageAsync(string filePath, Window ownerWindow);
+    Task PasteImagesAsync(IEnumerable<string> filePaths, Window ownerWindow);
 }
 
 public interface IConfigService
@@ -47,6 +48,9 @@ public interface IConfigService
     string BackgroundMode { get; set; } // Glass=毛玻璃, Mica=Win11云母, None=纯色
     bool PrivacyMode { get; set; }
     bool AlwaysOnTop { get; set; }
+    bool DeleteAfterPaste { get; set; }
+    bool AutoStart { get; set; }
+    bool SkipUpdateReminder { get; set; }
     string FontFamily { get; set; }
     int FontWeight { get; set; } // 100-900
     string GetTempRoot();

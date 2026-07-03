@@ -133,6 +133,10 @@
                             <TextBlock Text="{DynamicResource BgHint}" FontSize="10"
                                        Foreground="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}"
                                        TextWrapping="Wrap" Margin="0,4,0,0"/>
+                            <TextBlock Text="{Binding BackdropWarning}" FontSize="10"
+                                       Foreground="#E81123"
+                                       TextWrapping="Wrap" Margin="0,4,0,0"
+                                       Visibility="{Binding HasBackdropWarning, Converter={StaticResource BoolToVis}}"/>
                         </StackPanel>
                     </Border>
 
@@ -140,7 +144,7 @@
                     <Border x:Name="FontCard" CornerRadius="8" Padding="12" Margin="0,8,0,0"
                             Background="{Binding ListBackground, Source={x:Static svc:ThemeManager.Instance}}"
                             BorderBrush="{Binding CardBorder, Source={x:Static svc:ThemeManager.Instance}}" BorderThickness="1.5">
-                        <Grid Cursor="Hand" MouseLeftButtonDown="OpenFontSettings_Click">
+                        <Grid Cursor="Hand" MouseLeftButtonDown="OpenFontSettings_Click" Background="Transparent">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
@@ -251,67 +255,132 @@
                         </StackPanel>
                     </Border>
 
-                    <!-- 隐私模式独立卡片 -->
-                    <Border x:Name="PrivacyCard" CornerRadius="8" Padding="12" Margin="0,8,0,0"
-                            Background="{Binding ListBackground, Source={x:Static svc:ThemeManager.Instance}}"
-                            BorderBrush="{Binding CardBorder, Source={x:Static svc:ThemeManager.Instance}}" BorderThickness="1.5">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
+                    <!-- ===== 行为 ===== -->
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                        <Border Width="16" Height="16" Margin="0,0,6,0"
+                                Background="{Binding TextPrimary, Source={x:Static svc:ThemeManager.Instance}}">
+                            <Border.OpacityMask>
+                                <ImageBrush ImageSource="pack://application:,,,/Resources/Icons/tune.png"/>
+                            </Border.OpacityMask>
+                        </Border>
+                        <TextBlock Text="{DynamicResource Behavior}" FontSize="13" FontWeight="SemiBold"
+                                   Foreground="{Binding TextPrimary, Source={x:Static svc:ThemeManager.Instance}}" VerticalAlignment="Center"/>
+                    </StackPanel>
 
-                            <Border Grid.Column="0" Width="36" Height="36" CornerRadius="8" Margin="0,0,10,0"
-                                    Background="{Binding Accent, Source={x:Static svc:ThemeManager.Instance}}">
-                                <Border.OpacityMask>
-                                    <ImageBrush ImageSource="pack://application:,,,/Resources/Icons/hidden.png"/>
-                                </Border.OpacityMask>
-                            </Border>
+                    <Border x:Name="BehaviorCard" Background="{Binding ListBackground, Source={x:Static svc:ThemeManager.Instance}}"
+                            CornerRadius="8" Padding="12"
+                            BorderBrush="{Binding CardBorder, Source={x:Static svc:ThemeManager.Instance}}" BorderThickness="1">
+                        <StackPanel>
+                            <!-- 隐私模式 -->
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Border Grid.Column="0" Width="28" Height="28" CornerRadius="6"
+                                        Background="{Binding Accent, Source={x:Static svc:ThemeManager.Instance}}"
+                                        VerticalAlignment="Center" Margin="0,0,10,0">
+                                    <Border.OpacityMask>
+                                        <ImageBrush ImageSource="pack://application:,,,/Resources/Icons/hidden.png"/>
+                                    </Border.OpacityMask>
+                                </Border>
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                    <TextBlock Text="{DynamicResource PrivacyMode}" FontSize="11" FontWeight="SemiBold"
+                                               Foreground="{Binding TextPrimary, Source={x:Static svc:ThemeManager.Instance}}"/>
+                                    <TextBlock Text="{DynamicResource PrivacyModeDesc}" FontSize="9"
+                                               Foreground="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}"
+                                               TextWrapping="Wrap" Margin="0,1,0,0"/>
+                                </StackPanel>
+                                <CheckBox x:Name="PrivacyCheckBox" Grid.Column="2" IsChecked="{Binding PrivacyMode}"
+                                          VerticalAlignment="Center" Margin="8,0,0,0"
+                                          Checked="PrivacyCheckBox_Changed" Unchecked="PrivacyCheckBox_Changed"/>
+                            </Grid>
 
-                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                <TextBlock Text="{DynamicResource PrivacyMode}" FontSize="12" FontWeight="SemiBold"
-                                           Foreground="{Binding TextPrimary, Source={x:Static svc:ThemeManager.Instance}}"/>
-                                <TextBlock Text="{DynamicResource PrivacyModeDesc}" FontSize="10"
-                                           Foreground="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}"
-                                           TextWrapping="Wrap" Margin="0,2,0,0"/>
-                            </StackPanel>
+                            <Border Height="1" Background="{Binding Separator, Source={x:Static svc:ThemeManager.Instance}}" Margin="0,10"/>
 
-                            <CheckBox x:Name="PrivacyCheckBox" Grid.Column="2" IsChecked="{Binding PrivacyMode}"
-                                      VerticalAlignment="Center" Margin="8,0,0,0"/>
-                        </Grid>
-                    </Border>
+                            <!-- 窗口置顶 -->
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Border Grid.Column="0" Width="28" Height="28" CornerRadius="6"
+                                        Background="{Binding Accent, Source={x:Static svc:ThemeManager.Instance}}"
+                                        VerticalAlignment="Center" Margin="0,0,10,0">
+                                    <Border.OpacityMask>
+                                        <ImageBrush ImageSource="pack://application:,,,/Resources/Icons/lock.png"/>
+                                    </Border.OpacityMask>
+                                </Border>
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                    <TextBlock Text="{DynamicResource AlwaysOnTop}" FontSize="11" FontWeight="SemiBold"
+                                               Foreground="{Binding TextPrimary, Source={x:Static svc:ThemeManager.Instance}}"/>
+                                    <TextBlock Text="{DynamicResource AlwaysOnTopDesc}" FontSize="9"
+                                               Foreground="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}"
+                                               TextWrapping="Wrap" Margin="0,1,0,0"/>
+                                </StackPanel>
+                                <CheckBox x:Name="AlwaysOnTopCheckBox" Grid.Column="2" IsChecked="{Binding AlwaysOnTop}"
+                                          VerticalAlignment="Center" Margin="8,0,0,0"
+                                          Checked="AlwaysOnTopCheckBox_Changed" Unchecked="AlwaysOnTopCheckBox_Changed"/>
+                            </Grid>
 
-                    <!-- 置顶模式独立卡片 -->
-                    <Border x:Name="AlwaysOnTopCard" CornerRadius="8" Padding="12" Margin="0,8,0,0"
-                            Background="{Binding ListBackground, Source={x:Static svc:ThemeManager.Instance}}"
-                            BorderBrush="{Binding CardBorder, Source={x:Static svc:ThemeManager.Instance}}" BorderThickness="1.5">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
+                            <Border Height="1" Background="{Binding Separator, Source={x:Static svc:ThemeManager.Instance}}" Margin="0,10"/>
 
-                            <Border Grid.Column="0" Width="32" Height="32" CornerRadius="6"
-                                    Background="{Binding Accent, Source={x:Static svc:ThemeManager.Instance}}"
-                                    VerticalAlignment="Center" Margin="0,0,10,0">
-                                <Border.OpacityMask>
-                                    <ImageBrush ImageSource="pack://application:,,,/Resources/Icons/lock.png"/>
-                                </Border.OpacityMask>
-                            </Border>
+                            <!-- 粘贴后删除文件 -->
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Border Grid.Column="0" Width="28" Height="28" CornerRadius="6"
+                                        Background="{Binding Accent, Source={x:Static svc:ThemeManager.Instance}}"
+                                        VerticalAlignment="Center" Margin="0,0,10,0">
+                                    <Border.OpacityMask>
+                                        <ImageBrush ImageSource="pack://application:,,,/Resources/Icons/trash.png"/>
+                                    </Border.OpacityMask>
+                                </Border>
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                    <TextBlock Text="{DynamicResource DeleteAfterPaste}" FontSize="11" FontWeight="SemiBold"
+                                               Foreground="{Binding TextPrimary, Source={x:Static svc:ThemeManager.Instance}}"/>
+                                    <TextBlock Text="{DynamicResource DeleteAfterPasteDesc}" FontSize="9"
+                                               Foreground="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}"
+                                               TextWrapping="Wrap" Margin="0,1,0,0"/>
+                                </StackPanel>
+                                <CheckBox Grid.Column="2" IsChecked="{Binding DeleteAfterPaste}"
+                                          VerticalAlignment="Center" Margin="8,0,0,0"
+                                          Checked="BehaviorDangerCheckBox_Changed" Unchecked="BehaviorDangerCheckBox_Changed"/>
+                            </Grid>
 
-                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                <TextBlock Text="{DynamicResource AlwaysOnTop}" FontSize="12" FontWeight="SemiBold"
-                                           Foreground="{Binding TextPrimary, Source={x:Static svc:ThemeManager.Instance}}"/>
-                                <TextBlock Text="{DynamicResource AlwaysOnTopDesc}" FontSize="10"
-                                           Foreground="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}"
-                                           TextWrapping="Wrap" Margin="0,2,0,0"/>
-                            </StackPanel>
+                            <Border Height="1" Background="{Binding Separator, Source={x:Static svc:ThemeManager.Instance}}" Margin="0,10"/>
 
-                            <CheckBox x:Name="AlwaysOnTopCheckBox" Grid.Column="2" IsChecked="{Binding AlwaysOnTop}"
-                                      VerticalAlignment="Center" Margin="8,0,0,0"/>
-                        </Grid>
+                            <!-- 开机自启 -->
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Border Grid.Column="0" Width="28" Height="28" CornerRadius="6"
+                                        Background="{Binding Accent, Source={x:Static svc:ThemeManager.Instance}}"
+                                        VerticalAlignment="Center" Margin="0,0,10,0">
+                                    <Border.OpacityMask>
+                                        <ImageBrush ImageSource="pack://application:,,,/Resources/Icons/reload.png"/>
+                                    </Border.OpacityMask>
+                                </Border>
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                    <TextBlock Text="{DynamicResource AutoStart}" FontSize="11" FontWeight="SemiBold"
+                                               Foreground="{Binding TextPrimary, Source={x:Static svc:ThemeManager.Instance}}"/>
+                                    <TextBlock Text="{DynamicResource AutoStartDesc}" FontSize="9"
+                                               Foreground="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}"
+                                               TextWrapping="Wrap" Margin="0,1,0,0"/>
+                                </StackPanel>
+                                <CheckBox Grid.Column="2" IsChecked="{Binding AutoStart}"
+                                          VerticalAlignment="Center" Margin="8,0,0,0"
+                                          Checked="BehaviorDangerCheckBox_Changed" Unchecked="BehaviorDangerCheckBox_Changed"/>
+                            </Grid>
+                        </StackPanel>
                     </Border>
 
                     <Border Height="1" Background="{Binding Separator, Source={x:Static svc:ThemeManager.Instance}}" Margin="0,12"/>
@@ -408,55 +477,32 @@
                             </Grid>
 
                             <!-- 检查更新 -->
-                            <Grid Margin="0,10,0,0">
+                            <Border Height="1" Background="{Binding Separator, Source={x:Static svc:ThemeManager.Instance}}" Margin="0,10"/>
+
+                            <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
-                                <StackPanel Grid.Column="0" Orientation="Horizontal">
-                                    <Border Width="14" Height="14" Margin="0,0,6,0"
-                                            Background="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}">
+
+                                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" ToolTip="{DynamicResource CheckUpdate}">
+                                    <Border Width="16" Height="16" Margin="0,0,6,0"
+                                            Background="{Binding Accent, Source={x:Static svc:ThemeManager.Instance}}">
                                         <Border.OpacityMask>
                                             <ImageBrush ImageSource="pack://application:,,,/Resources/Icons/reload.png"/>
                                         </Border.OpacityMask>
                                     </Border>
-                                    <TextBlock Text="{DynamicResource CheckUpdate}" FontSize="12"
-                                               Foreground="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{DynamicResource CheckUpdate}" FontSize="12" FontWeight="SemiBold"
+                                               Foreground="{Binding TextPrimary, Source={x:Static svc:ThemeManager.Instance}}" VerticalAlignment="Center"/>
                                 </StackPanel>
+
                                 <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                                    <Button Command="{Binding CheckUpdateCommand}"
-                                            Padding="10,5" FontSize="11" Cursor="Hand"
-                                            Background="{Binding ButtonBg, Source={x:Static svc:ThemeManager.Instance}}"
-                                            Foreground="{Binding Accent, Source={x:Static svc:ThemeManager.Instance}}"
-                                            BorderThickness="0">
-                                        <Button.Template>
-                                            <ControlTemplate TargetType="Button">
-                                                <Border x:Name="bd" CornerRadius="6"
-                                                        Background="{TemplateBinding Background}"
-                                                        Padding="{TemplateBinding Padding}">
-                                                    <ContentPresenter HorizontalAlignment="Center"/>
-                                                </Border>
-                                                <ControlTemplate.Triggers>
-                                                    <Trigger Property="IsMouseOver" Value="True">
-                                                        <Setter TargetName="bd" Property="Background" Value="{Binding ButtonHover, Source={x:Static svc:ThemeManager.Instance}}"/>
-                                                    </Trigger>
-                                                </ControlTemplate.Triggers>
-                                            </ControlTemplate>
-                                        </Button.Template>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{Binding UpdateButtonText}" FontSize="11"
-                                                       Foreground="{Binding Accent, Source={x:Static svc:ThemeManager.Instance}}"/>
-                                            <Ellipse Width="8" Height="8" Fill="#E81123" Margin="6,0,0,0"
-                                                     VerticalAlignment="Center"
-                                                     Visibility="{Binding HasUpdate, Converter={StaticResource BoolToVis}}"/>
-                                        </StackPanel>
-                                    </Button>
-                                    <Button Command="{Binding DownloadUpdateCommand}"
-                                            Padding="10,5" FontSize="11" Cursor="Hand"
+                                    <Button x:Name="CheckUpdateButton" Command="{Binding CheckUpdateCommand}"
+                                            Padding="14,7" FontSize="11" Cursor="Hand" MinWidth="100"
                                             Background="{Binding Accent, Source={x:Static svc:ThemeManager.Instance}}"
                                             Foreground="White"
-                                            BorderThickness="0" Margin="6,0,0,0"
-                                            Visibility="{Binding HasUpdate, Converter={StaticResource BoolToVis}}">
+                                            BorderThickness="0"
+                                            ToolTip="{DynamicResource CheckUpdateTip}">
                                         <Button.Template>
                                             <ControlTemplate TargetType="Button">
                                                 <Border x:Name="bd" CornerRadius="6"
@@ -471,12 +517,98 @@
                                                 </ControlTemplate.Triggers>
                                             </ControlTemplate>
                                         </Button.Template>
-                                        <TextBlock Text="{DynamicResource InstallNow}" FontSize="11"/>
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                            <TextBlock FontSize="11" Foreground="White">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Text" Value="{Binding UpdateButtonText}"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding UpdateButtonText}" Value="">
+                                                                <Setter Property="Text" Value="{DynamicResource CheckUpdate}"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                            <Ellipse Width="8" Height="8" Fill="#FFD700" Margin="6,0,0,0"
+                                                     VerticalAlignment="Center"
+                                                     Visibility="{Binding HasUpdate, Converter={StaticResource BoolToVis}}"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <Button Command="{Binding DownloadUpdateCommand}"
+                                            Padding="14,7" FontSize="11" Cursor="Hand"
+                                            Background="#2EA043" Foreground="White"
+                                            BorderThickness="0" Margin="6,0,0,0"
+                                            Visibility="{Binding HasUpdate, Converter={StaticResource BoolToVis}}">
+                                        <Button.Template>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border x:Name="bd" CornerRadius="6"
+                                                        Background="{TemplateBinding Background}"
+                                                        Padding="{TemplateBinding Padding}">
+                                                    <ContentPresenter HorizontalAlignment="Center"/>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter TargetName="bd" Property="Opacity" Value="0.85"/>
+                                                    </Trigger>
+                                                    <Trigger Property="IsEnabled" Value="False">
+                                                        <Setter TargetName="bd" Property="Opacity" Value="0.5"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Button.Template>
+                                        <TextBlock Text="{Binding DownloadButtonText}"/>
                                     </Button>
                                 </StackPanel>
                             </Grid>
 
+                            <!-- 不提醒新版本 -->
+                            <Grid Margin="0,10,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="1" Text="{DynamicResource SkipUpdateReminder}" FontSize="11"
+                                           Foreground="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}"
+                                           VerticalAlignment="Center" Margin="0,0,0,0"/>
+                                <CheckBox Grid.Column="2" IsChecked="{Binding SkipUpdateReminder}"
+                                          VerticalAlignment="Center" Margin="8,0,0,0"
+                                          Checked="SkipUpdateReminder_Changed" Unchecked="SkipUpdateReminder_Changed"/>
+                            </Grid>
+
                             <Border Height="1" Background="{Binding Separator, Source={x:Static svc:ThemeManager.Instance}}" Margin="0,0,0,10"/>
+
+                            <!-- 查看日志 -->
+                            <Button Click="OpenLogs_Click" Cursor="Hand"
+                                    Padding="10,6" FontSize="11"
+                                    Background="{Binding ButtonBg, Source={x:Static svc:ThemeManager.Instance}}"
+                                    Foreground="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}"
+                                    BorderThickness="0" HorizontalAlignment="Left">
+                                <Button.Template>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border x:Name="bd" CornerRadius="6"
+                                                Background="{TemplateBinding Background}"
+                                                Padding="{TemplateBinding Padding}">
+                                            <ContentPresenter HorizontalAlignment="Center"/>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="bd" Property="Background" Value="{Binding ButtonHover, Source={x:Static svc:ThemeManager.Instance}}"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Button.Template>
+                                <StackPanel Orientation="Horizontal">
+                                    <Border Width="12" Height="12" Margin="0,0,4,0"
+                                            Background="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}">
+                                        <Border.OpacityMask>
+                                            <ImageBrush ImageSource="pack://application:,,,/Resources/Icons/folder.png"/>
+                                        </Border.OpacityMask>
+                                    </Border>
+                                    <TextBlock Text="{DynamicResource ViewLogs}"/>
+                                </StackPanel>
+                            </Button>
 
                             <TextBlock Text="{DynamicResource Tutorial}" FontSize="12" FontWeight="SemiBold"
                                        Foreground="{Binding TextPrimary, Source={x:Static svc:ThemeManager.Instance}}" Margin="0,0,0,6"/>
@@ -522,6 +654,14 @@
                                        Foreground="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}" Margin="0,0,0,3"/>
                             <TextBlock Text="{DynamicResource CreditInno}" FontSize="10"
                                        Foreground="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}"/>
+
+                            <Border Height="1" Background="{Binding Separator, Source={x:Static svc:ThemeManager.Instance}}" Margin="0,12"/>
+
+                            <TextBlock Text="{DynamicResource Disclaimer}" FontSize="12" FontWeight="SemiBold"
+                                       Foreground="{Binding TextPrimary, Source={x:Static svc:ThemeManager.Instance}}" Margin="0,0,0,6"/>
+                            <TextBlock Text="{DynamicResource DisclaimerText}" FontSize="9"
+                                       Foreground="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}"
+                                       TextWrapping="Wrap" LineHeight="16"/>
                         </StackPanel>
                     </Border>
 

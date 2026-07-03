@@ -1,6 +1,6 @@
 ; Terminal Image Transfer Manager - Inno Setup Script
 #define MyAppName "Terminal Image Transfer Manager"
-#define MyAppVersion "1.2.0"
+#define MyAppVersion "1.2.2"
 #define MyAppPublisher "小蔡有点料"
 #define MyAppExeName "ImageManager.exe"
 #define MyAppId "E8C2F5A1-3B7D-4F9E-A6D4-1C8E5B2F7A39"

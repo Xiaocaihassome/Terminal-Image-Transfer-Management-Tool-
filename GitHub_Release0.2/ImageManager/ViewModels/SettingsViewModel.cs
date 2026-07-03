@@ -17,8 +17,14 @@ public partial class SettingsViewModel : ObservableObject
     private readonly IUpdateService _updateService;
     private readonly MainViewModel? _mainViewModel;
 
-    // 由 SettingsWindow 设置，用于切换设置后刷新毛玻璃效果
-    public Action? RefreshBackdrop { get; set; }
+    // 由 SettingsWindow 设置，用于切换设置后刷新毛玻璃效果，返回是否成功
+    public Func<bool>? RefreshBackdrop { get; set; }
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasBackdropWarning))]
+    private string _backdropWarning = string.Empty;
+
+    public bool HasBackdropWarning => !string.IsNullOrEmpty(BackdropWarning);
 
     [ObservableProperty]
     private string _currentTheme = "System";
@@ -97,7 +103,7 @@ public partial class SettingsViewModel : ObservableObject
                 : $"自定义: {CustomTempPath}";
         }
     }
-    public string Version => "1.2.0";
+    public string Version => "1.2.2";
 
     public SettingsViewModel(IConfigService configService, IToastService toastService, IUpdateService updateService, MainViewModel mainViewModel)
     {
@@ -125,6 +131,9 @@ public partial class SettingsViewModel : ObservableObject
         BackgroundMode = _configService.BackgroundMode;
         PrivacyMode = _configService.PrivacyMode;
         AlwaysOnTop = _configService.AlwaysOnTop;
+        DeleteAfterPaste = _configService.DeleteAfterPaste;
+        AutoStart = _configService.AutoStart;
+        SkipUpdateReminder = _configService.SkipUpdateReminder;
         SelectedFontFamily = _configService.FontFamily;
         SelectedFontWeight = _configService.FontWeight;
     }
@@ -134,7 +143,7 @@ public partial class SettingsViewModel : ObservableObject
         _configService.Transparency = value;
         _configService.Save();
         ApplyTheme(CurrentTheme, value);
-        RefreshBackdrop?.Invoke();
+        UpdateBackdropWarning(RefreshBackdrop?.Invoke() ?? true);
     }
 
     partial void OnCurrentLanguageChanged(string value)
@@ -148,7 +157,7 @@ public partial class SettingsViewModel : ObservableObject
     {
         _configService.DisableBlur = value;
         _configService.Save();
-        RefreshBackdrop?.Invoke();
+        UpdateBackdropWarning(RefreshBackdrop?.Invoke() ?? true);
     }
 
     partial void OnPrivacyModeChanged(bool value)
@@ -157,6 +166,15 @@ public partial class SettingsViewModel : ObservableObject
         _configService.Save();
         OnPropertyChanged(nameof(DisplayTempPath));
     }
+
+    [ObservableProperty]
+    private bool _deleteAfterPaste;
+
+    [ObservableProperty]
+    private bool _autoStart;
+
+    [ObservableProperty]
+    private bool _skipUpdateReminder;
 
     [ObservableProperty]
     private bool _alwaysOnTop;
@@ -168,7 +186,55 @@ public partial class SettingsViewModel : ObservableObject
         ApplyAlwaysOnTop?.Invoke(value);
     }
 
+    partial void OnDeleteAfterPasteChanged(bool value)
+    {
+        _configService.DeleteAfterPaste = value;
+        _configService.Save();
+    }
+
+    partial void OnAutoStartChanged(bool value)
+    {
+        _configService.AutoStart = value;
+        _configService.Save();
+        SetAutoStart(value);
+    }
+
+    partial void OnSkipUpdateReminderChanged(bool value)
+    {
+        _configService.SkipUpdateReminder = value;
+        _configService.Save();
+        if (value)
+        {
+            HasUpdate = false;
+            HideUpdateBanner?.Invoke();
+        }
+    }
+
+    private static void SetAutoStart(bool enable)
+    {
+        const string appName = "ImageManager";
+        const string runKeyPath = @"Software\Microsoft\Windows\CurrentVersion\Run";
+        try
+        {
+            using var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(runKeyPath, true);
+            if (key == null) return;
+            if (enable)
+            {
+                var exePath = System.Diagnostics.Process.GetCurrentProcess().MainModule?.FileName ?? "";
+                if (!string.IsNullOrEmpty(exePath))
+                    key.SetValue(appName, $"\"{exePath}\"");
+            }
+            else
+            {
+                key.DeleteValue(appName, false);
+            }
+        }
+        catch { }
+    }
+
     public Action<bool>? ApplyAlwaysOnTop { get; set; }
+    public Action<System.Windows.Media.Color>? TriggerGlow { get; set; }
+    public Action? HideUpdateBanner { get; set; }
 
     partial void OnSelectedFontFamilyChanged(string value)
     {
@@ -218,7 +284,24 @@ public partial class SettingsViewModel : ObservableObject
         DisableBlur = mode == "None";
         _configService.DisableBlur = DisableBlur;
         _configService.Save();
-        RefreshBackdrop?.Invoke();
+        UpdateBackdropWarning(RefreshBackdrop?.Invoke() ?? true);
+    }
+
+    private void UpdateBackdropWarning(bool success)
+    {
+        if (!success && BackgroundMode == "Mica")
+        {
+            BackdropWarning = Application.Current?.TryFindResource("BackdropWarning") as string ?? string.Empty;
+            // 自动回退到毛玻璃
+            BackgroundMode = "Glass";
+            _configService.BackgroundMode = "Glass";
+            _configService.Save();
+            RefreshBackdrop?.Invoke();
+        }
+        else
+        {
+            BackdropWarning = string.Empty;
+        }
     }
 
     [RelayCommand]
@@ -228,7 +311,7 @@ public partial class SettingsViewModel : ObservableObject
         _configService.Theme = theme;
         _configService.Save();
         ApplyTheme(theme);
-        RefreshBackdrop?.Invoke();
+        UpdateBackdropWarning(RefreshBackdrop?.Invoke() ?? true);
     }
 
     [RelayCommand]
@@ -291,29 +374,48 @@ public partial class SettingsViewModel : ObservableObject
     [RelayCommand]
     private async Task CheckUpdateAsync()
     {
+        if (SkipUpdateReminder) return;
+
         UpdateStatus = "检查中...";
         HasUpdate = false;
         LatestUpdate = null;
 
-        var update = await _updateService.CheckAsync();
-        if (update != null)
+        try
         {
-            LatestUpdate = update;
-            HasUpdate = true;
-            if (_mainViewModel != null) _mainViewModel.HasUpdate = true;
-            UpdateStatus = $"发现新版本 {update.Version}";
+            var update = await _updateService.CheckAsync();
+            if (update != null)
+            {
+                LatestUpdate = update;
+                HasUpdate = true;
+                if (_mainViewModel != null) _mainViewModel.HasUpdate = true;
+                UpdateStatus = $"发现新版本 {update.Version}";
+                TriggerGlow?.Invoke(System.Windows.Media.Color.FromRgb(0xE8, 0x11, 0x23)); // 红色
+            }
+            else
+            {
+                UpdateStatus = "已是最新版本";
+                TriggerGlow?.Invoke(System.Windows.Media.Color.FromRgb(0x2E, 0xA0, 0x43)); // 绿色
+            }
         }
-        else
+        catch
         {
-            UpdateStatus = "已是最新版本";
+            UpdateStatus = "检查失败";
+            TriggerGlow?.Invoke(System.Windows.Media.Color.FromRgb(0xFF, 0xC1, 0x07)); // 黄色
         }
     }
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(DownloadButtonText))]
+    private bool _isDownloading;
+
+    public string DownloadButtonText => IsDownloading ? "正在下载..." : "立即安装";
 
     [RelayCommand]
     private async Task DownloadUpdateAsync()
     {
         if (LatestUpdate == null) return;
 
+        IsDownloading = true;
         UpdateStatus = "正在下载...";
         try
         {
@@ -322,6 +424,7 @@ public partial class SettingsViewModel : ObservableObject
         catch (Exception ex)
         {
             UpdateStatus = $"下载失败：{ex.Message}";
+            IsDownloading = false;
             _toastService.Show("下载失败，请手动下载", ToastType.Error);
         }
     }

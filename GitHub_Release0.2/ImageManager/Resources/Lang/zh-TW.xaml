@@ -15,6 +15,8 @@
     <sys:String x:Key="ClearAll">清空</sys:String>
     <sys:String x:Key="DeleteNoAsk">刪除時不詢問</sys:String>
     <sys:String x:Key="CleanOnExit">退出清空</sys:String>
+    <sys:String x:Key="AutoStart">開機自動啟動</sys:String>
+    <sys:String x:Key="AutoStartDesc">開啟後系統啟動時自動執行應用</sys:String>
 
     <!-- 设置窗口 -->
     <sys:String x:Key="SettingsTitle">設定</sys:String>
@@ -37,6 +39,8 @@
     <sys:String x:Key="PrivacyModeDesc">開啟後隱藏檔案路徑等敏感資訊，適用於螢幕共享或簡報場景</sys:String>
     <sys:String x:Key="AlwaysOnTop">視窗置頂</sys:String>
     <sys:String x:Key="AlwaysOnTopDesc">開啟後視窗始終顯示在其他視窗上方</sys:String>
+    <sys:String x:Key="DeleteAfterPaste">貼上後刪除檔案</sys:String>
+    <sys:String x:Key="DeleteAfterPasteDesc">開啟後點擊「貼上到視窗」時自動刪除來源檔案</sys:String>
     <sys:String x:Key="FontSelect">字型設定</sys:String>
     <sys:String x:Key="FontWeightSelect">字重</sys:String>
     <sys:String x:Key="FontSettingDesc">自訂應用字型和字重</sys:String>
@@ -47,6 +51,8 @@
     <sys:String x:Key="BgMica">Win11 壓克力</sys:String>
     <sys:String x:Key="BgNone">無（純色）</sys:String>
     <sys:String x:Key="BgHint">毛玻璃即時模糊桌面；Win11 壓克力使用系統材質（需 Windows 10/11）。</sys:String>
+    <sys:String x:Key="BackdropWarning">目前系統不支援壓克力效果，已自動切換為毛玻璃。</sys:String>
+    <sys:String x:Key="Behavior">行為</sys:String>
     <sys:String x:Key="Help">幫助</sys:String>
     <sys:String x:Key="Tutorial">使用教程</sys:String>
     <sys:String x:Key="Step1">1. 拖入圖片到視窗，或按 Ctrl+V 貼上截圖</sys:String>
@@ -71,6 +77,9 @@
     <sys:String x:Key="CreditIcons">Game Icon Pack by Nieobie — UI 圖示</sys:String>
     <sys:String x:Key="CreditInno">Inno Setup — 安裝程式製作工具</sys:String>
 
+    <sys:String x:Key="Disclaimer">使用須知與免責聲明</sys:String>
+    <sys:String x:Key="DisclaimerText">本倉庫及對應工具的開放目的為個人學習、技術交流與非營利測試，作者倡議請勿將其直接用於商業盈利用途。&#x0a;&#x0a;項目源碼的正式授權規則以 MIT 許可證為準，商業使用請自行評估合規風險。&#x0a;&#x0a;本工具為純本地運行的圖片中轉管理工具，不內建、不託管任何線上圖片資源。使用者自行匯入、貼上的本地圖片、截圖及程式產生的暫存檔案，其版權、合規性與全部使用後果均由使用者自行承擔。&#x0a;&#x0a;若因對本項目源碼、編譯程式進行傳播、修改、二次分發，或搭配第三方圖床、線上素材資源使用而引發版權糾紛及其他法律責任，全部責任由使用者自行承擔，項目開發者不承擔任何法律責任。&#x0a;&#x0a;本工具按「現狀」提供，不對使用過程中的操作失誤、檔案遺失、系統相容問題等潛在風險提供擔保，所有使用風險由使用者自行承擔。&#x0a;&#x0a;本項目在 AI 的廣泛協助下開發，因此仍可能存在細微或不易察覺的程式問題。若給您帶來不便，敬請理解。</sys:String>
+
     <sys:String x:Key="About">關於</sys:String>
     <sys:String x:Key="AppName">應用程式名稱</sys:String>
     <sys:String x:Key="AppVersion">版本</sys:String>
@@ -80,6 +89,10 @@
     <sys:String x:Key="Website">官網</sys:String>
     <sys:String x:Key="OpenWebsite">打開官網</sys:String>
     <sys:String x:Key="CheckUpdate">檢查更新</sys:String>
+    <sys:String x:Key="CheckUpdateTip">檢查新版本</sys:String>
+    <sys:String x:Key="ViewLogs">檢視日誌</sys:String>
+    <sys:String x:Key="ErrorLogCopied">錯誤已記錄，修復提示已複製到剪貼簿</sys:String>
+    <sys:String x:Key="SkipUpdateReminder">不再提醒新版本</sys:String>
     <sys:String x:Key="InstallNow">立即安裝</sys:String>
     <sys:String x:Key="UpdateBannerText">發現新版本，點擊查看詳情</sys:String>
     <sys:String x:Key="OpenSourceDev">開源工具開發者</sys:String>

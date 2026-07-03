@@ -11,7 +11,7 @@ public class ConfigService : IConfigService
     private static readonly string ConfigPath = Path.Combine(ConfigDir, "settings.json");
 
     public bool DeleteWithoutConfirm { get; set; }
-    public bool AutoCleanOnExit { get; set; } = true;
+    public bool AutoCleanOnExit { get; set; }
     public bool ShowInTaskbar { get; set; }
     public string Theme { get; set; } = "System";
     public string? CustomTempPath { get; set; }
@@ -21,6 +21,9 @@ public class ConfigService : IConfigService
     public string BackgroundMode { get; set; } = "Glass";
     public bool PrivacyMode { get; set; }
     public bool AlwaysOnTop { get; set; }
+    public bool DeleteAfterPaste { get; set; }
+    public bool AutoStart { get; set; }
+    public bool SkipUpdateReminder { get; set; }
     public string FontFamily { get; set; } = "";
     public int FontWeight { get; set; } = 400;
 
@@ -58,6 +61,9 @@ public class ConfigService : IConfigService
                     BackgroundMode = "Glass";
                 PrivacyMode = data.PrivacyMode;
                 AlwaysOnTop = data.AlwaysOnTop;
+                DeleteAfterPaste = data.DeleteAfterPaste;
+                AutoStart = data.AutoStart;
+                SkipUpdateReminder = data.SkipUpdateReminder;
                 FontFamily = string.IsNullOrEmpty(data.FontFamily) ? "" : data.FontFamily;
                 FontWeight = data.FontWeight > 0 ? data.FontWeight : 400;
             }
@@ -81,6 +87,9 @@ public class ConfigService : IConfigService
             BackgroundMode = BackgroundMode,
             PrivacyMode = PrivacyMode,
             AlwaysOnTop = AlwaysOnTop,
+            DeleteAfterPaste = DeleteAfterPaste,
+            AutoStart = AutoStart,
+            SkipUpdateReminder = SkipUpdateReminder,
             FontFamily = FontFamily,
             FontWeight = FontWeight
         };
@@ -106,6 +115,9 @@ public class ConfigService : IConfigService
         public string? BackgroundMode { get; set; }
         public bool PrivacyMode { get; set; }
         public bool AlwaysOnTop { get; set; }
+        public bool DeleteAfterPaste { get; set; }
+        public bool AutoStart { get; set; }
+        public bool SkipUpdateReminder { get; set; }
         public string? FontFamily { get; set; }
         public int FontWeight { get; set; }
     }

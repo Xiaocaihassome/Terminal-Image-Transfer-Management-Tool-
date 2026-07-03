@@ -1,17 +1,14 @@
 [English](#english) | [繁體中文](#繁體中文) | [日本語](#日本語) | [한국어](#한국어)
 
-# v1.2.0 更新内容
+# v1.2.2 更新内容
 
 ## 新增
-- 窗口置顶功能（设置中开启）
-- 官网链接
-
-## 修复
-- 修复了一些已知问题
+- 亚克力效果检测：自动检测系统是否支持 Win11 亚克力效果，不支持时自动回退到毛玻璃并显示警告
+- 新增 `System.Drawing.Common` 依赖（用于视觉效果验证）
 
 ## 下载
 
-下载 `ImageManager_Setup_1.2.0.exe` 并运行安装程序。
+下载 `ImageManager_Setup_1.2.2.exe` 并运行安装程序。
 
 ## 系统需求
 
@@ -20,7 +17,7 @@
 
 ## 官网
 
-https://terminal-image-transfer-management-tool--website.pages.dev/
+https://imagemanager-6gs.pages.dev/
 
 ---
 
@@ -28,18 +25,14 @@ https://terminal-image-transfer-management-tool--website.pages.dev/
 
 <a id="english"></a>
 
-## What's New in v1.2.0
+## What's New in v1.2.2
 
 ### Added
-- Always on Top feature (enable in settings)
-- Official website link
-
-### Fixed
-- Fixed some known issues
+- Acrylic effect detection: automatically detect whether the system supports Win11 acrylic, fall back to Frosted Glass with a warning when unsupported
 
 ## Download
 
-Download `ImageManager_Setup_1.2.0.exe` and run the installer.
+Download `ImageManager_Setup_1.2.2.exe` and run the installer.
 
 ## System Requirements
 
@@ -48,7 +41,7 @@ Download `ImageManager_Setup_1.2.0.exe` and run the installer.
 
 ## Website
 
-https://terminal-image-transfer-management-tool--website.pages.dev/
+https://imagemanager-6gs.pages.dev/
 
 ---
 
@@ -56,18 +49,14 @@ https://terminal-image-transfer-management-tool--website.pages.dev/
 
 <a id="繁體中文"></a>
 
-## v1.2.0 更新內容
+## v1.2.2 更新內容
 
 ### 新增
-- 視窗置頂功能（設定中開啟）
-- 官網連結
-
-### 修復
-- 修復了一些已知問題
+- 壓克力效果偵測：自動偵測系統是否支援 Win11 壓克力效果，不支援時自動回退至毛玻璃並顯示警告
 
 ## 下載
 
-下載 `ImageManager_Setup_1.2.0.exe` 並執行安裝程式。
+下載 `ImageManager_Setup_1.2.2.exe` 並執行安裝程式。
 
 ## 系統需求
 
@@ -76,7 +65,7 @@ https://terminal-image-transfer-management-tool--website.pages.dev/
 
 ## 官網
 
-https://terminal-image-transfer-management-tool--website.pages.dev/
+https://imagemanager-6gs.pages.dev/
 
 ---
 
@@ -84,18 +73,14 @@ https://terminal-image-transfer-management-tool--website.pages.dev/
 
 <a id="日本語"></a>
 
-## v1.2.0 更新内容
+## v1.2.2 更新内容
 
 ### 追加
-- ウインドウを最前面に固定する機能（設定で有効化）
-- 公式サイトリンク
-
-### 修正
-- 既知の問題を修正しました
+- アクリル効果の検出：システムが Win11 アクリルをサポートしているか自動検出、サポートされていない場合はフロストガラスに自動切り替え
 
 ## ダウンロード
 
-`ImageManager_Setup_1.2.0.exe` をダウンロードしてインストーラーを実行してください。
+`ImageManager_Setup_1.2.2.exe` をダウンロードしてインストーラーを実行してください。
 
 ## システム要件
 
@@ -104,7 +89,7 @@ https://terminal-image-transfer-management-tool--website.pages.dev/
 
 ## 公式サイト
 
-https://terminal-image-transfer-management-tool--website.pages.dev/
+https://imagemanager-6gs.pages.dev/
 
 ---
 
@@ -112,18 +97,14 @@ https://terminal-image-transfer-management-tool--website.pages.dev/
 
 <a id="한국어"></a>
 
-## v1.2.0 업데이트 내용
+## v1.2.2 업데이트 내용
 
 ### 추가
-- 윈도우 항상 위에 기능 (설정에서 활성화)
-- 공식 사이트 링크
-
-### 수정
-- 알려진 일부 문제를 수정했습니다
+- 아크릴 효과 감지: 시스템이 Win11 아크릴을 지원하는지 자동 감지, 지원되지 않을 때 유리로 자동 전환
 
 ## 다운로드
 
-`ImageManager_Setup_1.2.0.exe`를 다운로드하여 설치 프로그램을 실행하세요.
+`ImageManager_Setup_1.2.2.exe`를 다운로드하여 설치 프로그램을 실행하세요.
 
 ## 시스템 요구사항
 
@@ -132,4 +113,4 @@ https://terminal-image-transfer-management-tool--website.pages.dev/
 
 ## 공식 사이트
 
-https://terminal-image-transfer-management-tool--website.pages.dev/
+https://imagemanager-6gs.pages.dev/

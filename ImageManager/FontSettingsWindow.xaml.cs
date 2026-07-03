@@ -28,7 +28,7 @@ public partial class FontSettingsWindow : Window
     {
         await Task.Delay(50);
         BackdropService.Apply(this, _configService?.BackgroundMode ?? "Glass");
-        PreviewLarge.Text = $"{FindResource("AppTitle")} v1.2.0";
+        PreviewLarge.Text = $"{FindResource("AppTitle")} v{_viewModel.Version}";
         UpdatePreview();
     }
 
@@ -64,6 +64,17 @@ public partial class FontSettingsWindow : Window
         PreviewKorean.FontWeight = weight;
     }
 
+    private void FontComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+    {
+        UpdatePreview();
+    }
+
+    private void FontWeightSlider_ValueChanged(object sender, System.Windows.RoutedPropertyChangedEventArgs<double> e)
+    {
+        if (IsLoaded)
+            UpdatePreview();
+    }
+
     private void ApplyFont_Click(object sender, RoutedEventArgs e)
     {
         _viewModel.ApplyGlobalFont();
@@ -75,7 +86,6 @@ public partial class FontSettingsWindow : Window
     {
         _viewModel.SelectedFontFamily = "";
         _viewModel.SelectedFontWeight = 400;
-        FontComboBox.SelectedItem = "";
         _viewModel.ApplyGlobalFont();
         _configService.Save();
         UpdatePreview();

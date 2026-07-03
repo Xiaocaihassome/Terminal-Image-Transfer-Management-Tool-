@@ -111,7 +111,8 @@ public partial class App : Application
         services.AddSingleton<IToastService, ToastService>();
         services.AddSingleton<IPasteService, PasteService>();
         services.AddSingleton<IUpdateService, UpdateService>();
-        services.AddTransient<MainViewModel>();
+        services.AddSingleton<IErrorLogService, ErrorLogService>();
+        services.AddSingleton<MainViewModel>();
         services.AddSingleton<SettingsViewModel>();
     }
 
@@ -145,12 +146,26 @@ public partial class App : Application
         {
             var logDir = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                "ImageManager");
+                "ImageManager", "Logs");
             Directory.CreateDirectory(logDir);
 
-            var logPath = Path.Combine(logDir, "error.log");
-            File.AppendAllText(logPath,
-                $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] {ex}\n\n");
+            var timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            var logFile = Path.Combine(logDir, $"error_{DateTime.Now:yyyyMMdd}.log");
+
+            var text = $"[{timestamp}] {ex.GetType().Name}: {ex.Message}";
+            if (ex.InnerException != null)
+                text += $"\n  Inner: {ex.InnerException.GetType().Name}: {ex.InnerException.Message}";
+            text += $"\n  StackTrace: {ex.StackTrace}\n\n";
+
+            File.AppendAllText(logFile, text);
+
+            // 复制 AI 修复提示词到剪贴板
+            var prompt = $"Please fix this error in my C# WPF application (ImageManager, .NET 8):\n\n" +
+                         $"Error: {ex.GetType().Name}: {ex.Message}\n" +
+                         $"Inner: {ex.InnerException?.Message}\n" +
+                         $"Stack Trace:\n{ex.StackTrace}\n\n" +
+                         $"Please provide the fix with code changes.";
+            try { Clipboard.SetText(prompt); } catch { }
         }
         catch { }
     }

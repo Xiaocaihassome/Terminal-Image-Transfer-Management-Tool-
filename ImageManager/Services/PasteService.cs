@@ -34,8 +34,16 @@ public class PasteService : IPasteService
 
     public async Task PasteImageAsync(string filePath, Window ownerWindow)
     {
+        await PasteImagesAsync(new[] { filePath }, ownerWindow);
+    }
+
+    public async Task PasteImagesAsync(IEnumerable<string> filePaths, Window ownerWindow)
+    {
+        var paths = filePaths.ToArray();
+        if (paths.Length == 0) return;
+
         // 写剪贴板
-        if (!WriteClipboard(filePath))
+        if (!WriteClipboard(paths))
         {
             _toastService.Show("剪贴板写入失败", ToastType.Error);
             return;
@@ -53,7 +61,7 @@ public class PasteService : IPasteService
 
         // 恢复窗口
         ownerWindow.WindowState = WindowState.Normal;
-        _toastService.Show("已粘贴路径", ToastType.Success);
+        _toastService.Show($"已粘贴 {paths.Length} 个文件路径", ToastType.Success);
     }
 
     private static void SendCtrlV()
@@ -64,7 +72,7 @@ public class PasteService : IPasteService
         keybd_event(0x11, 0, KEYEVENTF_KEYUP, IntPtr.Zero);  // Ctrl up
     }
 
-    private static bool WriteClipboard(string filePath)
+    private static bool WriteClipboard(string[] filePaths)
     {
         for (int attempt = 0; attempt < 5; attempt++)
         {
@@ -73,9 +81,14 @@ public class PasteService : IPasteService
                 try
                 {
                     EmptyClipboard();
-                    IntPtr hText = Marshal.StringToHGlobalUni(filePath + "\0");
+
+                    // CF_UNICODETEXT: 所有路径用换行连接
+                    var text = string.Join("\n", filePaths);
+                    IntPtr hText = Marshal.StringToHGlobalUni(text + "\0");
                     SetClipboardData(CF_UNICODETEXT, hText);
-                    IntPtr hDrop = CreateHDrop(filePath);
+
+                    // CF_HDROP: 支持多文件
+                    IntPtr hDrop = CreateHDrop(filePaths);
                     if (hDrop != IntPtr.Zero)
                         SetClipboardData(CF_HDROP, hDrop);
                     return true;
@@ -87,18 +100,39 @@ public class PasteService : IPasteService
         return false;
     }
 
-    private static IntPtr CreateHDrop(string filePath)
+    private static IntPtr CreateHDrop(string[] filePaths)
     {
+        // HDrop 结构:
+        // [0-3]   header size (uint32)
+        // [4-15]  reserved (全0，包含 point 结构)
+        // [16-19] 文件数量 (uint32)
+        // [20...] 每个文件路径: null-terminated Unicode，末尾双 null 结束
         int headerSize = 20;
-        byte[] pathBytes = System.Text.Encoding.Unicode.GetBytes(filePath + "\0\0");
-        int totalSize = headerSize + pathBytes.Length;
+        int fileCount = filePaths.Length;
+
+        // 计算总路径字节数
+        int pathsBytes = 0;
+        foreach (var path in filePaths)
+            pathsBytes += System.Text.Encoding.Unicode.GetByteCount(path + "\0");
+        pathsBytes += 2; // 末尾双 null
+
+        int totalSize = headerSize + pathsBytes;
         IntPtr hMem = Marshal.AllocHGlobal(totalSize);
         try
         {
+            // 清零
             for (int i = 0; i < totalSize; i++) Marshal.WriteByte(hMem, i, 0);
+
             Marshal.WriteInt32(hMem, 0, headerSize);
-            Marshal.WriteInt32(hMem, 16, 1);
-            Marshal.Copy(pathBytes, 0, hMem + headerSize, pathBytes.Length);
+            Marshal.WriteInt32(hMem, 16, fileCount);
+
+            int offset = headerSize;
+            foreach (var path in filePaths)
+            {
+                byte[] pathBytes = System.Text.Encoding.Unicode.GetBytes(path + "\0");
+                Marshal.Copy(pathBytes, 0, hMem + offset, pathBytes.Length);
+                offset += pathBytes.Length;
+            }
             return hMem;
         }
         catch { Marshal.FreeHGlobal(hMem); return IntPtr.Zero; }

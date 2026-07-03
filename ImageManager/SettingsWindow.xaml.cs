@@ -1,3 +1,4 @@
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -11,6 +12,7 @@ namespace ImageManager;
 public partial class SettingsWindow : Window
 {
     public IConfigService ConfigService { get; }
+    private bool _isLoaded;
 
     public SettingsWindow()
     {
@@ -26,15 +28,15 @@ public partial class SettingsWindow : Window
         ConfigService = configService;
         viewModel.RefreshBackdrop = () =>
             BackdropService.Apply(this, configService.BackgroundMode);
+        viewModel.TriggerGlow = (color) => PlayGlow(AboutCard, color);
     }
 
     private async void SettingsWindow_Loaded(object sender, RoutedEventArgs e)
     {
         await Task.Delay(50);
         BackdropService.Apply(this, ConfigService?.BackgroundMode ?? "Glass");
-
-        // 延迟订阅发光事件，避免 XAML 解析时触发
         SubscribeGlowEvents();
+        _isLoaded = true;
     }
 
     private void SubscribeGlowEvents()
@@ -42,9 +44,7 @@ public partial class SettingsWindow : Window
         // 给每个卡片里的所有交互元素统一加发光
         SubscribeCard(AppearanceCard);
         SubscribeCard(LanguageCard);
-        SubscribeCard(StorageCard, Color.FromRgb(0xE8, 0x11, 0x23)); // 红色（高危操作）
-        SubscribeCard(PrivacyCard);
-        SubscribeCard(AlwaysOnTopCard);
+        SubscribeCard(StorageCard, Color.FromRgb(0xE8, 0x11, 0x23));
         SubscribeCard(AboutCard);
 
         // 字体设置卡片（如果有的话）
@@ -85,7 +85,28 @@ public partial class SettingsWindow : Window
 
     private void PrivacyCheckBox_Changed(object sender, RoutedEventArgs e)
     {
-        if (PrivacyCard != null) PlayGlow(PrivacyCard);
+        if (_isLoaded && BehaviorCard != null) PlayGlow(BehaviorCard, Color.FromRgb(0x22, 0x22, 0x22));
+    }
+
+    private void AlwaysOnTopCheckBox_Changed(object sender, RoutedEventArgs e)
+    {
+        if (_isLoaded && BehaviorCard != null) PlayGlow(BehaviorCard);
+    }
+
+    private void BehaviorDangerCheckBox_Changed(object sender, RoutedEventArgs e)
+    {
+        if (_isLoaded && BehaviorCard != null) PlayGlow(BehaviorCard, Color.FromRgb(0xE8, 0x11, 0x23));
+    }
+
+    private void SkipUpdateReminder_Changed(object sender, RoutedEventArgs e)
+    {
+        if (_isLoaded && sender is System.Windows.Controls.CheckBox cb && AboutCard != null)
+        {
+            var color = cb.IsChecked == true
+                ? Color.FromRgb(0xE8, 0x11, 0x23)  // 红色
+                : Color.FromRgb(0x2E, 0xA0, 0x43);  // 绿色
+            PlayGlow(AboutCard, color);
+        }
     }
 
     private void ThemeRadio_Checked(object sender, RoutedEventArgs e) { if (AppearanceCard != null) PlayGlow(AppearanceCard); }
@@ -99,9 +120,6 @@ public partial class SettingsWindow : Window
         if (card == null) return;
         try
         {
-            var originalBrush = card.BorderBrush;
-
-            // 用指定色或主题 Accent 色
             Color accentColor;
             if (glowColor.HasValue)
             {
@@ -128,7 +146,6 @@ public partial class SettingsWindow : Window
             card.BorderBrush = glowBrush;
             glowBrush.BeginAnimation(SolidColorBrush.ColorProperty, anim);
 
-            // 动画结束后恢复原始 brush
             var timer = new System.Windows.Threading.DispatcherTimer
             {
                 Interval = TimeSpan.FromMilliseconds(1300)
@@ -136,7 +153,7 @@ public partial class SettingsWindow : Window
             timer.Tick += (_, _) =>
             {
                 timer.Stop();
-                card.BorderBrush = originalBrush;
+                card.ClearValue(Border.BorderBrushProperty);
             };
             timer.Start();
         }
@@ -220,9 +237,18 @@ public partial class SettingsWindow : Window
     {
         System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
         {
-            FileName = "https://terminal-image-transfer-management-tool--website.pages.dev/",
+            FileName = "https://imagemanager-6gs.pages.dev/",
             UseShellExecute = true
         });
+    }
+
+    private void OpenLogs_Click(object sender, RoutedEventArgs e)
+    {
+        var logDir = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            "ImageManager", "Logs");
+        Directory.CreateDirectory(logDir);
+        System.Diagnostics.Process.Start("explorer.exe", logDir);
     }
 
     private void OpenFontSettings_Click(object sender, MouseButtonEventArgs e)

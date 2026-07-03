@@ -92,7 +92,8 @@
     <sys:String x:Key="CheckUpdateTip">檢查新版本</sys:String>
     <sys:String x:Key="ViewLogs">檢視日誌</sys:String>
     <sys:String x:Key="ErrorLogCopied">錯誤已記錄，修復提示已複製到剪貼簿</sys:String>
-    <sys:String x:Key="SkipUpdateReminder">不再提醒新版本</sys:String>
+    <sys:String x:Key="SkipUpdateReminder">不再提醒新版本（測試版）</sys:String>
+    <sys:String x:Key="SkipUpdateReminderDesc">開啟後關閉更新檢查和提醒</sys:String>
     <sys:String x:Key="InstallNow">立即安裝</sys:String>
     <sys:String x:Key="UpdateBannerText">發現新版本，點擊查看詳情</sys:String>
     <sys:String x:Key="OpenSourceDev">開源工具開發者</sys:String>

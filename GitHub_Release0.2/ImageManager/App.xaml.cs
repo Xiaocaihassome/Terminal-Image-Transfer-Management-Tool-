@@ -89,6 +89,9 @@ public partial class App : Application
         _ = Task.Run(async () =>
         {
             await Task.Delay(3000);
+
+            if (configService.SkipUpdateReminder) return;
+
             var updateService = _serviceProvider.GetRequiredService<IUpdateService>();
             var update = await updateService.CheckAsync();
             if (update != null)
@@ -160,11 +163,19 @@ public partial class App : Application
             File.AppendAllText(logFile, text);
 
             // 复制 AI 修复提示词到剪贴板
-            var prompt = $"Please fix this error in my C# WPF application (ImageManager, .NET 8):\n\n" +
-                         $"Error: {ex.GetType().Name}: {ex.Message}\n" +
-                         $"Inner: {ex.InnerException?.Message}\n" +
-                         $"Stack Trace:\n{ex.StackTrace}\n\n" +
-                         $"Please provide the fix with code changes.";
+            var prompt = "Please fix this error in my C# WPF application.\n\n" +
+                         "## Project\n" +
+                         "- Name: ImageManager (Terminal Image Transfer Management Tool)\n" +
+                         "- Tech: C# WPF / .NET 8\n" +
+                         "- Source: https://github.com/Xiaocaihassome/Terminal-Image-Transfer-Management-Tool-\n" +
+                         "- Docs: https://imagemanager-6gs.pages.dev/docs.html\n\n" +
+                         "## Error\n" +
+                         $"Type: {ex.GetType().Name}\n" +
+                         $"Message: {ex.Message}\n" +
+                         $"Inner: {ex.InnerException?.Message}\n\n" +
+                         "## Stack Trace\n" +
+                         $"{ex.StackTrace}\n\n" +
+                         "Please provide the fix with code changes. Reference the source code and docs if needed.";
             try { Clipboard.SetText(prompt); } catch { }
         }
         catch { }

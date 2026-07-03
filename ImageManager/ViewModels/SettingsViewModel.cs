@@ -103,7 +103,7 @@ public partial class SettingsViewModel : ObservableObject
                 : $"自定义: {CustomTempPath}";
         }
     }
-    public string Version => "1.2.2";
+    public string Version => "1.2.3";
 
     public SettingsViewModel(IConfigService configService, IToastService toastService, IUpdateService updateService, MainViewModel mainViewModel)
     {

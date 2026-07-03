@@ -92,7 +92,8 @@
     <sys:String x:Key="CheckUpdateTip">새 버전 확인</sys:String>
     <sys:String x:Key="ViewLogs">로그 보기</sys:String>
     <sys:String x:Key="ErrorLogCopied">오류가 기록되었습니다. 수정 힌트가 클립보드에 복사되었습니다</sys:String>
-    <sys:String x:Key="SkipUpdateReminder">새 버전 알림 중지</sys:String>
+    <sys:String x:Key="SkipUpdateReminder">새 버전 알림 중지 (베타)</sys:String>
+    <sys:String x:Key="SkipUpdateReminderDesc">업데이트 확인 및 알림을 비활성화합니다</sys:String>
     <sys:String x:Key="InstallNow">지금 설치</sys:String>
     <sys:String x:Key="UpdateBannerText">새 버전이 있습니다. 클릭하여 확인하세요</sys:String>
     <sys:String x:Key="OpenSourceDev">오픈소스 개발자</sys:String>

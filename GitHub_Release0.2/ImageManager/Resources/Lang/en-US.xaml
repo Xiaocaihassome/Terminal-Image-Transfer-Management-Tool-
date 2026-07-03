@@ -92,7 +92,8 @@
     <sys:String x:Key="CheckUpdateTip">Check for new versions</sys:String>
     <sys:String x:Key="ViewLogs">View Logs</sys:String>
     <sys:String x:Key="ErrorLogCopied">Error logged, fix prompt copied to clipboard</sys:String>
-    <sys:String x:Key="SkipUpdateReminder">Don't remind about new versions</sys:String>
+    <sys:String x:Key="SkipUpdateReminder">Don't remind about new versions (Beta)</sys:String>
+    <sys:String x:Key="SkipUpdateReminderDesc">Disables update checks and notifications</sys:String>
     <sys:String x:Key="InstallNow">Install Now</sys:String>
     <sys:String x:Key="UpdateBannerText">New version available, click to view</sys:String>
     <sys:String x:Key="OpenSourceDev">Open Source Developer</sys:String>

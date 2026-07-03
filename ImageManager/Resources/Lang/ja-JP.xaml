@@ -92,7 +92,8 @@
     <sys:String x:Key="CheckUpdateTip">新しいバージョンを確認</sys:String>
     <sys:String x:Key="ViewLogs">ログを表示</sys:String>
     <sys:String x:Key="ErrorLogCopied">エラーを記録しました。修正ヒントをクリップボードにコピーしました</sys:String>
-    <sys:String x:Key="SkipUpdateReminder">新しいバージョンの通知を停止</sys:String>
+    <sys:String x:Key="SkipUpdateReminder">新しいバージョンの通知を停止（テスト版）</sys:String>
+    <sys:String x:Key="SkipUpdateReminderDesc">更新チェックと通知を無効化します</sys:String>
     <sys:String x:Key="InstallNow">今すぐインストール</sys:String>
     <sys:String x:Key="UpdateBannerText">新しいバージョンがあります。クリックして詳細を確認</sys:String>
     <sys:String x:Key="OpenSourceDev">オープンソース開発者</sys:String>

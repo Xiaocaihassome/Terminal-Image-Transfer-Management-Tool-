@@ -57,7 +57,7 @@
                         <Border Width="16" Height="16" Margin="0,0,6,0"
                                 Background="{Binding TextPrimary, Source={x:Static svc:ThemeManager.Instance}}">
                             <Border.OpacityMask>
-                                <ImageBrush ImageSource="pack://application:,,,/Resources/Icons/palette.png"/>
+                                <ImageBrush ImageSource="pack://application:,,,/Resources/Icons/fill.png"/>
                             </Border.OpacityMask>
                         </Border>
                         <TextBlock Text="{DynamicResource Appearance}" FontSize="13" FontWeight="SemiBold"
@@ -154,7 +154,7 @@
                             <Border Grid.Column="0" Width="36" Height="36" CornerRadius="8" Margin="0,0,10,0"
                                     Background="{Binding Accent, Source={x:Static svc:ThemeManager.Instance}}">
                                 <Border.OpacityMask>
-                                    <ImageBrush ImageSource="pack://application:,,,/Resources/Icons/font.png"/>
+                                    <ImageBrush ImageSource="pack://application:,,,/Resources/Icons/font3.png"/>
                                 </Border.OpacityMask>
                             </Border>
 
@@ -366,7 +366,7 @@
                                         Background="{Binding Accent, Source={x:Static svc:ThemeManager.Instance}}"
                                         VerticalAlignment="Center" Margin="0,0,10,0">
                                     <Border.OpacityMask>
-                                        <ImageBrush ImageSource="pack://application:,,,/Resources/Icons/reload.png"/>
+                                        <ImageBrush ImageSource="pack://application:,,,/Resources/Icons/power.png"/>
                                     </Border.OpacityMask>
                                 </Border>
                                 <StackPanel Grid.Column="1" VerticalAlignment="Center">
@@ -379,6 +379,34 @@
                                 <CheckBox Grid.Column="2" IsChecked="{Binding AutoStart}"
                                           VerticalAlignment="Center" Margin="8,0,0,0"
                                           Checked="BehaviorDangerCheckBox_Changed" Unchecked="BehaviorDangerCheckBox_Changed"/>
+                            </Grid>
+
+                            <Border Height="1" Background="{Binding Separator, Source={x:Static svc:ThemeManager.Instance}}" Margin="0,10"/>
+
+                            <!-- 不再提醒新版本 -->
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Border Grid.Column="0" Width="28" Height="28" CornerRadius="6"
+                                        Background="{Binding Accent, Source={x:Static svc:ThemeManager.Instance}}"
+                                        VerticalAlignment="Center" Margin="0,0,10,0">
+                                    <Border.OpacityMask>
+                                        <ImageBrush ImageSource="pack://application:,,,/Resources/Icons/reload.png"/>
+                                    </Border.OpacityMask>
+                                </Border>
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                    <TextBlock Text="{DynamicResource SkipUpdateReminder}" FontSize="11" FontWeight="SemiBold"
+                                               Foreground="{Binding TextPrimary, Source={x:Static svc:ThemeManager.Instance}}"/>
+                                    <TextBlock Text="{DynamicResource SkipUpdateReminderDesc}" FontSize="9"
+                                               Foreground="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}"
+                                               TextWrapping="Wrap" Margin="0,1,0,0"/>
+                                </StackPanel>
+                                <CheckBox Grid.Column="2" IsChecked="{Binding SkipUpdateReminder}"
+                                          VerticalAlignment="Center" Margin="8,0,0,0"
+                                          Checked="SkipUpdateReminder_Changed" Unchecked="SkipUpdateReminder_Changed"/>
                             </Grid>
                         </StackPanel>
                     </Border>
@@ -560,21 +588,6 @@
                                         <TextBlock Text="{Binding DownloadButtonText}"/>
                                     </Button>
                                 </StackPanel>
-                            </Grid>
-
-                            <!-- 不提醒新版本 -->
-                            <Grid Margin="0,10,0,0">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="1" Text="{DynamicResource SkipUpdateReminder}" FontSize="11"
-                                           Foreground="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}"
-                                           VerticalAlignment="Center" Margin="0,0,0,0"/>
-                                <CheckBox Grid.Column="2" IsChecked="{Binding SkipUpdateReminder}"
-                                          VerticalAlignment="Center" Margin="8,0,0,0"
-                                          Checked="SkipUpdateReminder_Changed" Unchecked="SkipUpdateReminder_Changed"/>
                             </Grid>
 
                             <Border Height="1" Background="{Binding Separator, Source={x:Static svc:ThemeManager.Instance}}" Margin="0,0,0,10"/>

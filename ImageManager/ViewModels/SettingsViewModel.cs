@@ -17,8 +17,14 @@ public partial class SettingsViewModel : ObservableObject
     private readonly IUpdateService _updateService;
     private readonly MainViewModel? _mainViewModel;
 
-    // 由 SettingsWindow 设置，用于切换设置后刷新毛玻璃效果
-    public Action? RefreshBackdrop { get; set; }
+    // 由 SettingsWindow 设置，用于切换设置后刷新毛玻璃效果，返回是否成功
+    public Func<bool>? RefreshBackdrop { get; set; }
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasBackdropWarning))]
+    private string _backdropWarning = string.Empty;
+
+    public bool HasBackdropWarning => !string.IsNullOrEmpty(BackdropWarning);
 
     [ObservableProperty]
     private string _currentTheme = "System";
@@ -97,7 +103,7 @@ public partial class SettingsViewModel : ObservableObject
                 : $"自定义: {CustomTempPath}";
         }
     }
-    public string Version => "1.2.1";
+    public string Version => "1.2.2";
 
     public SettingsViewModel(IConfigService configService, IToastService toastService, IUpdateService updateService, MainViewModel mainViewModel)
     {
@@ -137,7 +143,7 @@ public partial class SettingsViewModel : ObservableObject
         _configService.Transparency = value;
         _configService.Save();
         ApplyTheme(CurrentTheme, value);
-        RefreshBackdrop?.Invoke();
+        UpdateBackdropWarning(RefreshBackdrop?.Invoke() ?? true);
     }
 
     partial void OnCurrentLanguageChanged(string value)
@@ -151,7 +157,7 @@ public partial class SettingsViewModel : ObservableObject
     {
         _configService.DisableBlur = value;
         _configService.Save();
-        RefreshBackdrop?.Invoke();
+        UpdateBackdropWarning(RefreshBackdrop?.Invoke() ?? true);
     }
 
     partial void OnPrivacyModeChanged(bool value)
@@ -278,7 +284,24 @@ public partial class SettingsViewModel : ObservableObject
         DisableBlur = mode == "None";
         _configService.DisableBlur = DisableBlur;
         _configService.Save();
-        RefreshBackdrop?.Invoke();
+        UpdateBackdropWarning(RefreshBackdrop?.Invoke() ?? true);
+    }
+
+    private void UpdateBackdropWarning(bool success)
+    {
+        if (!success && BackgroundMode == "Mica")
+        {
+            BackdropWarning = Application.Current?.TryFindResource("BackdropWarning") as string ?? string.Empty;
+            // 自动回退到毛玻璃
+            BackgroundMode = "Glass";
+            _configService.BackgroundMode = "Glass";
+            _configService.Save();
+            RefreshBackdrop?.Invoke();
+        }
+        else
+        {
+            BackdropWarning = string.Empty;
+        }
     }
 
     [RelayCommand]
@@ -288,7 +311,7 @@ public partial class SettingsViewModel : ObservableObject
         _configService.Theme = theme;
         _configService.Save();
         ApplyTheme(theme);
-        RefreshBackdrop?.Invoke();
+        UpdateBackdropWarning(RefreshBackdrop?.Invoke() ?? true);
     }
 
     [RelayCommand]

@@ -133,6 +133,10 @@
                             <TextBlock Text="{DynamicResource BgHint}" FontSize="10"
                                        Foreground="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}"
                                        TextWrapping="Wrap" Margin="0,4,0,0"/>
+                            <TextBlock Text="{Binding BackdropWarning}" FontSize="10"
+                                       Foreground="#E81123"
+                                       TextWrapping="Wrap" Margin="0,4,0,0"
+                                       Visibility="{Binding HasBackdropWarning, Converter={StaticResource BoolToVis}}"/>
                         </StackPanel>
                     </Border>
 

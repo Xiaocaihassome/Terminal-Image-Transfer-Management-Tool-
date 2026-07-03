@@ -51,6 +51,7 @@
     <sys:String x:Key="BgMica">Win11 Acrylic</sys:String>
     <sys:String x:Key="BgNone">None (Solid)</sys:String>
     <sys:String x:Key="BgHint">Frosted Glass blurs the desktop in real time; Win11 Acrylic uses the system material (requires Windows 10/11).</sys:String>
+    <sys:String x:Key="BackdropWarning">Acrylic is not supported on this system. Switched to Frosted Glass.</sys:String>
     <sys:String x:Key="Behavior">Behavior</sys:String>
     <sys:String x:Key="Help">Help</sys:String>
     <sys:String x:Key="Tutorial">Tutorial</sys:String>

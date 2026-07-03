@@ -19,7 +19,7 @@ public interface IUpdateService
 public class UpdateService : IUpdateService
 {
     private const string RepoApi = "https://api.github.com/repos/Xiaocaihassome/Terminal-Image-Transfer-Management-Tool-/releases/latest";
-    private const string CurrentVersion = "1.2.1";
+    private const string CurrentVersion = "1.2.2";
 
     private static readonly HttpClient Http = new()
     {

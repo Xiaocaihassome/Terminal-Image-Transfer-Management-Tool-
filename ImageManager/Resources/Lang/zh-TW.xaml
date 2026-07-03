@@ -51,6 +51,7 @@
     <sys:String x:Key="BgMica">Win11 壓克力</sys:String>
     <sys:String x:Key="BgNone">無（純色）</sys:String>
     <sys:String x:Key="BgHint">毛玻璃即時模糊桌面；Win11 壓克力使用系統材質（需 Windows 10/11）。</sys:String>
+    <sys:String x:Key="BackdropWarning">目前系統不支援壓克力效果，已自動切換為毛玻璃。</sys:String>
     <sys:String x:Key="Behavior">行為</sys:String>
     <sys:String x:Key="Help">幫助</sys:String>
     <sys:String x:Key="Tutorial">使用教程</sys:String>

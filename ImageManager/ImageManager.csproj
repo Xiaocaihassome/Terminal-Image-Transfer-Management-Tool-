@@ -17,7 +17,7 @@
     <!-- 程序集信息 -->
     <AssemblyName>ImageManager</AssemblyName>
     <RootNamespace>ImageManager</RootNamespace>
-    <Version>1.2.1</Version>
+    <Version>1.2.2</Version>
     <Authors>小蔡有点料</Authors>
     <Description>Terminal Image Transfer Management Tool</Description>
     <ApplicationIcon>Resources\app.ico</ApplicationIcon>
@@ -26,6 +26,7 @@
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.9" />
+    <PackageReference Include="System.Drawing.Common" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>

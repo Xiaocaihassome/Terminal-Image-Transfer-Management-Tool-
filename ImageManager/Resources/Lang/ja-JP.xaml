@@ -51,6 +51,7 @@
     <sys:String x:Key="BgMica">Win11 アクリル</sys:String>
     <sys:String x:Key="BgNone">なし（単色）</sys:String>
     <sys:String x:Key="BgHint">フロストガラスはデスクトップをリアルタイムにぼかします。Win11 アクリルはシステムマテリアルを使用します（Windows 10/11 が必要）。</sys:String>
+    <sys:String x:Key="BackdropWarning">このシステムではアクリル効果がサポートされていません。フロストガラスに切り替えました。</sys:String>
     <sys:String x:Key="Behavior">動作</sys:String>
     <sys:String x:Key="Help">ヘルプ</sys:String>
     <sys:String x:Key="Tutorial">使い方</sys:String>

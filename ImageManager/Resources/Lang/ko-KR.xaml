@@ -51,6 +51,7 @@
     <sys:String x:Key="BgMica">Win11 아크릴</sys:String>
     <sys:String x:Key="BgNone">없음(단색)</sys:String>
     <sys:String x:Key="BgHint">유리는 바탕화면을 실시간으로 흐리게 합니다. Win11 아크릴은 시스템 머티리얼을 사용합니다(Windows 10/11 필요).</sys:String>
+    <sys:String x:Key="BackdropWarning">이 시스템에서 아크릴 효과가 지원되지 않습니다. 유리로 전환되었습니다.</sys:String>
     <sys:String x:Key="Behavior">동작</sys:String>
     <sys:String x:Key="Help">도움말</sys:String>
     <sys:String x:Key="Tutorial">사용 설명서</sys:String>

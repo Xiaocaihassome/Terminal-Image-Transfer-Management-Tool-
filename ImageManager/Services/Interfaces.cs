@@ -1,4 +1,4 @@
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -49,6 +49,8 @@ public interface IConfigService
     bool PrivacyMode { get; set; }
     bool AlwaysOnTop { get; set; }
     bool DeleteAfterPaste { get; set; }
+    bool AutoDetectClipboard { get; set; }
+    bool AutoReturnToTarget { get; set; }
     bool AutoStart { get; set; }
     bool SkipUpdateReminder { get; set; }
     string FontFamily { get; set; }

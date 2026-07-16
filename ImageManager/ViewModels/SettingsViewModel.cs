@@ -1,4 +1,4 @@
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Media;
@@ -52,6 +52,12 @@ public partial class SettingsViewModel : ObservableObject
     private bool _autoCleanOnExit = true;
 
     [ObservableProperty]
+    private bool _autoDetectClipboard;
+
+    [ObservableProperty]
+    private bool _autoReturnToTarget;
+
+    [ObservableProperty]
     private bool _privacyMode;
 
     [ObservableProperty]
@@ -103,7 +109,7 @@ public partial class SettingsViewModel : ObservableObject
                 : $"自定义: {CustomTempPath}";
         }
     }
-    public string Version => "1.2.3";
+    public string Version => "1.3.0";
 
     public SettingsViewModel(IConfigService configService, IToastService toastService, IUpdateService updateService, MainViewModel mainViewModel)
     {
@@ -125,6 +131,8 @@ public partial class SettingsViewModel : ObservableObject
         CustomTempPath = _configService.CustomTempPath;
         DeleteWithoutConfirm = _configService.DeleteWithoutConfirm;
         AutoCleanOnExit = _configService.AutoCleanOnExit;
+        AutoDetectClipboard = _configService.AutoDetectClipboard;
+        AutoReturnToTarget = _configService.AutoReturnToTarget;
         Transparency = _configService.Transparency;
         CurrentLanguage = _configService.Language;
         DisableBlur = _configService.DisableBlur;

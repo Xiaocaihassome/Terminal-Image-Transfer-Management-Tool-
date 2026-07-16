@@ -200,6 +200,18 @@ public partial class SettingsViewModel : ObservableObject
         _configService.Save();
     }
 
+    partial void OnAutoDetectClipboardChanged(bool value)
+    {
+        _configService.AutoDetectClipboard = value;
+        _configService.Save();
+    }
+
+    partial void OnAutoReturnToTargetChanged(bool value)
+    {
+        _configService.AutoReturnToTarget = value;
+        _configService.Save();
+    }
+
     partial void OnAutoStartChanged(bool value)
     {
         _configService.AutoStart = value;

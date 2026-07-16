@@ -1,13 +1,9 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Interop;
-using System.Windows.Media;
-using System.Windows.Media.Effects;
-using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using ImageManager.Services;
 using ImageManager.ViewModels;
@@ -32,40 +28,7 @@ public partial class MainWindow : Window
     [DllImport("user32.dll")]
     private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 
-    [DllImport("user32.dll")]
-    private static extern IntPtr GetDesktopWindow();
-
-    [DllImport("user32.dll")]
-    private static extern IntPtr GetWindowDC(IntPtr hWnd);
-
-    [DllImport("user32.dll")]
-    private static extern int ReleaseDC(IntPtr hWnd, IntPtr hDC);
-
-    [DllImport("gdi32.dll")]
-    private static extern IntPtr CreateCompatibleDC(IntPtr hdc);
-
-    [DllImport("gdi32.dll")]
-    private static extern IntPtr CreateCompatibleBitmap(IntPtr hdc, int width, int height);
-
-    [DllImport("gdi32.dll")]
-    private static extern IntPtr SelectObject(IntPtr hdc, IntPtr hgdiobj);
-
-    [DllImport("gdi32.dll")]
-    private static extern bool BitBlt(IntPtr hdcDest, int xDest, int yDest, int width, int height, IntPtr hdcSrc, int xSrc, int ySrc, int rop);
-
-    [DllImport("gdi32.dll")]
-    private static extern bool DeleteObject(IntPtr hObject);
-
-    [DllImport("gdi32.dll")]
-    private static extern bool DeleteDC(IntPtr hdc);
-
-    [DllImport("user32.dll")]
-    private static extern int GetSystemMetrics(int nIndex);
-
     private const int SW_RESTORE = 9;
-    private const int SM_CXSCREEN = 0;
-    private const int SM_CYSCREEN = 1;
-    private const int SRCCOPY = 0x00CC0020;
 
     public MainWindow(MainViewModel viewModel, IToastService toastService, IPasteService pasteService, IConfigService configService, IServiceProvider serviceProvider, IFileService fileService)
     {
@@ -99,11 +62,38 @@ public partial class MainWindow : Window
     {
         _toastService.SetContainer(ToastContainer);
         await Task.Delay(50);
-        if (!_configService.DisableBlur)
-            ApplyFrostedGlass();
+        BackdropService.Apply(this, _configService.BackgroundMode);
+        Topmost = _configService.AlwaysOnTop;
+
+        // 注册隐藏 banner 回调
+        var settingsVm = _serviceProvider.GetRequiredService<SettingsViewModel>();
+        settingsVm.HideUpdateBanner = () =>
+        {
+            _viewModel.HasUpdate = false;
+            UpdateBanner.Visibility = Visibility.Collapsed;
+        };
+
+        // 轮询检查 HasUpdate，更新 banner 可见性
+        _ = PollUpdateBanner();
 
         // 根据配置启动或停止剪贴板监听
         UpdateClipboardMonitor();
+    }
+
+    private async Task PollUpdateBanner()
+    {
+        if (_configService.SkipUpdateReminder) return;
+
+        // 等后台检查完成
+        for (int i = 0; i < 20; i++)
+        {
+            if (_viewModel.HasUpdate)
+            {
+                UpdateBanner.Visibility = Visibility.Visible;
+                return;
+            }
+            await Task.Delay(500);
+        }
     }
 
     private void UpdateClipboardMonitor()
@@ -132,7 +122,7 @@ public partial class MainWindow : Window
                     if (hash != _lastClipboardHash)
                     {
                         _lastClipboardHash = hash;
-                        
+
                         // 保存图片到临时目录
                         var path = _fileService.SaveImageToTemp(image);
                         await _viewModel.AddImageAsync(path);
@@ -144,80 +134,48 @@ public partial class MainWindow : Window
         catch { }
     }
 
-    private void ApplyFrostedGlass()
-    {
-        try
-        {
-            int w = GetSystemMetrics(SM_CXSCREEN);
-            int h = GetSystemMetrics(SM_CYSCREEN);
-
-            IntPtr hDesktop = GetDesktopWindow();
-            IntPtr hDCDesktop = GetWindowDC(hDesktop);
-            IntPtr hDCMem = CreateCompatibleDC(hDCDesktop);
-            IntPtr hBitmap = CreateCompatibleBitmap(hDCDesktop, w, h);
-            IntPtr hOld = SelectObject(hDCMem, hBitmap);
-
-            BitBlt(hDCMem, 0, 0, w, h, hDCDesktop, 0, 0, SRCCOPY);
-
-            SelectObject(hDCMem, hOld);
-            DeleteDC(hDCMem);
-            ReleaseDC(hDesktop, hDCDesktop);
-
-            var bmp = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
-                hBitmap, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-            DeleteObject(hBitmap);
-
-            bmp.Freeze();
-
-            var visualBrush = new VisualBrush(new Image { Source = bmp, Stretch = Stretch.None });
-            visualBrush.Freeze();
-
-            var blurBrush = new VisualBrush(new Border
-            {
-                Background = visualBrush,
-                Effect = new BlurEffect { Radius = 30, KernelType = KernelType.Gaussian }
-            });
-            blurBrush.Freeze();
-
-            Background = blurBrush;
-        }
-        catch
-        {
-            // 捕获失败时使用纯色背景
-            Background = new SolidColorBrush(Color.FromArgb(200, 240, 240, 240));
-        }
-    }
-
     #region 拖放
 
     private void DropZone_DragEnter(object sender, DragEventArgs e)
     {
         if (e.Data.GetDataPresent(DataFormats.FileDrop))
         {
-            if (ThemeManager.Instance.Accent is SolidColorBrush accent)
-                DropZone.BorderBrush = accent;
+            if (ThemeManager.Instance.Accent is System.Windows.Media.SolidColorBrush accentBrush)
+            {
+                var c = accentBrush.Color;
+                DropZone.Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(30, c.R, c.G, c.B));
+            }
+            DropZone.BorderBrush = ThemeManager.Instance.Accent;
+            e.Handled = true;
         }
     }
 
     private void DropZone_DragLeave(object sender, DragEventArgs e)
     {
-        DropZone.BorderBrush = (Brush)FindResource("DropZoneBorder");
+        DropZone.Background = System.Windows.Media.Brushes.Transparent;
+        DropZone.BorderBrush = ThemeManager.Instance.DropZoneBorder;
+        e.Handled = true;
     }
 
     private void DropZone_DragOver(object sender, DragEventArgs e)
     {
-        e.Effects = DragDropEffects.Copy;
+        e.Effects = e.Data.GetDataPresent(DataFormats.FileDrop) ? DragDropEffects.Copy : DragDropEffects.None;
         e.Handled = true;
     }
 
     private async void DropZone_Drop(object sender, DragEventArgs e)
     {
-        DropZone.BorderBrush = (Brush)FindResource("DropZoneBorder");
+        DropZone.Background = System.Windows.Media.Brushes.Transparent;
+        DropZone.BorderBrush = ThemeManager.Instance.DropZoneBorder;
+
         if (e.Data.GetDataPresent(DataFormats.FileDrop))
         {
             var files = (string[])e.Data.GetData(DataFormats.FileDrop)!;
             await _viewModel.AddImagesAsync(files);
+            if (files.Length > 0)
+                _toastService.Show($"已添加 {files.Length} 张图片", ToastType.Success);
         }
+        e.Handled = true;
     }
 
     #endregion
@@ -321,14 +279,15 @@ public partial class MainWindow : Window
 
     private async void PasteToWindow_Click(object sender, RoutedEventArgs e)
     {
-        var selected = _viewModel.ImageItems.FirstOrDefault(i => i.IsSelected);
-        if (selected == null)
+        var selectedItems = _viewModel.ImageItems.Where(i => i.IsSelected).ToList();
+        if (selectedItems.Count == 0)
         {
             _toastService.Show("请先选中要粘贴的图片", ToastType.Warning);
             return;
         }
 
-        if (!File.Exists(selected.FilePath))
+        var validFiles = selectedItems.Where(i => File.Exists(i.FilePath)).ToList();
+        if (validFiles.Count == 0)
         {
             _toastService.Show("文件不存在", ToastType.Error);
             return;
@@ -336,7 +295,27 @@ public partial class MainWindow : Window
 
         try
         {
-            await _pasteService.PasteImageAsync(selected.FilePath, this);
+            var filePaths = validFiles.Select(i => i.FilePath).ToList();
+            await _pasteService.PasteImagesAsync(filePaths, this);
+
+            // 粘贴后删除
+            if (_configService.DeleteAfterPaste)
+            {
+                foreach (var item in validFiles)
+                {
+                    try
+                    {
+                        File.Delete(item.FilePath);
+                        _viewModel.ImageItems.Remove(item);
+                    }
+                    catch { }
+                }
+                _toastService.Show($"已粘贴并删除 {validFiles.Count} 个文件", ToastType.Success);
+            }
+            else
+            {
+                _toastService.Show($"已粘贴 {validFiles.Count} 个文件", ToastType.Success);
+            }
         }
         catch (Exception ex)
         {
@@ -353,30 +332,44 @@ public partial class MainWindow : Window
     private void ClearAll_Click(object sender, RoutedEventArgs e) =>
         _viewModel.ClearAllCommand.Execute(null);
 
-    private void UpdateBanner_Click(object sender, RoutedEventArgs e)
-    {
+    private void UpdateBanner_Click(object sender, RoutedEventArgs e) =>
         Settings_Click(sender, e);
-    }
 
     private void Settings_Click(object sender, RoutedEventArgs e)
     {
-        var settingsVm = _serviceProvider.GetRequiredService<SettingsViewModel>();
-        var settingsWindow = new SettingsWindow(settingsVm, _configService) { Owner = this };
-
-        settingsWindow.Closed += (_, _) =>
+        try
         {
-            _viewModel.SyncFromConfig(_configService);
-            settingsVm.ApplyTheme(_configService.Theme, _configService.Transparency);
-            if (_configService.DisableBlur)
-                Background = new SolidColorBrush(Color.FromArgb(240, 240, 240, 240));
-            else
-                ApplyFrostedGlass();
-            
-            // 更新剪贴板监听状态
-            UpdateClipboardMonitor();
-        };
+            var settingsVm = _serviceProvider.GetRequiredService<SettingsViewModel>();
+            settingsVm.ApplyAlwaysOnTop = (on) => Topmost = on;
+            var settingsWindow = new SettingsWindow(settingsVm, _configService) { Owner = this };
 
-        settingsWindow.ShowDialog();
+            settingsWindow.Closed += (_, _) =>
+            {
+                _viewModel.SyncFromConfig(_configService);
+                settingsVm.ApplyTheme(_configService.Theme, _configService.Transparency);
+                BackdropService.Apply(this, _configService.BackgroundMode);
+
+                // 更新剪贴板监听状态
+                UpdateClipboardMonitor();
+            };
+
+            settingsWindow.ShowDialog();
+        }
+        catch (Exception ex)
+        {
+            var logService = _serviceProvider.GetRequiredService<IErrorLogService>();
+            logService.Log("设置窗口打开失败", ex);
+
+            var msg = LanguageManager.CurrentLanguage switch
+            {
+                "en-US" => "Error logged, fix prompt copied to clipboard",
+                "zh-TW" => "錯誤已記錄，修復提示已複製到剪貼簿",
+                "ja-JP" => "エラーを記録しました。修正ヒントをクリップボードにコピーしました",
+                "ko-KR" => "오류가 기록되었습니다. 수정 힌트가 클립보드에 복사되었습니다",
+                _ => "错误已记录，修复提示已复制到剪贴板"
+            };
+            _toastService.Show(msg, ToastType.Error);
+        }
     }
 
     #endregion

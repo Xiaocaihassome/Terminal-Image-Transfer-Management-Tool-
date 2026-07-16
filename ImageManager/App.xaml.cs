@@ -1,4 +1,4 @@
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Windows;
@@ -77,11 +77,12 @@ public partial class App : Application
         // 显示主窗口
         var mainVm = _serviceProvider.GetRequiredService<MainViewModel>();
         var mainWindow = new MainWindow(
-            mainVm,
-            _serviceProvider.GetRequiredService<IToastService>(),
-            _serviceProvider.GetRequiredService<IPasteService>(),
-            _serviceProvider.GetRequiredService<IConfigService>(),
-            _serviceProvider);
+              mainVm,
+              _serviceProvider.GetRequiredService<IToastService>(),
+              _serviceProvider.GetRequiredService<IPasteService>(),
+              _serviceProvider.GetRequiredService<IConfigService>(),
+              _serviceProvider,
+              _serviceProvider.GetRequiredService<IFileService>());
 
         mainWindow.Show();
 
@@ -206,3 +207,4 @@ public partial class App : Application
         base.OnExit(e);
     }
 }
+

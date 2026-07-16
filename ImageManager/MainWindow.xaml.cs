@@ -353,6 +353,11 @@ public partial class MainWindow : Window
     private void ClearAll_Click(object sender, RoutedEventArgs e) =>
         _viewModel.ClearAllCommand.Execute(null);
 
+    private void UpdateBanner_Click(object sender, RoutedEventArgs e)
+    {
+        Settings_Click(sender, e);
+    }
+
     private void Settings_Click(object sender, RoutedEventArgs e)
     {
         var settingsVm = _serviceProvider.GetRequiredService<SettingsViewModel>();

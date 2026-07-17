@@ -270,7 +270,7 @@
                             BorderBrush="{Binding CardBorder, Source={x:Static svc:ThemeManager.Instance}}" BorderThickness="1">
                         <StackPanel>
                             <!-- 隐私模式 -->
-                            <Grid>
+                            <Grid Margin="0,0,0,8">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="*"/>
@@ -295,8 +295,8 @@
                                           Checked="PrivacyCheckBox_Changed" Unchecked="PrivacyCheckBox_Changed"/>
                             </Grid>
 
-                            <!-- 窗口置顶 -->
-                            <Grid>
+                            <!-- 自动识别剪贴板图片 -->
+                            <Grid Margin="0,0,0,8">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="*"/>
@@ -306,23 +306,49 @@
                                         Background="{Binding Accent, Source={x:Static svc:ThemeManager.Instance}}"
                                         VerticalAlignment="Center" Margin="0,0,10,0">
                                     <Border.OpacityMask>
-                                        <ImageBrush ImageSource="pack://application:,,,/Resources/Icons/lock.png"/>
+                                        <ImageBrush ImageSource="pack://application:,,,/Resources/Icons/copy.png"/>
                                     </Border.OpacityMask>
                                 </Border>
                                 <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                    <TextBlock Text="{DynamicResource AlwaysOnTop}" FontSize="11" FontWeight="SemiBold"
+                                    <TextBlock Text="{DynamicResource AutoDetectClipboard}" FontSize="11" FontWeight="SemiBold"
                                                Foreground="{Binding TextPrimary, Source={x:Static svc:ThemeManager.Instance}}"/>
-                                    <TextBlock Text="{DynamicResource AlwaysOnTopDesc}" FontSize="9"
+                                    <TextBlock Text="{DynamicResource AutoDetectClipboardDesc}" FontSize="9"
                                                Foreground="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}"
                                                TextWrapping="Wrap" Margin="0,1,0,0"/>
                                 </StackPanel>
-                                <CheckBox x:Name="AlwaysOnTopCheckBox" Grid.Column="2" IsChecked="{Binding AlwaysOnTop}"
+                                <CheckBox x:Name="AutoDetectClipboardCheckBox" Grid.Column="2" IsChecked="{Binding AutoDetectClipboard}"
                                           VerticalAlignment="Center" Margin="8,0,0,0"
-                                          Checked="AlwaysOnTopCheckBox_Changed" Unchecked="AlwaysOnTopCheckBox_Changed"/>
+                                          Checked="AutoDetectClipboardCheckBox_Changed" Unchecked="AutoDetectClipboardCheckBox_Changed"/>
+                            </Grid>
+
+                            <!-- 粘贴后回到目标窗口 -->
+                            <Grid Margin="0,0,0,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Border Grid.Column="0" Width="28" Height="28" CornerRadius="6"
+                                        Background="{Binding Accent, Source={x:Static svc:ThemeManager.Instance}}"
+                                        VerticalAlignment="Center" Margin="0,0,10,0">
+                                    <Border.OpacityMask>
+                                        <ImageBrush ImageSource="pack://application:,,,/Resources/Icons/arrow_up.png"/>
+                                    </Border.OpacityMask>
+                                </Border>
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                    <TextBlock Text="{DynamicResource AutoReturnToTarget}" FontSize="11" FontWeight="SemiBold"
+                                               Foreground="{Binding TextPrimary, Source={x:Static svc:ThemeManager.Instance}}"/>
+                                    <TextBlock Text="{DynamicResource AutoReturnToTargetDesc}" FontSize="9"
+                                               Foreground="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}"
+                                               TextWrapping="Wrap" Margin="0,1,0,0"/>
+                                </StackPanel>
+                                <CheckBox x:Name="AutoReturnToTargetCheckBox" Grid.Column="2" IsChecked="{Binding AutoReturnToTarget}"
+                                          VerticalAlignment="Center" Margin="8,0,0,0"
+                                          Checked="AutoReturnToTargetCheckBox_Changed" Unchecked="AutoReturnToTargetCheckBox_Changed"/>
                             </Grid>
 
                             <!-- 粘贴后删除文件 -->
-                            <Grid>
+                            <Grid Margin="0,0,0,8">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="*"/>
@@ -347,8 +373,40 @@
                                           Checked="BehaviorDangerCheckBox_Changed" Unchecked="BehaviorDangerCheckBox_Changed"/>
                             </Grid>
 
+                            <Border Height="1" Background="{Binding Separator, Source={x:Static svc:ThemeManager.Instance}}" Margin="0,4,0,10"/>
+
+                            <!-- 通用设置 -->
+                            <TextBlock Text="通用设置" FontSize="10" Margin="0,0,0,8"
+                                       Foreground="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}"/>
+
+                            <!-- 窗口置顶 -->
+                            <Grid Margin="0,0,0,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Border Grid.Column="0" Width="28" Height="28" CornerRadius="6"
+                                        Background="{Binding Accent, Source={x:Static svc:ThemeManager.Instance}}"
+                                        VerticalAlignment="Center" Margin="0,0,10,0">
+                                    <Border.OpacityMask>
+                                        <ImageBrush ImageSource="pack://application:,,,/Resources/Icons/lock.png"/>
+                                    </Border.OpacityMask>
+                                </Border>
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                    <TextBlock Text="{DynamicResource AlwaysOnTop}" FontSize="11" FontWeight="SemiBold"
+                                               Foreground="{Binding TextPrimary, Source={x:Static svc:ThemeManager.Instance}}"/>
+                                    <TextBlock Text="{DynamicResource AlwaysOnTopDesc}" FontSize="9"
+                                               Foreground="{Binding TextSecondary, Source={x:Static svc:ThemeManager.Instance}}"
+                                               TextWrapping="Wrap" Margin="0,1,0,0"/>
+                                </StackPanel>
+                                <CheckBox x:Name="AlwaysOnTopCheckBox" Grid.Column="2" IsChecked="{Binding AlwaysOnTop}"
+                                          VerticalAlignment="Center" Margin="8,0,0,0"
+                                          Checked="AlwaysOnTopCheckBox_Changed" Unchecked="AlwaysOnTopCheckBox_Changed"/>
+                            </Grid>
+
                             <!-- 开机自启 -->
-                            <Grid>
+                            <Grid Margin="0,0,0,8">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="*"/>
@@ -373,7 +431,7 @@
                                           Checked="BehaviorDangerCheckBox_Changed" Unchecked="BehaviorDangerCheckBox_Changed"/>
                             </Grid>
 
-                            <!-- 不再提醒新版本 -->
+                            <!-- 跳过更新提醒 -->
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>

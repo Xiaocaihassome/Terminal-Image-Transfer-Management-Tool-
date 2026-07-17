@@ -99,16 +99,6 @@ public partial class SettingsWindow : Window
         if (_isLoaded && BehaviorCard != null) PlayGlow(BehaviorCard, Color.FromRgb(0xE8, 0x11, 0x23));
     }
 
-    private void AutoDetectClipboardCheckBox_Changed(object sender, RoutedEventArgs e)
-    {
-        if (_isLoaded && BehaviorCard != null) PlayGlow(BehaviorCard);
-    }
-
-    private void AutoReturnToTargetCheckBox_Changed(object sender, RoutedEventArgs e)
-    {
-        if (_isLoaded && BehaviorCard != null) PlayGlow(BehaviorCard);
-    }
-
     private void SkipUpdateReminder_Changed(object sender, RoutedEventArgs e)
     {
         if (_isLoaded && sender is System.Windows.Controls.CheckBox cb && BehaviorCard != null)

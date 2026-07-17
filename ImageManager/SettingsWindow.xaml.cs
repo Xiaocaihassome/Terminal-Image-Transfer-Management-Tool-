@@ -46,8 +46,6 @@ public partial class SettingsWindow : Window
         SubscribeCard(AppearanceCard);
         SubscribeCard(LanguageCard);
         SubscribeCard(StorageCard, Color.FromRgb(0xE8, 0x11, 0x23));
-        SubscribeCard(PasteCard);
-        SubscribeCard(GeneralCard);
         SubscribeCard(AboutCard);
 
         // 字体设置卡片（如果有的话）

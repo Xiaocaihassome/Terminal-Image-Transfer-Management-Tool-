@@ -255,7 +255,7 @@
 
                     <Border Height="1" Background="{Binding Separator, Source={x:Static svc:ThemeManager.Instance}}" Margin="0,12"/>
 
-                    <!-- ===== 行为 ===== -->
+                    <!-- ===== 隐私 ===== -->
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
                         <Border Width="16" Height="16" Margin="0,0,6,0"
                                 Background="{Binding TextPrimary, Source={x:Static svc:ThemeManager.Instance}}">
@@ -263,7 +263,7 @@
                                 <ImageBrush ImageSource="pack://application:,,,/Resources/Icons/hidden.png"/>
                             </Border.OpacityMask>
                         </Border>
-                        <TextBlock Text="{DynamicResource Behavior}" FontSize="13" FontWeight="SemiBold"
+                        <TextBlock Text="{DynamicResource PrivacyMode}" FontSize="13" FontWeight="SemiBold"
                                    Foreground="{Binding TextPrimary, Source={x:Static svc:ThemeManager.Instance}}" VerticalAlignment="Center"/>
                     </StackPanel>
 

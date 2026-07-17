@@ -98,7 +98,7 @@
                                           Background="{Binding Accent, Source={x:Static svc:ThemeManager.Instance}}"
                                           VerticalAlignment="Center" Margin="0,0,10,0">
                                       <Border.OpacityMask>
-                                          <ImageBrush ImageSource="pack://application:,,,/Resources/Icons/clipboard.png"/>
+                                          <ImageBrush ImageSource="pack://application:,,,/Resources/Icons/copy.png"/>
                                       </Border.OpacityMask>
                                   </Border>
                                   <StackPanel Grid.Column="1" VerticalAlignment="Center">
@@ -179,7 +179,7 @@
                                           Background="{Binding Accent, Source={x:Static svc:ThemeManager.Instance}}"
                                           VerticalAlignment="Center" Margin="0,0,10,0">
                                       <Border.OpacityMask>
-                                          <ImageBrush ImageSource="pack://application:,,,/Resources/Icons/clipboard.png"/>
+                                          <ImageBrush ImageSource="pack://application:,,,/Resources/Icons/copy.png"/>
                                       </Border.OpacityMask>
                                   </Border>
                                   <StackPanel Grid.Column="1" VerticalAlignment="Center">
@@ -418,7 +418,7 @@
                                           Background="{Binding Accent, Source={x:Static svc:ThemeManager.Instance}}"
                                           VerticalAlignment="Center" Margin="0,0,10,0">
                                       <Border.OpacityMask>
-                                          <ImageBrush ImageSource="pack://application:,,,/Resources/Icons/clipboard.png"/>
+                                          <ImageBrush ImageSource="pack://application:,,,/Resources/Icons/copy.png"/>
                                       </Border.OpacityMask>
                                   </Border>
                                   <StackPanel Grid.Column="1" VerticalAlignment="Center">
@@ -500,7 +500,7 @@
                                           Background="{Binding Accent, Source={x:Static svc:ThemeManager.Instance}}"
                                           VerticalAlignment="Center" Margin="0,0,10,0">
                                       <Border.OpacityMask>
-                                          <ImageBrush ImageSource="pack://application:,,,/Resources/Icons/clipboard.png"/>
+                                          <ImageBrush ImageSource="pack://application:,,,/Resources/Icons/copy.png"/>
                                       </Border.OpacityMask>
                                   </Border>
                                   <StackPanel Grid.Column="1" VerticalAlignment="Center">
@@ -582,7 +582,7 @@
                                           Background="{Binding Accent, Source={x:Static svc:ThemeManager.Instance}}"
                                           VerticalAlignment="Center" Margin="0,0,10,0">
                                       <Border.OpacityMask>
-                                          <ImageBrush ImageSource="pack://application:,,,/Resources/Icons/clipboard.png"/>
+                                          <ImageBrush ImageSource="pack://application:,,,/Resources/Icons/copy.png"/>
                                       </Border.OpacityMask>
                                   </Border>
                                   <StackPanel Grid.Column="1" VerticalAlignment="Center">
@@ -664,7 +664,7 @@
                                           Background="{Binding Accent, Source={x:Static svc:ThemeManager.Instance}}"
                                           VerticalAlignment="Center" Margin="0,0,10,0">
                                       <Border.OpacityMask>
-                                          <ImageBrush ImageSource="pack://application:,,,/Resources/Icons/clipboard.png"/>
+                                          <ImageBrush ImageSource="pack://application:,,,/Resources/Icons/copy.png"/>
                                       </Border.OpacityMask>
                                   </Border>
                                   <StackPanel Grid.Column="1" VerticalAlignment="Center">
@@ -842,7 +842,7 @@
                                           Background="{Binding Accent, Source={x:Static svc:ThemeManager.Instance}}"
                                           VerticalAlignment="Center" Margin="0,0,10,0">
                                       <Border.OpacityMask>
-                                          <ImageBrush ImageSource="pack://application:,,,/Resources/Icons/clipboard.png"/>
+                                          <ImageBrush ImageSource="pack://application:,,,/Resources/Icons/copy.png"/>
                                       </Border.OpacityMask>
                                   </Border>
                                   <StackPanel Grid.Column="1" VerticalAlignment="Center">

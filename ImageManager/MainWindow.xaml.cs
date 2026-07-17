@@ -360,6 +360,22 @@ public partial class MainWindow : Window
             var logService = _serviceProvider.GetRequiredService<IErrorLogService>();
             logService.Log("设置窗口打开失败", ex);
 
+            // 复制 AI 修复提示词到剪贴板
+            var prompt = "Please fix this error in my C# WPF application.\n\n" +
+                         "## Project\n" +
+                         "- Name: ImageManager (Terminal Image Transfer Management Tool)\n" +
+                         "- Tech: C# WPF / .NET 8\n" +
+                         "- Source: https://github.com/Xiaocaihassome/Terminal-Image-Transfer-Management-Tool-\n" +
+                         "- Docs: https://imagemanager-6gs.pages.dev/docs.html\n\n" +
+                         "## Error\n" +
+                         $"Type: {ex.GetType().Name}\n" +
+                         $"Message: {ex.Message}\n" +
+                         $"Inner: {ex.InnerException?.Message}\n\n" +
+                         "## Stack Trace\n" +
+                         $"{ex.StackTrace}\n\n" +
+                         "Please provide the fix with code changes. Reference the source code and docs if needed.";
+            try { Clipboard.SetText(prompt); } catch { }
+
             var msg = LanguageManager.CurrentLanguage switch
             {
                 "en-US" => "Error logged, fix prompt copied to clipboard",

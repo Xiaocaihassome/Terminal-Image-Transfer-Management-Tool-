@@ -390,7 +390,7 @@
                                 </StackPanel>
                                 <CheckBox Grid.Column="2" IsChecked="{Binding DeleteAfterPaste}"
                                           VerticalAlignment="Center" Margin="8,0,0,0"
-                                          Checked="BehaviorDangerCheckBox_Changed" Unchecked="BehaviorDangerCheckBox_Changed"/>
+                                          Checked="DeleteAfterPasteCheckBox_Changed" Unchecked="DeleteAfterPasteCheckBox_Changed"/>
                             </Grid>
                         </StackPanel>
                     </Border>
@@ -462,7 +462,7 @@
                                 </StackPanel>
                                 <CheckBox Grid.Column="2" IsChecked="{Binding AutoStart}"
                                           VerticalAlignment="Center" Margin="8,0,0,0"
-                                          Checked="BehaviorDangerCheckBox_Changed" Unchecked="BehaviorDangerCheckBox_Changed"/>
+                                          Checked="AutoStartCheckBox_Changed" Unchecked="AutoStartCheckBox_Changed"/>
                             </Grid>
 
                             <Border Height="1" Background="{Binding Separator, Source={x:Static svc:ThemeManager.Instance}}" Margin="0,0"/>

@@ -91,32 +91,37 @@ public partial class SettingsWindow : Window
 
     private void AutoDetectClipboardCheckBox_Changed(object sender, RoutedEventArgs e)
     {
-        if (_isLoaded && BehaviorCard != null) PlayGlow(BehaviorCard);
+        if (_isLoaded && PasteCard != null) PlayGlow(PasteCard);
     }
 
     private void AutoReturnToTargetCheckBox_Changed(object sender, RoutedEventArgs e)
     {
-        if (_isLoaded && BehaviorCard != null) PlayGlow(BehaviorCard);
+        if (_isLoaded && PasteCard != null) PlayGlow(PasteCard);
+    }
+
+    private void DeleteAfterPasteCheckBox_Changed(object sender, RoutedEventArgs e)
+    {
+        if (_isLoaded && PasteCard != null) PlayGlow(PasteCard, Color.FromRgb(0xE8, 0x11, 0x23));
     }
 
     private void AlwaysOnTopCheckBox_Changed(object sender, RoutedEventArgs e)
     {
-        if (_isLoaded && BehaviorCard != null) PlayGlow(BehaviorCard);
+        if (_isLoaded && GeneralCard != null) PlayGlow(GeneralCard);
     }
 
-    private void BehaviorDangerCheckBox_Changed(object sender, RoutedEventArgs e)
+    private void AutoStartCheckBox_Changed(object sender, RoutedEventArgs e)
     {
-        if (_isLoaded && BehaviorCard != null) PlayGlow(BehaviorCard, Color.FromRgb(0xE8, 0x11, 0x23));
+        if (_isLoaded && GeneralCard != null) PlayGlow(GeneralCard, Color.FromRgb(0xE8, 0x11, 0x23));
     }
 
     private void SkipUpdateReminder_Changed(object sender, RoutedEventArgs e)
     {
-        if (_isLoaded && sender is System.Windows.Controls.CheckBox cb && BehaviorCard != null)
+        if (_isLoaded && sender is System.Windows.Controls.CheckBox cb && GeneralCard != null)
         {
             if (cb.IsChecked == true)
-                PlayGlow(BehaviorCard, Color.FromRgb(0xE8, 0x11, 0x23), 2000);
+                PlayGlow(GeneralCard, Color.FromRgb(0xE8, 0x11, 0x23), 2000);
             else
-                PlayGlow(BehaviorCard, Color.FromRgb(0x2E, 0xA0, 0x43));
+                PlayGlow(GeneralCard, Color.FromRgb(0x2E, 0xA0, 0x43));
         }
     }
 

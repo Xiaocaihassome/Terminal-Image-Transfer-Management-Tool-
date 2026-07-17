@@ -1,7 +1,10 @@
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Threading;
 using ImageManager.Services;
 using ImageManager.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,24 +18,44 @@ public partial class MainWindow : Window
     private readonly PasteService _pasteService;
     private readonly IConfigService _configService;
     private readonly IServiceProvider _serviceProvider;
+    private readonly IFileService _fileService;
+    private readonly DispatcherTimer _clipboardTimer;
+    private string _lastClipboardHash = string.Empty;
 
-    public MainWindow(MainViewModel viewModel, IToastService toastService, IPasteService pasteService, IConfigService configService, IServiceProvider serviceProvider)
+    [DllImport("user32.dll")]
+    private static extern bool SetForegroundWindow(IntPtr hWnd);
+
+    [DllImport("user32.dll")]
+    private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+    private const int SW_RESTORE = 9;
+
+    public MainWindow(MainViewModel viewModel, IToastService toastService, IPasteService pasteService, IConfigService configService, IServiceProvider serviceProvider, IFileService fileService)
     {
         _viewModel = viewModel;
         _toastService = toastService;
         _pasteService = (PasteService)pasteService;
         _configService = configService;
         _serviceProvider = serviceProvider;
+        _fileService = fileService;
         DataContext = viewModel;
 
         InitializeComponent();
 
+        // 加载窗口图标
         try { Icon = new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/Resources/app.png", UriKind.Absolute)); }
         catch { }
 
         PreviewKeyDown += MainWindow_PreviewKeyDown;
         Closing += MainWindow_Closing;
         Loaded += MainWindow_Loaded;
+
+        // 初始化剪贴板监听定时器
+        _clipboardTimer = new DispatcherTimer
+        {
+            Interval = TimeSpan.FromMilliseconds(500)
+        };
+        _clipboardTimer.Tick += ClipboardTimer_Tick;
     }
 
     private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -52,6 +75,9 @@ public partial class MainWindow : Window
 
         // 轮询检查 HasUpdate，更新 banner 可见性
         _ = PollUpdateBanner();
+
+        // 根据配置启动或停止剪贴板监听
+        UpdateClipboardMonitor();
     }
 
     private async Task PollUpdateBanner()
@@ -68,6 +94,44 @@ public partial class MainWindow : Window
             }
             await Task.Delay(500);
         }
+    }
+
+    private void UpdateClipboardMonitor()
+    {
+        if (_configService.AutoDetectClipboard)
+        {
+            _clipboardTimer.Start();
+        }
+        else
+        {
+            _clipboardTimer.Stop();
+        }
+    }
+
+    private async void ClipboardTimer_Tick(object? sender, EventArgs e)
+    {
+        try
+        {
+            if (Clipboard.ContainsImage())
+            {
+                var image = Clipboard.GetImage();
+                if (image != null)
+                {
+                    // 生成简单的哈希来检测变化
+                    var hash = $"{image.Width}_{image.Height}_{image.DpiX}_{image.DpiY}";
+                    if (hash != _lastClipboardHash)
+                    {
+                        _lastClipboardHash = hash;
+
+                        // 保存图片到临时目录
+                        var path = _fileService.SaveImageToTemp(image);
+                        await _viewModel.AddImageAsync(path);
+                        _toastService.Show("已自动保存剪贴板图片", ToastType.Success);
+                    }
+                }
+            }
+        }
+        catch { }
     }
 
     #region 拖放
@@ -156,8 +220,7 @@ public partial class MainWindow : Window
 
         void OnMove(object s, MouseEventArgs ev)
         {
-            var p = Mouse.GetPosition(this);
-            var cur = new Point(p.X + Left, p.Y + Top);
+            var cur = PointToScreenMouse();
             double dx = cur.X - anchor.X, dy = cur.Y - anchor.Y;
 
             if (direction.Contains("W"))
@@ -189,6 +252,12 @@ public partial class MainWindow : Window
         el.MouseLeftButtonUp += OnUp;
     }
 
+    private Point PointToScreenMouse()
+    {
+        var p = Mouse.GetPosition(this);
+        return new Point(p.X + Left, p.Y + Top);
+    }
+
     #endregion
 
     #region 标题栏
@@ -210,14 +279,14 @@ public partial class MainWindow : Window
 
     private async void PasteToWindow_Click(object sender, RoutedEventArgs e)
     {
-        var selected = _viewModel.ImageItems.Where(i => i.IsSelected).ToList();
-        if (selected.Count == 0)
+        var selectedItems = _viewModel.ImageItems.Where(i => i.IsSelected).ToList();
+        if (selectedItems.Count == 0)
         {
             _toastService.Show("请先选中要粘贴的图片", ToastType.Warning);
             return;
         }
 
-        var validFiles = selected.Where(i => File.Exists(i.FilePath)).ToList();
+        var validFiles = selectedItems.Where(i => File.Exists(i.FilePath)).ToList();
         if (validFiles.Count == 0)
         {
             _toastService.Show("文件不存在", ToastType.Error);
@@ -229,7 +298,8 @@ public partial class MainWindow : Window
             var filePaths = validFiles.Select(i => i.FilePath).ToList();
             await _pasteService.PasteImagesAsync(filePaths, this);
 
-            if (_viewModel.DeleteAfterPaste)
+            // 粘贴后删除
+            if (_configService.DeleteAfterPaste)
             {
                 foreach (var item in validFiles)
                 {
@@ -240,47 +310,12 @@ public partial class MainWindow : Window
                     }
                     catch { }
                 }
-                if (validFiles.Count > 0)
-                    _toastService.Show($"已粘贴并删除 {validFiles.Count} 个文件", ToastType.Success);
+                _toastService.Show($"已粘贴并删除 {validFiles.Count} 个文件", ToastType.Success);
             }
-        }
-        catch (Exception ex)
-        {
-            _toastService.Show($"粘贴失败：{ex.Message}", ToastType.Error);
-        }
-    }
-
-    private async void PasteAndDelete_Click(object sender, RoutedEventArgs e)
-    {
-        var selected = _viewModel.ImageItems.Where(i => i.IsSelected).ToList();
-        if (selected.Count == 0)
-        {
-            _toastService.Show("请先选中要粘贴的图片", ToastType.Warning);
-            return;
-        }
-
-        var validFiles = selected.Where(i => File.Exists(i.FilePath)).ToList();
-        if (validFiles.Count == 0)
-        {
-            _toastService.Show("文件不存在", ToastType.Error);
-            return;
-        }
-
-        try
-        {
-            var filePaths = validFiles.Select(i => i.FilePath).ToList();
-            await _pasteService.PasteImagesAsync(filePaths, this);
-
-            foreach (var item in validFiles)
+            else
             {
-                try
-                {
-                    File.Delete(item.FilePath);
-                    _viewModel.ImageItems.Remove(item);
-                }
-                catch { }
+                _toastService.Show($"已粘贴 {validFiles.Count} 个文件", ToastType.Success);
             }
-            _toastService.Show($"已粘贴并删除 {validFiles.Count} 个文件", ToastType.Success);
         }
         catch (Exception ex)
         {
@@ -297,6 +332,9 @@ public partial class MainWindow : Window
     private void ClearAll_Click(object sender, RoutedEventArgs e) =>
         _viewModel.ClearAllCommand.Execute(null);
 
+    private void UpdateBanner_Click(object sender, RoutedEventArgs e) =>
+        Settings_Click(sender, e);
+
     private void Settings_Click(object sender, RoutedEventArgs e)
     {
         try
@@ -310,6 +348,9 @@ public partial class MainWindow : Window
                 _viewModel.SyncFromConfig(_configService);
                 settingsVm.ApplyTheme(_configService.Theme, _configService.Transparency);
                 BackdropService.Apply(this, _configService.BackgroundMode);
+
+                // 更新剪贴板监听状态
+                UpdateClipboardMonitor();
             };
 
             settingsWindow.ShowDialog();
@@ -320,11 +361,19 @@ public partial class MainWindow : Window
             logService.Log("设置窗口打开失败", ex);
 
             // 复制 AI 修复提示词到剪贴板
-            var prompt = $"Please fix this error in my C# WPF application (ImageManager, .NET 8):\n\n" +
-                         $"Error: {ex.GetType().Name}: {ex.Message}\n" +
-                         $"Inner: {ex.InnerException?.Message}\n" +
-                         $"Stack Trace:\n{ex.StackTrace}\n\n" +
-                         $"Please provide the fix with code changes.";
+            var prompt = "Please fix this error in my C# WPF application.\n\n" +
+                         "## Project\n" +
+                         "- Name: ImageManager (Terminal Image Transfer Management Tool)\n" +
+                         "- Tech: C# WPF / .NET 8\n" +
+                         "- Source: https://github.com/Xiaocaihassome/Terminal-Image-Transfer-Management-Tool-\n" +
+                         "- Docs: https://imagemanager-6gs.pages.dev/docs.html\n\n" +
+                         "## Error\n" +
+                         $"Type: {ex.GetType().Name}\n" +
+                         $"Message: {ex.Message}\n" +
+                         $"Inner: {ex.InnerException?.Message}\n\n" +
+                         "## Stack Trace\n" +
+                         $"{ex.StackTrace}\n\n" +
+                         "Please provide the fix with code changes. Reference the source code and docs if needed.";
             try { Clipboard.SetText(prompt); } catch { }
 
             var msg = LanguageManager.CurrentLanguage switch
@@ -343,11 +392,11 @@ public partial class MainWindow : Window
 
     #region 关闭
 
-    private void MainWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e) =>
+    private void MainWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
+    {
+        _clipboardTimer.Stop();
         _viewModel.CleanupOnExit();
+    }
 
     #endregion
-
-    private void UpdateBanner_Click(object sender, RoutedEventArgs e) =>
-        Settings_Click(sender, e);
 }

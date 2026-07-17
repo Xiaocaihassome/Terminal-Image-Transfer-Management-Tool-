@@ -69,7 +69,8 @@
 
                             <ComboBox x:Name="FontComboBox"
                                       ItemsSource="{Binding InstalledFonts}"
-                                      SelectedItem="{Binding SelectedFontFamily}"
+                                      SelectedValue="{Binding SelectedFontFamily}"
+                                      SelectedValuePath="."
                                       FontSize="12" Height="32"
                                       Background="{Binding ButtonBg, Source={x:Static svc:ThemeManager.Instance}}"
                                       Foreground="{Binding TextPrimary, Source={x:Static svc:ThemeManager.Instance}}"
@@ -89,6 +90,7 @@
                                            VerticalAlignment="Center"/>
                                 <Slider Grid.Column="1" Minimum="100" Maximum="900"
                                         Value="{Binding SelectedFontWeight}"
+                                        ValueChanged="FontWeightSlider_ValueChanged"
                                         TickFrequency="100" IsSnapToTickEnabled="True"
                                         VerticalAlignment="Center"/>
                                 <TextBlock Grid.Column="2" Text="{Binding SelectedFontWeight}" FontSize="10"

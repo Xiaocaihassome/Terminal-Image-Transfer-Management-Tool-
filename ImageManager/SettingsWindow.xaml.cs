@@ -1,6 +1,7 @@
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
@@ -88,24 +89,39 @@ public partial class SettingsWindow : Window
         if (_isLoaded && BehaviorCard != null) PlayGlow(BehaviorCard, Color.FromRgb(0x22, 0x22, 0x22));
     }
 
-    private void AlwaysOnTopCheckBox_Changed(object sender, RoutedEventArgs e)
+    private void AutoDetectClipboardCheckBox_Changed(object sender, RoutedEventArgs e)
     {
-        if (_isLoaded && BehaviorCard != null) PlayGlow(BehaviorCard);
+        if (_isLoaded && PasteCard != null) PlayGlow(PasteCard);
     }
 
-    private void BehaviorDangerCheckBox_Changed(object sender, RoutedEventArgs e)
+    private void AutoReturnToTargetCheckBox_Changed(object sender, RoutedEventArgs e)
     {
-        if (_isLoaded && BehaviorCard != null) PlayGlow(BehaviorCard, Color.FromRgb(0xE8, 0x11, 0x23));
+        if (_isLoaded && PasteCard != null) PlayGlow(PasteCard);
+    }
+
+    private void DeleteAfterPasteCheckBox_Changed(object sender, RoutedEventArgs e)
+    {
+        if (_isLoaded && PasteCard != null) PlayGlow(PasteCard, Color.FromRgb(0xE8, 0x11, 0x23));
+    }
+
+    private void AlwaysOnTopCheckBox_Changed(object sender, RoutedEventArgs e)
+    {
+        if (_isLoaded && GeneralCard != null) PlayGlow(GeneralCard);
+    }
+
+    private void AutoStartCheckBox_Changed(object sender, RoutedEventArgs e)
+    {
+        if (_isLoaded && GeneralCard != null) PlayGlow(GeneralCard, Color.FromRgb(0xE8, 0x11, 0x23));
     }
 
     private void SkipUpdateReminder_Changed(object sender, RoutedEventArgs e)
     {
-        if (_isLoaded && sender is System.Windows.Controls.CheckBox cb && AboutCard != null)
+        if (_isLoaded && sender is System.Windows.Controls.CheckBox cb && GeneralCard != null)
         {
-            var color = cb.IsChecked == true
-                ? Color.FromRgb(0xE8, 0x11, 0x23)  // 红色
-                : Color.FromRgb(0x2E, 0xA0, 0x43);  // 绿色
-            PlayGlow(AboutCard, color);
+            if (cb.IsChecked == true)
+                PlayGlow(GeneralCard, Color.FromRgb(0xE8, 0x11, 0x23), 2000);
+            else
+                PlayGlow(GeneralCard, Color.FromRgb(0x2E, 0xA0, 0x43));
         }
     }
 
@@ -115,7 +131,7 @@ public partial class SettingsWindow : Window
     private void StorageCheckBox_Changed(object sender, RoutedEventArgs e) { if (StorageCard != null) PlayGlow(StorageCard); }
     private void UpdateButton_Click(object sender, RoutedEventArgs e) { if (AboutCard != null) PlayGlow(AboutCard); }
 
-    private void PlayGlow(Border card, Color? glowColor = null)
+    private void PlayGlow(Border card, Color? glowColor = null, int durationMs = 1200)
     {
         if (card == null) return;
         try
@@ -134,26 +150,31 @@ public partial class SettingsWindow : Window
                 accentColor = Color.FromRgb(96, 205, 255);
             }
 
-            var anim = new ColorAnimationUsingKeyFrames
-            {
-                Duration = TimeSpan.FromMilliseconds(1200),
-            };
-            anim.KeyFrames.Add(new LinearColorKeyFrame(accentColor, KeyTime.FromTimeSpan(TimeSpan.Zero)));
-            anim.KeyFrames.Add(new LinearColorKeyFrame(accentColor, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(500))));
-            anim.KeyFrames.Add(new LinearColorKeyFrame(Colors.Transparent, KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(1200))));
+            // 保存原始 binding
+            var origBinding = BindingOperations.GetBinding(card, Border.BorderBrushProperty);
 
             var glowBrush = new SolidColorBrush(accentColor);
             card.BorderBrush = glowBrush;
-            glowBrush.BeginAnimation(SolidColorBrush.ColorProperty, anim);
+
+            var anim = new System.Windows.Media.Animation.DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(200));
+            glowBrush.BeginAnimation(SolidColorBrush.OpacityProperty, anim);
 
             var timer = new System.Windows.Threading.DispatcherTimer
             {
-                Interval = TimeSpan.FromMilliseconds(1300)
+                Interval = TimeSpan.FromMilliseconds(durationMs)
             };
             timer.Tick += (_, _) =>
             {
                 timer.Stop();
-                card.ClearValue(Border.BorderBrushProperty);
+                var fadeOut = new System.Windows.Media.Animation.DoubleAnimation(1, 0, TimeSpan.FromMilliseconds(300));
+                fadeOut.Completed += (_, _) =>
+                {
+                    if (origBinding != null)
+                        BindingOperations.SetBinding(card, Border.BorderBrushProperty, origBinding);
+                    else
+                        card.ClearValue(Border.BorderBrushProperty);
+                };
+                glowBrush.BeginAnimation(SolidColorBrush.OpacityProperty, fadeOut);
             };
             timer.Start();
         }

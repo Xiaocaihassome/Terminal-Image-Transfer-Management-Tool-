@@ -1,4 +1,4 @@
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
@@ -53,6 +53,10 @@
     <sys:String x:Key="BgHint">Frosted Glass blurs the desktop in real time; Win11 Acrylic uses the system material (requires Windows 10/11).</sys:String>
     <sys:String x:Key="BackdropWarning">Acrylic is not supported on this system. Switched to Frosted Glass.</sys:String>
     <sys:String x:Key="Behavior">Behavior</sys:String>
+    <sys:String x:Key="AutoDetectClipboard">Auto-detect clipboard images</sys:String>
+    <sys:String x:Key="AutoDetectClipboardDesc">Automatically detect and save images from clipboard</sys:String>
+    <sys:String x:Key="AutoReturnToTarget">Return to target window after paste</sys:String>
+    <sys:String x:Key="AutoReturnToTargetDesc">Automatically return to target application window after pasting</sys:String>
     <sys:String x:Key="Help">Help</sys:String>
     <sys:String x:Key="Tutorial">Tutorial</sys:String>
     <sys:String x:Key="Step1">1. Drop images into the window, or press Ctrl+V to paste screenshots</sys:String>
@@ -92,7 +96,8 @@
     <sys:String x:Key="CheckUpdateTip">Check for new versions</sys:String>
     <sys:String x:Key="ViewLogs">View Logs</sys:String>
     <sys:String x:Key="ErrorLogCopied">Error logged, fix prompt copied to clipboard</sys:String>
-    <sys:String x:Key="SkipUpdateReminder">Don't remind about new versions</sys:String>
+    <sys:String x:Key="SkipUpdateReminder">Don't remind about new versions (Beta)</sys:String>
+    <sys:String x:Key="SkipUpdateReminderDesc">Disables update checks and notifications</sys:String>
     <sys:String x:Key="InstallNow">Install Now</sys:String>
     <sys:String x:Key="UpdateBannerText">New version available, click to view</sys:String>
     <sys:String x:Key="OpenSourceDev">Open Source Developer</sys:String>

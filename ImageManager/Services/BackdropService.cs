@@ -156,7 +156,6 @@ public static class BackdropService
         try
         {
             var hwnd = new WindowInteropHelper(window).EnsureHandle();
-            // 半透明底色（AABBGGRR），alpha 越低越通透
             var accent = new AccentPolicy
             {
                 AccentState = ACCENT_ENABLE_ACRYLICBLURBEHIND,
@@ -171,12 +170,9 @@ public static class BackdropService
                 Data = ptr,
                 SizeOfData = size
             };
-            SetWindowCompositionAttribute(hwnd, ref data);
+            int result = SetWindowCompositionAttribute(hwnd, ref data);
             Marshal.FreeHGlobal(ptr);
-
-            // SetWindowCompositionAttribute 在不支持的系统上仍返回 1，
-            // 需通过截取窗口像素检查 alpha 通道判断效果是否真的生效
-            return VerifyAcrylicRendering(hwnd);
+            return result != 0;
         }
         catch { return false; }
     }

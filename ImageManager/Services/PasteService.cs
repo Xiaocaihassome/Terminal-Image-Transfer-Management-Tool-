@@ -1,4 +1,4 @@
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
 
@@ -7,6 +7,7 @@ namespace ImageManager.Services;
 public class PasteService : IPasteService
 {
     private readonly IToastService _toastService;
+    private readonly IConfigService _configService;
 
     [DllImport("user32.dll")]
     private static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, IntPtr dwExtraInfo);
@@ -23,13 +24,24 @@ public class PasteService : IPasteService
     [DllImport("user32.dll")]
     private static extern IntPtr SetClipboardData(uint uFormat, IntPtr hMem);
 
+    [DllImport("user32.dll")]
+    private static extern IntPtr GetForegroundWindow();
+
+    [DllImport("user32.dll")]
+    private static extern bool SetForegroundWindow(IntPtr hWnd);
+
+    [DllImport("user32.dll")]
+    private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
     private const uint KEYEVENTF_KEYUP = 0x0002;
     private const uint CF_UNICODETEXT = 13;
     private const uint CF_HDROP = 15;
+    private const int SW_RESTORE = 9;
 
-    public PasteService(IToastService toastService)
+    public PasteService(IToastService toastService, IConfigService configService)
     {
         _toastService = toastService;
+        _configService = configService;
     }
 
     public async Task PasteImageAsync(string filePath, Window ownerWindow)
@@ -42,6 +54,14 @@ public class PasteService : IPasteService
         var paths = filePaths.ToArray();
         if (paths.Length == 0) return;
 
+        // 记录目标窗口（粘贴前的前台窗口）
+        IntPtr targetHwnd = GetForegroundWindow();
+        IntPtr ownerHwnd = new WindowInteropHelper(ownerWindow).Handle;
+
+        // 如果当前前台窗口是本窗口，则不记录
+        if (targetHwnd == ownerHwnd)
+            targetHwnd = IntPtr.Zero;
+
         // 写剪贴板
         if (!WriteClipboard(paths))
         {
@@ -51,16 +71,26 @@ public class PasteService : IPasteService
 
         await Task.Delay(100);
 
-        // 最小化窗口 → 目标窗口自动获得前台焦点
+        // 最小化窗口
         ownerWindow.WindowState = WindowState.Minimized;
         await Task.Delay(200);
 
-        // 用 keybd_event 发 Ctrl+V（与 PowerShell 版本一致）
+        // 用 keybd_event 发 Ctrl+V
         SendCtrlV();
         await Task.Delay(300);
 
-        // 恢复窗口
-        ownerWindow.WindowState = WindowState.Normal;
+        // 根据配置决定是否回到目标窗口
+        if (_configService.AutoReturnToTarget && targetHwnd != IntPtr.Zero)
+        {
+            ShowWindow(targetHwnd, SW_RESTORE);
+            SetForegroundWindow(targetHwnd);
+        }
+        else
+        {
+            // 恢复本窗口
+            ownerWindow.WindowState = WindowState.Normal;
+        }
+
         _toastService.Show($"已粘贴 {paths.Length} 个文件路径", ToastType.Success);
     }
 
@@ -82,12 +112,10 @@ public class PasteService : IPasteService
                 {
                     EmptyClipboard();
 
-                    // CF_UNICODETEXT: 所有路径用换行连接
                     var text = string.Join("\n", filePaths);
                     IntPtr hText = Marshal.StringToHGlobalUni(text + "\0");
                     SetClipboardData(CF_UNICODETEXT, hText);
 
-                    // CF_HDROP: 支持多文件
                     IntPtr hDrop = CreateHDrop(filePaths);
                     if (hDrop != IntPtr.Zero)
                         SetClipboardData(CF_HDROP, hDrop);
@@ -102,25 +130,18 @@ public class PasteService : IPasteService
 
     private static IntPtr CreateHDrop(string[] filePaths)
     {
-        // HDrop 结构:
-        // [0-3]   header size (uint32)
-        // [4-15]  reserved (全0，包含 point 结构)
-        // [16-19] 文件数量 (uint32)
-        // [20...] 每个文件路径: null-terminated Unicode，末尾双 null 结束
         int headerSize = 20;
         int fileCount = filePaths.Length;
 
-        // 计算总路径字节数
         int pathsBytes = 0;
         foreach (var path in filePaths)
             pathsBytes += System.Text.Encoding.Unicode.GetByteCount(path + "\0");
-        pathsBytes += 2; // 末尾双 null
+        pathsBytes += 2;
 
         int totalSize = headerSize + pathsBytes;
         IntPtr hMem = Marshal.AllocHGlobal(totalSize);
         try
         {
-            // 清零
             for (int i = 0; i < totalSize; i++) Marshal.WriteByte(hMem, i, 0);
 
             Marshal.WriteInt32(hMem, 0, headerSize);

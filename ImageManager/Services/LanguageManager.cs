@@ -13,11 +13,14 @@ public static class LanguageManager
         ["ja-JP"] = "pack://application:,,,/Resources/Lang/ja-JP.xaml",
     };
 
+    public static string CurrentLanguage { get; private set; } = "zh-CN";
+
     public static void ApplyLanguage(string langCode)
     {
         if (!LanguageMap.TryGetValue(langCode, out var packUri))
             langCode = "zh-CN";
         packUri ??= LanguageMap["zh-CN"];
+        CurrentLanguage = langCode;
 
         var dict = new ResourceDictionary { Source = new Uri(packUri) };
 

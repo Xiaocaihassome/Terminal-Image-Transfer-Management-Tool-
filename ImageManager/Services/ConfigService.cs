@@ -1,4 +1,4 @@
-using System.IO;
+﻿using System.IO;
 using System.Text.Json;
 
 namespace ImageManager.Services;
@@ -22,6 +22,8 @@ public class ConfigService : IConfigService
     public bool PrivacyMode { get; set; }
     public bool AlwaysOnTop { get; set; }
     public bool DeleteAfterPaste { get; set; }
+    public bool AutoDetectClipboard { get; set; }
+    public bool AutoReturnToTarget { get; set; }
     public bool AutoStart { get; set; }
     public bool SkipUpdateReminder { get; set; }
     public string FontFamily { get; set; } = "";
@@ -51,17 +53,17 @@ public class ConfigService : IConfigService
                 Transparency = data.Transparency > 0 && data.Transparency <= 1 ? data.Transparency : 0.75;
                 Language = string.IsNullOrEmpty(data.Language) ? "zh-CN" : data.Language;
                 DisableBlur = data.DisableBlur;
-                // 兼容旧配置：未写入 BackgroundMode 时，依据 DisableBlur 推断
                 if (!string.IsNullOrEmpty(data.BackgroundMode))
                     BackgroundMode = data.BackgroundMode;
                 else
                     BackgroundMode = data.DisableBlur ? "None" : "Glass";
-                // 已移除的液态玻璃模式归一化为毛玻璃
                 if (BackgroundMode == "Liquid")
                     BackgroundMode = "Glass";
                 PrivacyMode = data.PrivacyMode;
                 AlwaysOnTop = data.AlwaysOnTop;
                 DeleteAfterPaste = data.DeleteAfterPaste;
+                AutoDetectClipboard = data.AutoDetectClipboard;
+                AutoReturnToTarget = data.AutoReturnToTarget;
                 AutoStart = data.AutoStart;
                 SkipUpdateReminder = data.SkipUpdateReminder;
                 FontFamily = string.IsNullOrEmpty(data.FontFamily) ? "" : data.FontFamily;
@@ -88,6 +90,8 @@ public class ConfigService : IConfigService
             PrivacyMode = PrivacyMode,
             AlwaysOnTop = AlwaysOnTop,
             DeleteAfterPaste = DeleteAfterPaste,
+            AutoDetectClipboard = AutoDetectClipboard,
+            AutoReturnToTarget = AutoReturnToTarget,
             AutoStart = AutoStart,
             SkipUpdateReminder = SkipUpdateReminder,
             FontFamily = FontFamily,
@@ -116,6 +120,8 @@ public class ConfigService : IConfigService
         public bool PrivacyMode { get; set; }
         public bool AlwaysOnTop { get; set; }
         public bool DeleteAfterPaste { get; set; }
+        public bool AutoDetectClipboard { get; set; }
+        public bool AutoReturnToTarget { get; set; }
         public bool AutoStart { get; set; }
         public bool SkipUpdateReminder { get; set; }
         public string? FontFamily { get; set; }

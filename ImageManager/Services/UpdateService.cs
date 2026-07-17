@@ -1,4 +1,4 @@
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 using System.Text.Json;
@@ -19,7 +19,7 @@ public interface IUpdateService
 public class UpdateService : IUpdateService
 {
     private const string RepoApi = "https://api.github.com/repos/Xiaocaihassome/Terminal-Image-Transfer-Management-Tool-/releases/latest";
-    private const string CurrentVersion = "1.2.2";
+    private const string CurrentVersion = "1.2.4";
 
     private static readonly HttpClient Http = new()
     {

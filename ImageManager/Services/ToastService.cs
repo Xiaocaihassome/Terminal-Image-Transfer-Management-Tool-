@@ -55,8 +55,10 @@ public class ToastService : IToastService
             {
                 Text = message,
                 Foreground = Brushes.White,
-                FontSize = 14,
-                FontWeight = FontWeights.Medium
+                FontSize = 13,
+                FontWeight = FontWeights.Medium,
+                TextWrapping = TextWrapping.Wrap,
+                MaxWidth = 400
             }
         };
 

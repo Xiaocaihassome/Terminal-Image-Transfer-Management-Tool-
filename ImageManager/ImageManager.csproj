@@ -17,7 +17,7 @@
     <!-- 程序集信息 -->
     <AssemblyName>ImageManager</AssemblyName>
     <RootNamespace>ImageManager</RootNamespace>
-    <Version>1.2.2</Version>
+    <Version>1.2.3</Version>
     <Authors>小蔡有点料</Authors>
     <Description>Terminal Image Transfer Management Tool</Description>
     <ApplicationIcon>Resources\app.ico</ApplicationIcon>
@@ -67,6 +67,9 @@
     <Resource Include="Resources\Icons\upload.png" />
     <Resource Include="Resources\Icons\palette.png" />
     <Resource Include="Resources\Icons\font2.png" />
+    <Resource Include="Resources\Icons\power.png" />
+    <Resource Include="Resources\Icons\font3.png" />
+    <Resource Include="Resources\Icons\fill.png" />
     <Resource Include="Resources\Lang\zh-CN.xaml" />
     <Resource Include="Resources\Lang\zh-TW.xaml" />
     <Resource Include="Resources\Lang\en-US.xaml" />
